@@ -67,3 +67,255 @@
 - 제약사항:
   - 사용자의 잔액은 결제 금액 이상이어야 합니다.
   - 결제 요청은 유효한 예약 정보에 대해서만 가능해야 합니다.
+
+## API spec
+
+### 1. 유저 토큰 발급 API
+
+- **Endpoint:** `/api/token`
+
+- **Method:** `POST`
+
+- **Description:** 사용자에게 대기열 관리를 위한 토큰을 발급합니다.
+
+- **Request Body:**
+
+  ```json
+  {
+    "userId": "string"
+  }
+  ```
+
+- **Response:**
+
+  - 200 OK
+
+    ```json
+    {
+      "token": "string",
+      "queuePosition": "number",
+      "expirationTime": "datetime"
+    }
+    ```
+
+  - 400 Bad Request
+
+    ```json
+    {
+      "error": "잘못된 사용자 ID"
+    }
+    ```
+
+### 2. 예약 가능 날짜 조회 API
+
+- **Endpoint:** `/api/concerts/dates`
+
+- **Method:** `GET`
+
+- **Description:** 예약 가능한 모든 날짜를 조회합니다.
+
+- **Responses:**
+
+  - 200 OK
+
+    ```json
+    {
+      "dates": ["yyyy-mm-dd", "yyyy-mm-dd"]
+    }
+    ```
+
+### 3. 예약 가능 좌석 조회 API
+
+- **Endpoint:** `/api/concerts/seats`
+
+- **Method:** `GET`
+
+- **Description:** 특정 날짜에 대한 예약 가능한 좌석 정보를 조회합니다.
+
+- **Query Parameters:**
+
+  - `date`: `string` (format: "yyyy-mm-dd")
+
+- **Responses:**
+
+  - **200 OK**
+
+  ```json
+  {
+    "date": "yyyy-mm-dd",
+    "availableSeats": ["1", "2", "3"]
+  }
+  ```
+
+  - **404 Not Found**
+
+  ```json
+  {
+    "error": "찾을 수 없는 좌석 번호입니다."
+  }
+  ```
+
+  - **400 Bad Request**
+
+  ```json
+  {
+    "error": "잘못된 형식의 날짜입니다."
+  }
+  ```
+
+  
+
+### 4. 좌석 예약 요청 API
+
+- **Endpoint:** `/api/reservations`
+
+- **Method:** `POST`
+
+- **Description:** 특정 날짜와 좌석에 대한 예약 요청을 합니다.
+
+- **Request Body:**
+
+  ```json
+  {
+    "userId": "string",
+    "date": "yyyy-mm-dd",
+    "seatNumber": "number",
+    "token": "string"
+  }
+  ```
+
+- **Response:**
+
+  -  **200 OK**
+
+    ```json
+    {
+      "reservationId": "string",
+      "status": "Reserved",
+      "expirationTime": "datetime"
+    }
+    ```
+
+  - **400 Bad Request**
+
+    ```json
+    {
+      "error": "잘못된 형식의 요청 파라미터입니다."
+    }
+    ```
+
+  - **401 Unauthorized**
+
+    ```json
+    {
+      "error": "잘못되었거나 이미 만료된 토큰입니다."
+    }
+    ```
+
+### 5. 잔액 충전 API
+
+- **Endpoint:** `/api/balance/recharge`
+
+- **Method:** `POST`
+
+- **Description:** 사용자의 잔액을 충전합니다.
+
+- **Request Body:**
+
+  ```json
+  {
+    "userId": "string",
+    "amount": "number"
+  }
+  ```
+
+- **Response:**
+
+  - **200 OK**
+
+    ```json
+    {
+      "userId": "string",
+      "newBalance": "number"
+    }
+    ```
+
+  - **400 Bad Request**
+
+    ```json
+    {
+      "error": "잘못된 요청 파라미터 입니다."
+    }
+    ```
+
+### 6. 잔액 조회 API
+
+- **Endpoint:** `/api/balance`
+- **Method:** `GET`
+- **Description:** 사용자의 현재 잔액을 조회합니다.
+- **Query Parameters:**
+  - `userId`: `string`
+- **Responses:**
+  - **200 OK**
+
+- - ```json
+    {
+      "userId": "string",
+      "currentBalance": "number"
+    }
+    ```
+
+  - **404 Not Found**
+
+    ```json
+    {
+      "error": "찾을 수 없는 사용자입니다."
+    }
+    ```
+
+### 7. 결제 API
+
+- **Endpoint:** `/api/payments`
+
+- **Method:** `POST`
+
+- **Description:** 좌석 예약에 대한 결제를 진행합니다.
+
+- **Request Body:**
+
+  ```json
+  {
+    "userId": "string",
+    "reservationId": "string",
+    "amount": "number"
+  }
+  ```
+
+- **Responses: **
+
+  - **200 OK**
+
+    ```json
+    {
+      "paymentId": "string",
+      "status": "Completed"
+    }
+    ```
+
+  - **400 Bad Request**
+
+    ```json
+    {
+      "error": "잘못된 잔액 표시 형식이거나 잔액이 부족합니다."
+    }
+    ```
+
+  - 401 Unauthorized
+
+    ```json
+    {
+      "error": "잘못되 사용자 ID 혹은 예약 ID 입니다."
+    }
+    ```
+
+    
