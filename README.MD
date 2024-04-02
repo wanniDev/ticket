@@ -318,9 +318,26 @@
     }
     ```
 
-## 시퀀스 다이어그램
+## 플로우 차트
 
 ### 1. 유저 토큰 발급 API
+![tokencreate drawio](https://github.com/wanniDev/ticket/assets/81374655/daecde77-3214-4149-9bf2-598279b55fb3)
 
-![ticket_create_token drawio](https://github.com/f-lab-edu/payment-lab/assets/81374655/7b5e4ab3-e6df-4299-b49e-31d3ce218cb6)
+### 2. 예약 가능 날짜 조회 API
+![reservation_date_search drawio](https://github.com/wanniDev/ticket/assets/81374655/03b9cf95-6b12-4f64-9a07-584f26596919)
+
+### 3. 예약 가능 좌석 조회 API
+![reservation_seats_search drawio](https://github.com/wanniDev/ticket/assets/81374655/48b2d329-48b8-4749-b9d1-66f0f0b24f97)
+
+### 4. 좌석 예약 요청 API
+![reservation drawio](https://github.com/wanniDev/ticket/assets/81374655/5534b91b-086f-4a09-afc2-3a0d677f3f4b)
+
+### 5. 잔액 충전 API
+![balance_charge drawio](https://github.com/wanniDev/ticket/assets/81374655/20615ee3-111c-487c-b3a4-48656c1e9aa5)
+
+### 6. 잔액 조회 API
+![balance_search drawio](https://github.com/wanniDev/ticket/assets/81374655/cbcc6bf8-8802-433e-80c1-942cfd0f43a0)
+
+### 7. 결제 API
+![payment drawio](https://github.com/wanniDev/ticket/assets/81374655/1a1b9aee-dd5a-4a2a-8376-c91eab917948)
 
