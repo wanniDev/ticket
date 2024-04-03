@@ -330,7 +330,7 @@
 ![reservation_seats_search drawio](https://github.com/wanniDev/ticket/assets/81374655/48b2d329-48b8-4749-b9d1-66f0f0b24f97)
 
 ### 4. 좌석 예약 요청 API
-![reservation drawio](https://github.com/wanniDev/ticket/assets/81374655/5534b91b-086f-4a09-afc2-3a0d677f3f4b)
+![reservation drawio](https://github.com/wanniDev/ticket/assets/81374655/45c31430-9b9d-4ef4-8fac-b68e2292f055)
 
 ### 5. 잔액 충전 API
 ![balance_charge drawio](https://github.com/wanniDev/ticket/assets/81374655/20615ee3-111c-487c-b3a4-48656c1e9aa5)
