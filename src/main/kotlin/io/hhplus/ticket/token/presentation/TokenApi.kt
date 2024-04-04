@@ -1,4 +1,4 @@
-package io.hhplus.ticket.concertdate.presentation
+package io.hhplus.ticket.token.presentation
 
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
@@ -9,7 +9,7 @@ import java.time.LocalDateTime
 
 @RestController
 @RequestMapping("/api/token")
-class RestTokenApi {
+class TokenApi {
     @PostMapping
     fun createToken(@RequestBody request: CreateTokenRequest): ResponseEntity<CreateTokenResponse> {
         return ResponseEntity

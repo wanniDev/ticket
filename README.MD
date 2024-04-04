@@ -108,7 +108,7 @@
 
 ### 2. 예약 가능 날짜 조회 API
 
-- **Endpoint:** `/api/concerts/dates`
+- **Endpoint:** `/api/concert/date`
 
 - **Method:** `GET`
 
