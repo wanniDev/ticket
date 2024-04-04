@@ -126,7 +126,7 @@
 
 ### 3. 예약 가능 좌석 조회 API
 
-- **Endpoint:** `/api/concerts/seats`
+- **Endpoint:** `/api/concert/seat`
 
 - **Method:** `GET`
 
