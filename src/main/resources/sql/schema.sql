@@ -8,9 +8,10 @@ CREATE TABLE `user` (
 
 CREATE TABLE `token` (
 	`id`	varchar(255)	NOT NULL,
-	`expiration_itme`	datetime	NULL,
-	`status`	enum('ACTIVE', 'EXPIRED')	NULL	COMMENT 'ACTIVE, EXPIRED',
+	`expiration_time`	datetime	NULL,
+	`status`	varchar(255)	NULL	COMMENT 'ACTIVE, EXPIRED',
 	`create_time`	datetime	NULL,
+    `update_time`	datetime	NULL,
 	`user_id`	varchar(255)	NOT NULL	COMMENT '사용자 식별자'
 );
 
