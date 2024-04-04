@@ -318,6 +318,9 @@
     }
     ```
 
+## 데이터베이스 스키마
+![TICKET](https://github.com/wanniDev/ticket/assets/81374655/a6837585-daea-4cf3-a195-7de1e2726f09)
+
 ## 플로우 차트
 
 ### 1. 유저 토큰 발급 API
