@@ -214,7 +214,7 @@
 
 ### 5. 잔액 충전 API
 
-- **Endpoint:** `/api/balance/recharge`
+- **Endpoint:** `/api/payment/recharge`
 
 - **Method:** `POST`
 
