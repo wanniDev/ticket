@@ -273,51 +273,6 @@
     }
     ```
 
-### 7. 결제 API
-
-- **Endpoint:** `/api/payments`
-
-- **Method:** `POST`
-
-- **Description:** 좌석 예약에 대한 결제를 진행합니다.
-
-- **Request Body:**
-
-  ```json
-  {
-    "userId": "string",
-    "reservationId": "string",
-    "amount": "number"
-  }
-  ```
-
-- **Responses:**
-
-  - **200 OK**
-
-    ```json
-    {
-      "paymentId": "string",
-      "status": "Completed"
-    }
-    ```
-
-  - **400 Bad Request**
-
-    ```json
-    {
-      "error": "잘못된 잔액 표시 형식이거나 잔액이 부족합니다."
-    }
-    ```
-
-  - 401 Unauthorized
-
-    ```json
-    {
-      "error": "잘못되 사용자 ID 혹은 예약 ID 입니다."
-    }
-    ```
-
 ## 데이터베이스 스키마
 ![TICKET](https://github.com/wanniDev/ticket/assets/81374655/a81c7d78-34d0-496b-bd16-f19ed9222f37)
 
