@@ -23,22 +23,22 @@ CREATE TABLE `concert_date` (
 CREATE TABLE `seat` (
 	`id`	varchar(255)	NOT NULL,
 	`number`	int4	NULL,
-	`status`	enum('AVAILABLE', 'RESERVED', 'OCCUPIED')	NULL,
-	`id2`	varchar(255)	NOT NULL
+	`status`	varchar(255)	NULL,
+	`concert_date_id`	varchar(255)	NOT NULL
 );
 
 CREATE TABLE `reservation` (
 	`id`	varchar(255)	NOT NULL,
-	`status`	enum('PENDING', 'RESERVED', 'OCCUPIED')	NULL,
+    `status`	varchar(255)	NULL,
 	`reservation_time`	datetime	NULL,
 	`expiration_time`	datetime	NULL,
 	`user_id`	varchar(255)	NOT NULL	COMMENT '사용자 식별자',
-	`concert_date_id`	varchar(255)	NOT NULL
+	`seat_id`	varchar(255)	NOT NULL
 );
 
 CREATE TABLE `payment` (
 	`id`	varchar(255)	NOT NULL,
-	`amount`	bigint	NULL,
+	`amount`	DECIMAL(19, 4)	NULL,
 	`payment_time`	datetime	NULL,
 	`reservation_id`	varchar(255)	NOT NULL,
 	`user_id`	varchar(255)	NOT NULL	COMMENT '사용자 식별자'
