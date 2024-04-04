@@ -319,7 +319,7 @@
     ```
 
 ## 데이터베이스 스키마
-![TICKET](https://github.com/wanniDev/ticket/assets/81374655/a6837585-daea-4cf3-a195-7de1e2726f09)
+![TICKET](https://github.com/wanniDev/ticket/assets/81374655/30ef20cf-cb68-4ba5-b401-cbfe71c38e39)
 
 ## 플로우 차트
 
