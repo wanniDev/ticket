@@ -19,4 +19,9 @@ class PaymentApi {
     fun getBalance(@RequestParam userId: String): ResponseEntity<BalanceResponse> {
         return ResponseEntity.ok(BalanceResponse("userId", BigDecimal(10000)))
     }
+
+    @PostMapping
+    fun pay(@RequestBody request: PayRequest): ResponseEntity<Void> {
+        return ResponseEntity.ok().build()
+    }
 }
