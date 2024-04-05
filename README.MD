@@ -15,6 +15,18 @@
 - 잔액 충전 / 조회 API
 - 결제 API
 
+### 0. 유저 토큰 대기열 확인
+- 목적 : 사용자가 대기열에 있는지 확인할 수 있어야 합니다.
+- 핵심 요구사항 :
+    - 사용자는 토큰을 입력하여 대기열에 있는지 확인할 수 있어야 합니다.
+    - 대기열에 있는 토큰은 다른 사용자에게 노출되지 않아야 합니다.
+- 제약사항 :
+  - 대기열은 FIFO(First In First Out) 방식으로 동작해야 합니다.
+  - 대기열에 있는 토큰은 만료 시간이 지나면 자동으로 삭제되어야 합니다.
+  - 대기열에 있는 토큰은 한 번에 하나의 사용자만 확인할 수 있어야 합니다.
+- 특이사항 :
+    - 대기열 확인은 토큰을 입력받아 확인하는 방식으로 구현합니다.
+
 ### 1. 유저 토큰 발급 API
 - 묙젹 : 사용자가 서버와 상호작용하기 위한 토큰을 발급받을 수 있어야 합니다.
 - 핵심 요구사항 :
@@ -70,6 +82,33 @@
 
 ## API spec
 
+### 0. 유저 토큰 대기열 확인
+
+- **Endpoint:** `/api/token/peek`
+
+- **Method:** `POST`
+
+- **Description:** 사용자에게 대기열 관리를 위한 토큰을 발급합니다.
+
+- **Request Body:**
+
+  ```json
+  {
+    "tokenId": "string"
+  }
+  ```
+
+- **Response:**
+
+  - 200 OK
+
+    ```json
+    {
+      "isTurn" : "boolean",
+      "occurredTime": "datetime"
+    }
+    ```
+
 ### 1. 유저 토큰 발급 API
 
 - **Endpoint:** `/api/token`
@@ -93,7 +132,6 @@
     ```json
     {
       "token": "string",
-      "queuePosition": "number",
       "expirationTime": "datetime"
     }
     ```
@@ -277,6 +315,13 @@
 ![TICKET](https://github.com/wanniDev/ticket/assets/81374655/a81c7d78-34d0-496b-bd16-f19ed9222f37)
 
 ## 플로우 차트
+### 0. 유저 토큰 대기열 확인
+1. 클라이언트 토큰 입력 수신
+2. 토큰이 유효한지 확인
+3. 토큰이 유효하면 대기열 확인(peek)
+4. 대기열 순번의 토큰과 클라이언트 토큰이 일치하는지 확인
+5. 일치하면 true 리턴
+6. 일치하지 않으면 false 리턴
 
 ### 1. 유저 토큰 발급 API
 ![tokencreate drawio](https://github.com/wanniDev/ticket/assets/81374655/daecde77-3214-4149-9bf2-598279b55fb3)
