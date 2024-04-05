@@ -2,17 +2,15 @@ package io.hhplus.ticket.payment.domain
 
 import io.hhplus.ticket.reservation.domain.Reservation
 import io.hhplus.ticket.user.domain.User
-import jakarta.persistence.Entity
-import jakarta.persistence.FetchType
-import jakarta.persistence.Id
-import jakarta.persistence.ManyToOne
+import jakarta.persistence.*
 import java.math.BigDecimal
 import java.time.LocalDateTime
 
 @Entity
 class Payment(
-    @Id
-    val id: String,
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Long,
+    val tsid: String,
     val amount: BigDecimal,
     val paymentTime: LocalDateTime,
     @ManyToOne(targetEntity = User::class, optional = false, fetch = FetchType.LAZY)

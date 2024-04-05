@@ -6,8 +6,9 @@ import java.time.LocalDateTime
 
 @Entity
 class Token(
-    @Id
-    val id: String,
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Long,
+    val tsid: String,
     @ManyToOne(targetEntity = User::class, optional = false, fetch = FetchType.LAZY)
     val user: User,
     val expirationTime: LocalDateTime,

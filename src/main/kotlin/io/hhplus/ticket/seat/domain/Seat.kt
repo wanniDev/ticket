@@ -5,8 +5,9 @@ import jakarta.persistence.*
 
 @Entity
 class Seat(
-    @Id
-    val id: String,
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Long,
+    val tsid: String,
     val number: Int,
     @Enumerated(EnumType.STRING)
     val status: Status,

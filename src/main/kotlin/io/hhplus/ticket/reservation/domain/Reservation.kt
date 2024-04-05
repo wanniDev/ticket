@@ -7,8 +7,9 @@ import java.time.LocalDateTime
 
 @Entity
 class Reservation(
-    @Id
-    val id: String,
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Long,
+    val tsid: String,
     @Enumerated(EnumType.STRING)
     val status: Status,
     val reservationTime: LocalDateTime,

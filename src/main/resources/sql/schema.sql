@@ -1,47 +1,59 @@
 CREATE TABLE `user` (
-	`id`	varchar(255)    NOT NULL	COMMENT '사용자 식별자',
+	`id`	bigint    NOT NULL	COMMENT '사용자 식별자',
+    `tsid` varchar(255) NOT NULL UNIQUE COMMENT '사용자 식별 보조키',
 	`username`	varchar(255)	NULL	COMMENT '사용자 이름',
 	`balance`	bigint	NULL,
 	`create_time`	datetime	NULL,
-	`update_time`	datetime	NOT NULL
+	`update_time`	datetime	NOT NULL,
+    INDEX user_tsid_idx (tsid)
 );
 
 CREATE TABLE `token` (
-	`id`	varchar(255)	NOT NULL,
+	`id`	bigint	NOT NULL,
+    `tsid` varchar(255) NOT NULL UNIQUE COMMENT '토큰 식별 보조키',
 	`expiration_time`	datetime	NULL,
 	`status`	varchar(255)	NULL	COMMENT 'ACTIVE, EXPIRED',
 	`create_time`	datetime	NULL,
     `update_time`	datetime	NULL,
-	`user_id`	varchar(255)	NOT NULL	COMMENT '사용자 식별자'
+	`user_id`	bigint	NOT NULL	COMMENT '사용자 식별자',
+    INDEX token_tsid_idx (tsid)
 );
 
 CREATE TABLE `concert_date` (
-	`id`	varchar(255)	NOT NULL,
-	`date`	datetime	NULL
+	`id`	bigint	NOT NULL,
+    `tsid` varchar(255) NOT NULL UNIQUE COMMENT '콘서트 일자 식별 보조키',
+	`date`	datetime	NULL,
+    INDEX concert_date_tsid_idx (tsid)
 );
 
 CREATE TABLE `seat` (
-	`id`	varchar(255)	NOT NULL,
+	`id`	bigint	NOT NULL,
+    `tsid` varchar(255) NOT NULL UNIQUE COMMENT '좌석 식별 보조키',
 	`number`	int4	NULL,
 	`status`	varchar(255)	NULL,
-	`concert_date_id`	varchar(255)	NOT NULL
+	`concert_date_id`	bigint	NOT NULL,
+    INDEX seat_tsid_idx (tsid)
 );
 
 CREATE TABLE `reservation` (
-	`id`	varchar(255)	NOT NULL,
+	`id`	bigint	NOT NULL,
+    `tsid` varchar(255) NOT NULL UNIQUE COMMENT '예약 식별 보조키',
     `status`	varchar(255)	NULL,
 	`reservation_time`	datetime	NULL,
 	`expiration_time`	datetime	NULL,
-	`user_id`	varchar(255)	NOT NULL	COMMENT '사용자 식별자',
-	`seat_id`	varchar(255)	NOT NULL
+	`user_id`	bigint	NOT NULL	COMMENT '사용자 식별자',
+	`seat_id`	bigint	NOT NULL,
+    INDEX reservation_tsid_idx (tsid)
 );
 
 CREATE TABLE `payment` (
-	`id`	varchar(255)	NOT NULL,
+	`id`	bigint	NOT NULL,
+    `tsid` varchar(255) NOT NULL UNIQUE COMMENT '결제 식별 보조키',
 	`amount`	DECIMAL(19, 4)	NULL,
 	`payment_time`	datetime	NULL,
-	`reservation_id`	varchar(255)	NOT NULL,
-	`user_id`	varchar(255)	NOT NULL	COMMENT '사용자 식별자'
+	`reservation_id`	bigint	NOT NULL,
+	`user_id`	bigint	NOT NULL	COMMENT '사용자 식별자',
+    INDEX payment_tsid_idx (tsid)
 );
 
 ALTER TABLE `user` ADD CONSTRAINT `PK_USER` PRIMARY KEY (
