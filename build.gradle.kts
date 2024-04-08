@@ -23,8 +23,13 @@ repositories {
 extra["snippetsDir"] = file("build/generated-snippets")
 
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    // spring boot
     implementation("org.springframework.boot:spring-boot-starter-web")
+
+    // spring data jpa
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+
+    // jackson
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
 
@@ -36,10 +41,16 @@ dependencies {
     // swagger
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2")
 
+    // h2
     runtimeOnly("com.h2database:h2")
+
+    // mysql
     runtimeOnly("com.mysql:mysql-connector-j")
+
+    // test
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:5.2.1")
 }
 
 tasks.withType<KotlinCompile> {
