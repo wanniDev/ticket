@@ -1,6 +1,5 @@
-package io.hhplus.ticket.seat.domain
+package io.hhplus.ticket.concert.domain
 
-import io.hhplus.ticket.concertdate.domain.ConcertDate
 import jakarta.persistence.*
 
 @Entity

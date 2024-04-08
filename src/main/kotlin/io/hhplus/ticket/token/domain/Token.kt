@@ -1,6 +1,6 @@
 package io.hhplus.ticket.token.domain
 
-import io.hhplus.ticket.user.domain.User
+import io.hhplus.ticket.balance.domain.Balance
 import jakarta.persistence.*
 import java.time.LocalDateTime
 
@@ -9,8 +9,8 @@ class Token(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
     val tsid: String,
-    @ManyToOne(targetEntity = User::class, optional = false, fetch = FetchType.LAZY)
-    val user: User,
+    @ManyToOne(targetEntity = Balance::class, optional = false, fetch = FetchType.LAZY)
+    val balance: Balance,
     val expirationTime: LocalDateTime,
     @Enumerated(EnumType.STRING)
     val status: Status,

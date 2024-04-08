@@ -1,4 +1,4 @@
-package io.hhplus.ticket.concertdate.presentation
+package io.hhplus.ticket.concert.presentation
 
 import java.time.LocalDate
 

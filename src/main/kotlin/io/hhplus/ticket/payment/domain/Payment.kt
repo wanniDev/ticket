@@ -1,7 +1,7 @@
 package io.hhplus.ticket.payment.domain
 
 import io.hhplus.ticket.reservation.domain.Reservation
-import io.hhplus.ticket.user.domain.User
+import io.hhplus.ticket.balance.domain.Balance
 import jakarta.persistence.*
 import java.math.BigDecimal
 import java.time.LocalDateTime
@@ -13,8 +13,8 @@ class Payment(
     val tsid: String,
     val amount: BigDecimal,
     val paymentTime: LocalDateTime,
-    @ManyToOne(targetEntity = User::class, optional = false, fetch = FetchType.LAZY)
-    val user: User,
+    @ManyToOne(targetEntity = Balance::class, optional = false, fetch = FetchType.LAZY)
+    val balance: Balance,
     @ManyToOne(targetEntity = Reservation::class, optional = false, fetch = FetchType.LAZY)
     val reservation: Reservation
 )

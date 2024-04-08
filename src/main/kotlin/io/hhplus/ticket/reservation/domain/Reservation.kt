@@ -1,7 +1,7 @@
 package io.hhplus.ticket.reservation.domain
 
-import io.hhplus.ticket.seat.domain.Seat
-import io.hhplus.ticket.user.domain.User
+import io.hhplus.ticket.concert.domain.Seat
+import io.hhplus.ticket.balance.domain.Balance
 import jakarta.persistence.*
 import java.time.LocalDateTime
 
@@ -14,8 +14,8 @@ class Reservation(
     val status: Status,
     val reservationTime: LocalDateTime,
     val expirationTime: LocalDateTime,
-    @ManyToOne(targetEntity = User::class, optional = false, fetch = FetchType.LAZY)
-    val user: User,
+    @ManyToOne(targetEntity = Balance::class, optional = false, fetch = FetchType.LAZY)
+    val balance: Balance,
     @ManyToOne(targetEntity = Seat::class, optional = false, fetch = FetchType.LAZY)
     val seat: Seat
 ) {

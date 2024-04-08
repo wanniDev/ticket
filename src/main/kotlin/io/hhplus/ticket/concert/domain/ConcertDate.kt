@@ -1,4 +1,4 @@
-package io.hhplus.ticket.concertdate.domain
+package io.hhplus.ticket.concert.domain
 
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue

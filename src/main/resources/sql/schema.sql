@@ -1,11 +1,10 @@
-CREATE TABLE `user` (
-	`id`	bigint    NOT NULL	COMMENT '사용자 식별자',
-    `tsid` varchar(255) NOT NULL UNIQUE COMMENT '사용자 식별 보조키',
-	`username`	varchar(255)	NULL	COMMENT '사용자 이름',
+CREATE TABLE `balance` (
+	`id`	bigint    NOT NULL	COMMENT '잔고 식별자',
+    `tsid` varchar(255) NOT NULL UNIQUE COMMENT '잔고 식별 보조키',
 	`balance`	bigint	NULL,
 	`create_time`	datetime	NULL,
 	`update_time`	datetime	NOT NULL,
-    INDEX user_tsid_idx (tsid)
+    INDEX balance_tsid_idx (tsid)
 );
 
 CREATE TABLE `token` (
@@ -56,7 +55,7 @@ CREATE TABLE `payment` (
     INDEX payment_tsid_idx (tsid)
 );
 
-ALTER TABLE `user` ADD CONSTRAINT `PK_USER` PRIMARY KEY (
+ALTER TABLE `balance` ADD CONSTRAINT `PK_USER` PRIMARY KEY (
 	`id`
 );
 
