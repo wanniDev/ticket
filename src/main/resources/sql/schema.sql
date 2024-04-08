@@ -14,7 +14,7 @@ CREATE TABLE `token` (
 	`status`	varchar(255)	NULL	COMMENT 'ACTIVE, EXPIRED',
 	`create_time`	datetime	NULL,
     `update_time`	datetime	NULL,
-	`user_id`	bigint	NOT NULL	COMMENT '사용자 식별자',
+	`balance_id`	bigint	NOT NULL	COMMENT '사용자 잔고 식별자',
     INDEX token_tsid_idx (tsid)
 );
 
@@ -40,7 +40,7 @@ CREATE TABLE `reservation` (
     `status`	varchar(255)	NULL,
 	`reservation_time`	datetime	NULL,
 	`expiration_time`	datetime	NULL,
-	`user_id`	bigint	NOT NULL	COMMENT '사용자 식별자',
+	`balance_id`	bigint	NOT NULL	COMMENT '사용자 잔고 식별자',
 	`seat_id`	bigint	NOT NULL,
     INDEX reservation_tsid_idx (tsid)
 );
@@ -51,7 +51,7 @@ CREATE TABLE `payment` (
 	`amount`	DECIMAL(19, 4)	NULL,
 	`payment_time`	datetime	NULL,
 	`reservation_id`	bigint	NOT NULL,
-	`user_id`	bigint	NOT NULL	COMMENT '사용자 식별자',
+	`balance_id`	bigint	NOT NULL	COMMENT '사용자 잔고 식별자',
     INDEX payment_tsid_idx (tsid)
 );
 
