@@ -1,4 +1,4 @@
-package io.ticketaka.api.concert.presentation
+package io.ticketaka.api.concert.presentation.dto
 
 import java.time.LocalDate
 

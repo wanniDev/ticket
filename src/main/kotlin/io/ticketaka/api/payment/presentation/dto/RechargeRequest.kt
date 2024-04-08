@@ -1,4 +1,4 @@
-package io.ticketaka.api.payment.presentation
+package io.ticketaka.api.payment.presentation.dto
 
 import java.math.BigDecimal
 

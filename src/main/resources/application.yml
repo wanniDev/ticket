@@ -6,12 +6,12 @@ spring:
       enabled: true
   datasource:
     driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:ticket;MODE=MYSQL;DB_CLOSE_DELAY=-1
+    url: jdbc:h2:mem:tiketatka;MODE=MYSQL;DB_CLOSE_DELAY=-1
     username: sa
     password:
 #  datasource:
 #    driver-class-name: com.mysql.cj.jdbc.Driver
-#    url: jdbc:mysql://localhost:3306/lecture?autoReconnect=true&allowMultiQueries=true&useUnicode=true&characterEncoding=utf8
+#    url: jdbc:mysql://localhost:3306/tiketatka?autoReconnect=true&allowMultiQueries=true&useUnicode=true&characterEncoding=utf8
 #    username: root
 #    password:
   jpa:
@@ -27,3 +27,18 @@ spring:
     init:
       schema-locations: classpath*:sql/schema.sql
       mode: always
+
+springdoc:
+  swagger-ui:
+    path: /swagger-custom-ui.html
+    groups-order: DESC
+    tags-sorter: alpha
+    operations-sorter: method
+    disable-swagger-default-url: true
+    display-request-duration: true
+  api-docs:
+    path: /api-docs
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+  paths-to-match:
+    - /api/**

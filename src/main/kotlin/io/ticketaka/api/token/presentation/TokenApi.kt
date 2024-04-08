@@ -9,15 +9,15 @@ import java.time.LocalDateTime
 
 @RestController
 @RequestMapping("/api/token")
-class TokenApi {
+class TokenApi : TokenApiSpecification {
     @PostMapping
-    fun createToken(@RequestBody request: CreateTokenRequest): ResponseEntity<CreateTokenResponse> {
+    override fun createToken(@RequestBody request: CreateTokenRequest): ResponseEntity<CreateTokenResponse> {
         return ResponseEntity
             .ok(CreateTokenResponse("tokenId", LocalDateTime.now().plusMinutes(30L)))
     }
 
     @PostMapping("/peek")
-    fun peekToken(@RequestBody request: PeekTokenRequest): ResponseEntity<PeekTokenResponse> {
+    override fun peekToken(@RequestBody request: PeekTokenRequest): ResponseEntity<PeekTokenResponse> {
         return ResponseEntity
             .ok(PeekTokenResponse(true, LocalDateTime.now()))
     }

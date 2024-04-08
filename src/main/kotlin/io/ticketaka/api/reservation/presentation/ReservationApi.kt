@@ -9,9 +9,9 @@ import java.time.LocalDateTime
 
 @RestController
 @RequestMapping("/api/reservation")
-class ReservationApi {
+class ReservationApi : ReservationApiSpecification {
     @PostMapping
-    fun createReservation(@RequestBody request: CreateReservationRequest): CreateReservationResponse {
+    override fun createReservation(@RequestBody request: CreateReservationRequest): CreateReservationResponse {
         return CreateReservationResponse(
             "reservationId",
             Reservation.Status.CONFIRMED,
