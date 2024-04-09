@@ -26,7 +26,7 @@ class JwtFilter(
         filterChain: FilterChain
     ) {
         log.info("JwtFilter")
-        if (request.requestURI.contains("/api/token")) {
+        if (request.requestURI.contains("/api/token") || request.requestURI.contains("/h2-console")) {
             filterChain.doFilter(request, response)
             return
         }
