@@ -2,23 +2,26 @@ package io.ticketaka.api.token.infrastructure.persistence
 
 import io.ticketaka.api.token.domain.Token
 import io.ticketaka.api.token.domain.TokenRepository
+import io.ticketaka.api.token.infrastructure.jpa.JpaTokenRepository
 import org.springframework.stereotype.Component
 
 @Component
-class TokenRepositoryComposition: TokenRepository {
+class TokenRepositoryComposition(
+    private val jpaTokenRepository: JpaTokenRepository
+): TokenRepository {
     override fun save(token: Token): Token {
-        TODO("Not yet implemented")
+        return jpaTokenRepository.save(token)
     }
 
     override fun delete(token: Token) {
-        TODO("Not yet implemented")
+        jpaTokenRepository.delete(token)
     }
 
-    override fun findFirstOrderByCreatedAtAsc(): Token? {
-        TODO("Not yet implemented")
+    override fun findFirstTokenOrderByIssuedTimeAscLimit1(): Token? {
+        return jpaTokenRepository.findFirstTokenOrderByIssuedTimeAscLimit1()
     }
 
     override fun count(): Long {
-        TODO("Not yet implemented")
+        return jpaTokenRepository.count()
     }
 }
