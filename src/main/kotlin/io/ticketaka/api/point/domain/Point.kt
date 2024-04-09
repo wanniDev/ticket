@@ -6,10 +6,11 @@ import java.time.LocalDateTime
 
 @Entity
 class Point(
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long,
     val tsid: String,
     val balance: BigDecimal,
     val createTime: LocalDateTime,
     val updateTime: LocalDateTime
-)
+) {
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Long? = null
+}

@@ -1,6 +1,8 @@
 package io.ticketaka.api.common.domain.queue
 
+import io.ticketaka.api.point.domain.Point
 import io.ticketaka.api.token.domain.Token
+import io.ticketaka.api.user.domain.User
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -18,7 +20,7 @@ class TokenWaitingQueueTest {
         val mockTokenWaitingQueue = mock<TokenWaitingQueue> {
             on { offer(any()) } doReturn true
         }
-        val token = Token(1L, "sdfewWER", LocalDateTime.now(), Token.Status.ACTIVE, "sdferWer")
+        val token = Token.newInstance(User("userTsid1", Point("pointTsid1", 0.0.toBigDecimal(), LocalDateTime.now(), LocalDateTime.now())))
 
         // when
         val result = mockTokenWaitingQueue.offer(token)
@@ -31,7 +33,7 @@ class TokenWaitingQueueTest {
     fun `test poll`() {
         // given
         val mockTokenWaitingQueue = mock<TokenWaitingQueue> {
-            on { poll() } doReturn Token(1L, "sdfewWER", LocalDateTime.now(), Token.Status.ACTIVE, "sdferWer")
+            on { poll() } doReturn Token.newInstance(User("userTsid1", Point("pointTsid1", 0.0.toBigDecimal(), LocalDateTime.now(), LocalDateTime.now())))
         }
 
         // when

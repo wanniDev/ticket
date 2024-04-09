@@ -4,8 +4,6 @@ import jakarta.persistence.*
 
 @Entity
 class Seat(
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long,
     val tsid: String,
     val number: String,
     @Enumerated(EnumType.STRING)
@@ -13,6 +11,9 @@ class Seat(
     @ManyToOne(targetEntity = ConcertDate::class, optional = false, fetch = FetchType.LAZY)
     val concertDate: ConcertDate
 ) {
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Long? = null
+
     enum class Status {
         AVAILABLE, RESERVED, OCCUPIED
     }

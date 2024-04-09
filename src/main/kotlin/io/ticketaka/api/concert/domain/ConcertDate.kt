@@ -8,8 +8,9 @@ import java.time.LocalDateTime
 
 @Entity
 class ConcertDate(
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long,
     val tsid: String,
     val date: LocalDateTime
-)
+) {
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Long? = null
+}

@@ -8,8 +8,6 @@ import java.time.LocalDateTime
 
 @Entity
 class Payment(
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long,
     val tsid: String,
     val amount: BigDecimal,
     val paymentTime: LocalDateTime,
@@ -17,4 +15,7 @@ class Payment(
     val point: Point,
     @ManyToOne(targetEntity = Reservation::class, optional = false, fetch = FetchType.LAZY)
     val reservation: Reservation
-)
+) {
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Long? = null
+}

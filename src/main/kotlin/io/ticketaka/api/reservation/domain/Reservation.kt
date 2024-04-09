@@ -7,8 +7,6 @@ import java.time.LocalDateTime
 
 @Entity
 class Reservation(
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long,
     val tsid: String,
     @Enumerated(EnumType.STRING)
     val status: Status,
@@ -19,6 +17,9 @@ class Reservation(
     @ManyToOne(targetEntity = Seat::class, optional = false, fetch = FetchType.LAZY)
     val seat: Seat
 ) {
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Long? = null
+
     enum class Status {
         PENDING, CONFIRMED, CANCELLED
     }
