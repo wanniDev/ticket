@@ -26,6 +26,11 @@ class JwtFilter(
         filterChain: FilterChain
     ) {
         log.info("JwtFilter")
+        if (request.requestURI.contains("/api/token")) {
+            filterChain.doFilter(request, response)
+            return
+        }
+        
         val header = request.getHeader(AUTHORIZATION_HEADER)
         val tokenMap = jwtTokenParser.parse(header)
 
