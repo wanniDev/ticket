@@ -47,6 +47,9 @@ dependencies {
     // mysql
     runtimeOnly("com.mysql:mysql-connector-j")
 
+    // tsid
+    implementation("com.github.f4b6a3:tsid-creator:5.2.6")
+
     // test
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
