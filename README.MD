@@ -373,7 +373,7 @@ erDiagram
         varchar tsid
         datetime issued_time
         varchar status
-        bigint user_id
+        varchar user_tsid
     }
     concert_Date {
         bigint id

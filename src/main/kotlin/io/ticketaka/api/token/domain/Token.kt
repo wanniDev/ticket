@@ -12,8 +12,7 @@ class Token(
     val issuedTime: LocalDateTime,
     @Enumerated(EnumType.STRING)
     val status: Status,
-    @ManyToOne(targetEntity = User::class, optional = false, fetch = FetchType.LAZY)
-    val user: User
+    val userTsid: String
 ) {
     enum class Status {
         ACTIVE, EXPIRED

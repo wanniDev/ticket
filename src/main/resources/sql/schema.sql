@@ -19,7 +19,7 @@ CREATE TABLE `token` (
     `tsid` varchar(255) NOT NULL UNIQUE,
 	`issued_time`	datetime	NULL,
 	`status`	varchar(255)	NULL,
-	`user_id`	bigint	NOT NULL,
+	`user_tsid`	varchar(255)	NOT NULL,
     INDEX token_tsid_idx (tsid)
 );
 
