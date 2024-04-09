@@ -1,4 +1,4 @@
-package io.ticketaka.api.balance.presentation.dto
+package io.ticketaka.api.point.presentation.dto
 
 import java.math.BigDecimal
 

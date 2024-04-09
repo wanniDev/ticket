@@ -1,7 +1,7 @@
 package io.ticketaka.api.reservation.domain
 
 import io.ticketaka.api.concert.domain.Seat
-import io.ticketaka.api.balance.domain.Balance
+import io.ticketaka.api.user.domain.User
 import jakarta.persistence.*
 import java.time.LocalDateTime
 
@@ -14,8 +14,8 @@ class Reservation(
     val status: Status,
     val reservationTime: LocalDateTime,
     val expirationTime: LocalDateTime,
-    @ManyToOne(targetEntity = Balance::class, optional = false, fetch = FetchType.LAZY)
-    val balance: Balance,
+    @ManyToOne(targetEntity = User::class, optional = false, fetch = FetchType.LAZY)
+    val user: User,
     @ManyToOne(targetEntity = Seat::class, optional = false, fetch = FetchType.LAZY)
     val seat: Seat
 ) {

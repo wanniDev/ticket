@@ -336,7 +336,85 @@ sequenceDiagram
     ```
 
 ## 데이터베이스 스키마
-![TICKET](https://github.com/wanniDev/ticket/assets/81374655/a81c7d78-34d0-496b-bd16-f19ed9222f37)
+```mermaid
+erDiagram
+    user {
+        bigint id
+        varchar tsid
+    }
+    point {
+      bigint id
+      varchar tsid
+      decimal balance
+      datetime create_time
+      datetime update_time
+    }
+    point_usage {
+      bigint id
+      varchar tsid
+      varchar transaction_type
+      bigint user_id
+      bigint balance_id
+    }
+    token {
+        bigint id
+        varchar tsid
+        datetime issued_time
+        varchar status
+        bigint user_id
+    }
+    concert_Date {
+        bigint id
+        varchar tsid
+        datetime date
+    }
+    
+    seat { 
+        bigint id
+        varchar tsid
+        varchar number
+        varchar status
+        bigint concert_date_id
+    }
+
+    reservation {
+        bigint id
+        string tsid
+        string status
+        datetime reservation_time
+        datetime expiration_time
+        bigint user_id
+        bigint seat_id
+    }
+    
+    payment {
+        bigint id
+        varchar tsid
+        decimal amount
+        datetime payment_time
+        bigint reservation_id
+        bigint point_id
+    }
+    
+    payment_usage {
+        bigint id
+        varchar tsid
+        varchar transaction_key
+        varchar status
+        datetime create_time
+        datetime update_time
+        bigint payment_id
+        bigint point_id
+    }
+    
+    point ||--o{ payment_usage : "1"
+    payment ||--o{ payment_usage : "1"
+    point ||--o{ point_usage : "1"
+    user ||--o{ point_usage : "1"
+    user ||--o| token : "1"
+    user ||--o{ reservation : "1"
+    concert_Date ||--o{ seat : "1"
+```
 
 ## 플로우 차트
 ### 0. 유저 토큰 대기열 확인

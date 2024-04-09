@@ -1,21 +1,21 @@
-package io.ticketaka.api.token.domain
+package io.ticketaka.api.point.domain
 
 import io.ticketaka.api.user.domain.User
 import jakarta.persistence.*
-import java.time.LocalDateTime
 
 @Entity
-class Token(
+class PointUsage(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
     val tsid: String,
-    val issuedTime: LocalDateTime,
     @Enumerated(EnumType.STRING)
-    val status: Status,
+    val transactionType: TransactionType,
     @ManyToOne(targetEntity = User::class, optional = false, fetch = FetchType.LAZY)
-    val user: User
+    val user: User,
+    @ManyToOne(targetEntity = Point::class, optional = false, fetch = FetchType.LAZY)
+    val point: Point,
 ) {
-    enum class Status {
-        ACTIVE, EXPIRED
+    enum class TransactionType {
+        CHARGE, USE
     }
 }
