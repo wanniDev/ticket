@@ -15,17 +15,37 @@
 - 잔액 충전 / 조회 API
 - 결제 API
 
-### 0. 유저 토큰 대기열 확인
-- 목적 : 사용자가 대기열에 있는지 확인할 수 있어야 합니다.
-- 핵심 요구사항 :
-    - 사용자는 토큰을 입력하여 대기열에 있는지 확인할 수 있어야 합니다.
-    - 대기열에 있는 토큰은 다른 사용자에게 노출되지 않아야 합니다.
-- 제약사항 :
-  - 대기열은 FIFO(First In First Out) 방식으로 동작해야 합니다.
-  - 대기열에 있는 토큰은 만료 시간이 지나면 자동으로 삭제되어야 합니다.
-  - 대기열에 있는 토큰은 한 번에 하나의 사용자만 확인할 수 있어야 합니다.
-- 특이사항 :
-    - 대기열 확인은 토큰을 입력받아 확인하는 방식으로 구현합니다.
+### 0. 유저 토큰 대기열 검증
+```mermaid
+sequenceDiagram
+    participant C as Client
+    participant F as Filter
+    participant AO as AOP
+    participant A as API
+    participant Q as 대기열
+    C->>F: api 요청
+    F->>F: 토큰 검증
+    opt 잘못된 토큰
+        F-->>C: 401 Unauthorized
+    end
+    F->>AO: api 요청 처리 위임
+    loop 시도 횟수 < 최대 횟수
+        AO->>Q: 대기열 확인
+        Q->>Q: 대기열 순번 확인
+        alt 대기열 순번이 일치
+            Q-->>AO: loop break
+        else 대기열 순번이 불일치
+            Q-->>AO: 시도 횟수++
+        end
+    end
+    alt 대기열 순번이 일치
+        AO->>A: api 요청 처리 위임
+        A->>A: api 로직 처리
+        A-->>C: api 응답
+    else 대기열 순번이 불일치
+        AO->>C: 429 Too Many Requests
+    end
+```
 
 ### 1. 유저 토큰 발급 API
 - 묙젹 : 사용자가 서버와 상호작용하기 위한 토큰을 발급받을 수 있어야 합니다.
