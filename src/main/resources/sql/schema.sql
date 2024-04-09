@@ -1,3 +1,9 @@
+CREATE TABLE `user` (
+    `id`	bigint    NOT NULL	COMMENT '잔고 식별자',
+    `tsid` varchar(255) NOT NULL UNIQUE COMMENT '잔고 식별 보조키',
+    INDEX user_tsid_idx (tsid)
+);
+
 CREATE TABLE `balance` (
 	`id`	bigint    NOT NULL	COMMENT '잔고 식별자',
     `tsid` varchar(255) NOT NULL UNIQUE COMMENT '잔고 식별 보조키',
@@ -55,7 +61,19 @@ CREATE TABLE `payment` (
     INDEX payment_tsid_idx (tsid)
 );
 
-ALTER TABLE `balance` ADD CONSTRAINT `PK_USER` PRIMARY KEY (
+CREATE TABLE `user_balance` (
+    `id`	bigint	NOT NULL,
+    `tsid` varchar(255) NOT NULL UNIQUE COMMENT '사용자 잔고 식별 보조키',
+    `user_id`	bigint	NOT NULL,
+    `balance_id`	bigint	NOT NULL,
+    INDEX user_balance_tsid_idx (user_id)
+);
+
+ALTER TABLE `user` ADD CONSTRAINT `PK_USER` PRIMARY KEY (
+    `id`
+);
+
+ALTER TABLE `balance` ADD CONSTRAINT `PK_BALANCE` PRIMARY KEY (
 	`id`
 );
 
@@ -77,4 +95,8 @@ ALTER TABLE `reservation` ADD CONSTRAINT `PK_RESERVATION` PRIMARY KEY (
 
 ALTER TABLE `payment` ADD CONSTRAINT `PK_PAYMENT` PRIMARY KEY (
 	`id`
+);
+
+ALTER TABLE `user_balance` ADD CONSTRAINT `PK_USER_BALANCE` PRIMARY KEY (
+    `id`
 );
