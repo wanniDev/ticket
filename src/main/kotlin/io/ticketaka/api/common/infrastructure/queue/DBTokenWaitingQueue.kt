@@ -15,13 +15,13 @@ class DBTokenWaitingQueue(
     }
 
     override fun poll(): Token? {
-        return tokenRepository.findFirstOrderByCreatedAtAsc()?.also {
+        return tokenRepository.findFirstTokenOrderByIssuedTimeAscLimit1()?.also {
             tokenRepository.delete(it)
         }
     }
 
     override fun peek(): Token? {
-        return tokenRepository.findFirstOrderByCreatedAtAsc()
+        return tokenRepository.findFirstTokenOrderByIssuedTimeAscLimit1()
     }
 
     override fun size(): Long {
