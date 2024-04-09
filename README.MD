@@ -29,21 +29,25 @@ sequenceDiagram
         F-->>C: 401 Unauthorized
     end
     F->>AO: api 요청 처리 위임
-    loop 시도 횟수 < 최대 횟수
+    alt 대기열 용량 허용
+      loop 시도 횟수 < 최대 횟수
         AO->>Q: 대기열 확인
         Q->>Q: 대기열 순번 확인
         alt 대기열 순번이 일치
-            Q-->>AO: loop break
+          Q-->>AO: loop break
         else 대기열 순번이 불일치
-            Q-->>AO: 시도 횟수++
+          Q-->>AO: 시도 횟수++
         end
-    end
-    alt 대기열 순번이 일치
+      end
+      alt 대기열 순번이 일치
         AO->>A: api 요청 처리 위임
         A->>A: api 로직 처리
         A-->>C: api 응답
-    else 대기열 순번이 불일치
+      else 대기열 순번이 불일치
         AO->>C: 429 Too Many Requests
+      end
+    else 대기열 용량 초과
+        AO-->>C: 429 Too Many Requests
     end
 ```
 
