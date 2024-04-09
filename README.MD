@@ -44,7 +44,7 @@ sequenceDiagram
         A->>A: api 로직 처리
         A-->>C: api 응답
       else 대기열 순번이 불일치
-        AO->>C: 429 Too Many Requests
+        AO-->>C: 429 Too Many Requests
       end
     else 대기열 용량 초과
         AO-->>C: 429 Too Many Requests
@@ -52,6 +52,29 @@ sequenceDiagram
 ```
 
 ### 1. 유저 토큰 발급 API
+```mermaid
+sequenceDiagram
+    participant C as Client
+    participant AO as AOP
+    participant A as API
+    participant DB as Database
+    C->>AO: api 요청
+    alt 대기열 사용가능
+      AO->>A: api 요청 처리 위임
+    else 대기열 사용불가
+      AO-->>C: 429 Too Many Requests
+    end
+    AO->>A: api 요청 처리 위임
+    A->>DB: 사용자 조회
+    DB->>DB: 사용자 식별 정보 확인
+    DB-->>A: 사용자 식별 정보 결과 return
+    opt 사용자 식별 불가 
+        A-->>C: 400 Bad Request
+    end
+    A->>A: 토큰 생성
+    A-->>C: api 응답
+
+```
 - 묙젹 : 사용자가 서버와 상호작용하기 위한 토큰을 발급받을 수 있어야 합니다.
 - 핵심 요구사항 :
     - 사용자 식별 정보를 기반으로 토큰을 생성합니다.
