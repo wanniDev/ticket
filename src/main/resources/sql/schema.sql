@@ -26,7 +26,7 @@ CREATE TABLE `token` (
 CREATE TABLE `concert_date` (
     `id` bigint auto_increment primary key,
     `tsid` varchar(255) not null unique,
-	`date`	datetime null,
+	`date`	date null,
     INDEX concert_date_tsid_idx (tsid)
 );
 

@@ -1,5 +1,6 @@
 package io.ticketaka.api.concert.presentation
 
+import io.ticketaka.api.concert.application.ConcertSeatService
 import io.ticketaka.api.concert.presentation.dto.ConcertDateResponse
 import io.ticketaka.api.concert.presentation.dto.ConcertSeatResponse
 import org.springframework.http.ResponseEntity
@@ -11,7 +12,7 @@ import java.time.LocalDate
 
 @RestController
 @RequestMapping("/api/concert")
-class ConcertApi : ConcertApiSpecification {
+class ConcertApi(private val concertSeatService: ConcertSeatService) : ConcertApiSpecification {
     @GetMapping("/date")
     override fun getConcertDate(): ResponseEntity<ConcertDateResponse> {
         return ResponseEntity.ok(
@@ -31,7 +32,7 @@ class ConcertApi : ConcertApiSpecification {
         return ResponseEntity.ok(
             ConcertSeatResponse(
                 date,
-                listOf(1,2,3,4)
+                concertSeatService.getSeats(date)
             )
         )
     }
