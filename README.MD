@@ -351,38 +351,38 @@ sequenceDiagram
 ```mermaid
 erDiagram
     user {
-        bigint id
+        bigint id pk
         varchar tsid
     }
     point {
-      bigint id
+      bigint id pk
       varchar tsid
       decimal balance
       datetime create_time
       datetime update_time
     }
     point_usage {
-      bigint id
+      bigint id pk
       varchar tsid
       varchar transaction_type
-      bigint user_id
-      bigint balance_id
+      bigint user_id fk
+      bigint balance_id fk
     }
     token {
-        bigint id
+        bigint id pk
         varchar tsid
         datetime issued_time
         varchar status
         varchar user_tsid
     }
     concert_Date {
-        bigint id
+        bigint id pk
         varchar tsid
-        datetime date
+        date date
     }
     
     seat { 
-        bigint id
+        bigint id pk
         varchar tsid
         varchar number
         varchar status
@@ -390,33 +390,33 @@ erDiagram
     }
 
     reservation {
-        bigint id
+        bigint id pk
         string tsid
         string status
         datetime reservation_time
         datetime expiration_time
-        bigint user_id
-        bigint seat_id
+        bigint user_id fk
+        bigint seat_id fk
     }
     
     payment {
-        bigint id
+        bigint id pk
         varchar tsid
         decimal amount
         datetime payment_time
-        bigint reservation_id
-        bigint point_id
+        bigint reservation_id fk
+        bigint point_id fk
     }
     
     payment_usage {
-        bigint id
+        bigint id pk
         varchar tsid
         varchar transaction_key
         varchar status
         datetime create_time
         datetime update_time
-        bigint payment_id
-        bigint point_id
+        bigint payment_id fk
+        bigint point_id fk
     }
     
     point ||--o{ payment_usage : "1"
