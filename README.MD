@@ -431,17 +431,7 @@ erDiagram
         datetime payment_time
     }
     
-    payment_history {
-        bigint id pk
-        varchar tsid
-        varchar transaction_key
-        varchar status
-        datetime occurred_time
-        datetime update_time
-    }
-    
     concert ||--o{ seat : "1"
-    payment ||--o{ payment_history : "1"
     point ||--o{ point_usage : "1"
     user ||--o{ point_usage : "1"
     user ||--o| token : "1"

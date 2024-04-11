@@ -11,7 +11,7 @@ import java.time.LocalDateTime
 class Reservation(
     val tsid: String,
     @Enumerated(EnumType.STRING)
-    val status: Status,
+    var status: Status,
     val reservationTime: LocalDateTime,
     val expirationTime: LocalDateTime,
     @ManyToOne(targetEntity = User::class, optional = false, fetch = FetchType.LAZY)
@@ -21,6 +21,13 @@ class Reservation(
     @ManyToOne(targetEntity = Seat::class, optional = false, fetch = FetchType.LAZY)
     val seat: Seat
 ) {
+    fun confirm() {
+        if (status != Status.PENDING) {
+            throw IllegalStateException("Reservation is not pending")
+        }
+        status = Status.CONFIRMED
+    }
+
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
 

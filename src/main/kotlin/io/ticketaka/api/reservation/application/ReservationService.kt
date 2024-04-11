@@ -29,9 +29,11 @@ class ReservationService(
         val seat = seatRepository.findByNumberAndConcert(command.seatNumber, concert)
             ?: throw IllegalArgumentException("Seat not found")
 
+
         val reservation = Reservation.createPendingReservation(user, concert, seat)
-        reservationRepository.save(reservation)
         user.chargePoint(concert.price)
+        reservation.confirm()
+        reservationRepository.save(reservation)
 
         return CreateReservationResult(
             "reservationId",

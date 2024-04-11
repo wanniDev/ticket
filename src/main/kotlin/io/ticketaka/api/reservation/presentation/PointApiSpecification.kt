@@ -8,7 +8,7 @@ import io.ticketaka.api.reservation.presentation.dto.RechargeRequest
 import org.springframework.http.ResponseEntity
 
 @Tag(name = "Balance", description = "잔고 도메인 API")
-interface BalanceApiSpecification {
+interface PointApiSpecification {
 
     @Operation(
         summary = "충전 API",

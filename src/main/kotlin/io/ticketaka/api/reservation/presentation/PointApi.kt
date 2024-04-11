@@ -14,9 +14,9 @@ import java.math.BigDecimal
 
 @RestController
 @RequestMapping("/api/balance")
-class BalanceApi(
+class PointApi(
     private val balanceService: BalanceService
-): BalanceApiSpecification {
+): PointApiSpecification {
     @PostMapping("/recharge")
     override fun recharge(@RequestBody request: RechargeRequest): ResponseEntity<Void> {
         balanceService.recharge(request.toCommand())
