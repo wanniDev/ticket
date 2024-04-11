@@ -13,7 +13,7 @@ class ConcertSeatService(
     private val concertDateRepository: ConcertDateRepository
 ) {
     fun getSeats(date: LocalDate): List<Int> {
-        val concertDate = concertDateRepository.findByDate(date)
+        val concertDate = concertDateRepository.findByDate(date) ?: throw IllegalArgumentException("Concert date not found")
         return seatRepository.findByConcertDateId(concertDate.id!!).map { it.number.toInt() }
     }
 }

@@ -1,5 +1,6 @@
 package io.ticketaka.api.reservation.presentation
 
+import io.ticketaka.api.reservation.application.ReservationService
 import io.ticketaka.api.reservation.domain.Reservation
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -9,13 +10,16 @@ import java.time.LocalDateTime
 
 @RestController
 @RequestMapping("/api/reservation")
-class ReservationApi : ReservationApiSpecification {
+class ReservationApi(
+    private val reservationService: ReservationService
+) : ReservationApiSpecification {
     @PostMapping
     override fun createReservation(@RequestBody request: CreateReservationRequest): CreateReservationResponse {
+        val result = reservationService.createReservation(request.toCommand())
         return CreateReservationResponse(
-            "reservationId",
-            Reservation.Status.CONFIRMED,
-            LocalDateTime.now().plusMinutes(5L)
+            result.reservationId,
+            result.status,
+            result.expiration
         )
     }
 }
