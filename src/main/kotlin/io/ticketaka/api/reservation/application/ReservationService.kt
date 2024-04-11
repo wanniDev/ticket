@@ -4,8 +4,8 @@ import io.ticketaka.api.concert.domain.ConcertRepository
 import io.ticketaka.api.concert.domain.SeatRepository
 import io.ticketaka.api.reservation.application.dto.CreateReservationCommand
 import io.ticketaka.api.reservation.application.dto.CreateReservationResult
-import io.ticketaka.api.reservation.domain.Reservation
-import io.ticketaka.api.reservation.domain.ReservationRepository
+import io.ticketaka.api.reservation.domain.reservation.Reservation
+import io.ticketaka.api.reservation.domain.reservation.ReservationRepository
 import io.ticketaka.api.user.domain.UserRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -29,7 +29,7 @@ class ReservationService(
         val seat = seatRepository.findByNumberAndConcert(command.seatNumber, concert)
             ?: throw IllegalArgumentException("Seat not found")
 
-        val reservation = Reservation.createPendingReservation(user, seat)
+        val reservation = Reservation.createPendingReservation(user, concert, seat)
         reservationRepository.save(reservation)
         user.chargePoint(concert.price)
 

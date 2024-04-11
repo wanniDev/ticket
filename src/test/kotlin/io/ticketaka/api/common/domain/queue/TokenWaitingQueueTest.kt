@@ -1,6 +1,6 @@
 package io.ticketaka.api.common.domain.queue
 
-import io.ticketaka.api.point.domain.Point
+import io.ticketaka.api.reservation.domain.point.Point
 import io.ticketaka.api.user.domain.domain.Token
 import io.ticketaka.api.user.domain.User
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -10,7 +10,6 @@ import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
-import java.time.LocalDateTime
 
 @ExtendWith(MockitoExtension::class)
 class TokenWaitingQueueTest {

@@ -1,10 +1,10 @@
-package io.ticketaka.api.point.presentation
+package io.ticketaka.api.reservation.presentation
 
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
-import io.ticketaka.api.point.presentation.dto.BalanceResponse
-import io.ticketaka.api.point.presentation.dto.RechargeRequest
+import io.ticketaka.api.reservation.presentation.dto.BalanceResponse
+import io.ticketaka.api.reservation.presentation.dto.RechargeRequest
 import org.springframework.http.ResponseEntity
 
 @Tag(name = "Balance", description = "잔고 도메인 API")

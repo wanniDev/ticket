@@ -1,6 +1,6 @@
-package io.ticketaka.api.point.infrastructure.jpa
+package io.ticketaka.api.reservation.infrastructure.jpa
 
-import io.ticketaka.api.point.domain.Point
+import io.ticketaka.api.reservation.domain.point.Point
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface JpaPointRepository: JpaRepository<Point, Long> {

@@ -27,6 +27,7 @@ CREATE TABLE `concert` (
     `id` bigint auto_increment primary key,
     `tsid` varchar(255) not null unique,
 	`date`	date null,
+    `price`   decimal(19, 4) not null,
     INDEX concert_tsid_idx (tsid)
 );
 
@@ -46,6 +47,7 @@ CREATE TABLE `reservation` (
 	`reservation_time`	datetime null,
 	`expiration_time`	datetime null,
 	`user_id`	bigint not null,
+    `concert_id`	bigint not null,
 	`seat_id`	bigint not null,
     INDEX reservation_tsid_idx (tsid)
 );

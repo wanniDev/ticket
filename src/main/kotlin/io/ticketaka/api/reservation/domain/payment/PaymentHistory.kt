@@ -2,7 +2,6 @@ package io.ticketaka.api.reservation.domain.payment
 
 import com.github.f4b6a3.tsid.TsidCreator
 import io.ticketaka.api.common.infrastructure.tsid.TsIdKeyGenerator
-import io.ticketaka.api.point.domain.Point
 import jakarta.persistence.*
 import java.math.BigDecimal
 import java.time.LocalDateTime

@@ -1,6 +1,6 @@
 package io.ticketaka.api.payment.application
 
-import io.ticketaka.api.point.domain.Point
+import io.ticketaka.api.reservation.domain.point.Point
 import io.ticketaka.api.reservation.application.PaymentService
 import io.ticketaka.api.reservation.application.dto.PaymentCommand
 import io.ticketaka.api.reservation.domain.payment.Payment

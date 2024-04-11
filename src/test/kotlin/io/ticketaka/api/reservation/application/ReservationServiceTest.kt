@@ -4,10 +4,10 @@ import io.ticketaka.api.concert.domain.Concert
 import io.ticketaka.api.concert.domain.ConcertRepository
 import io.ticketaka.api.concert.domain.Seat
 import io.ticketaka.api.concert.domain.SeatRepository
-import io.ticketaka.api.point.domain.Point
+import io.ticketaka.api.reservation.domain.point.Point
 import io.ticketaka.api.reservation.application.dto.CreateReservationCommand
-import io.ticketaka.api.reservation.domain.Reservation
-import io.ticketaka.api.reservation.domain.ReservationRepository
+import io.ticketaka.api.reservation.domain.reservation.Reservation
+import io.ticketaka.api.reservation.domain.reservation.ReservationRepository
 import io.ticketaka.api.user.domain.User
 import io.ticketaka.api.user.domain.UserRepository
 import org.junit.jupiter.api.Assertions.*
@@ -41,7 +41,7 @@ class ReservationServiceTest {
             on { findByNumberAndConcert(any(), any()) } doReturn seat
         }
         val mockReservationRepository = mock<ReservationRepository>() {
-            on { save(any()) } doReturn Reservation.createPendingReservation(user, seat)
+            on { save(any()) } doReturn Reservation.createPendingReservation(user, concert, seat)
         }
 
         val reservationService = ReservationService(mockUserRepository, mockConcertRepository, mockSeatRepository, mockReservationRepository)

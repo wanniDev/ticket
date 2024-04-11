@@ -1,7 +1,7 @@
 package io.ticketaka.api.user.domain
 
 import io.ticketaka.api.common.infrastructure.tsid.TsIdKeyGenerator
-import io.ticketaka.api.point.domain.Point
+import io.ticketaka.api.reservation.domain.point.Point
 import jakarta.persistence.*
 import java.math.BigDecimal
 

@@ -1,6 +1,6 @@
-package io.ticketaka.api.point.presentation.dto
+package io.ticketaka.api.reservation.presentation.dto
 
-import io.ticketaka.api.point.application.dto.RechargeCommand
+import io.ticketaka.api.reservation.application.dto.RechargeCommand
 import java.math.BigDecimal
 
 data class RechargeRequest(

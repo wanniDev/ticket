@@ -1,4 +1,4 @@
-package io.ticketaka.api.point.domain
+package io.ticketaka.api.reservation.domain.point
 
 import io.ticketaka.api.user.domain.User
 import jakarta.persistence.*

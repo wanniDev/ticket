@@ -1,15 +1,13 @@
 package io.ticketaka.api.token.application
 
-import io.jsonwebtoken.impl.security.EdwardsCurve.findById
 import io.ticketaka.api.common.infrastructure.jwt.JwtProvider
 import io.ticketaka.api.common.infrastructure.jwt.JwtTokens
-import io.ticketaka.api.point.domain.Point
+import io.ticketaka.api.reservation.domain.point.Point
 import io.ticketaka.api.user.application.TokenService
 import io.ticketaka.api.user.domain.domain.Token
 import io.ticketaka.api.user.domain.domain.TokenRepository
 import io.ticketaka.api.user.domain.User
 import io.ticketaka.api.user.domain.UserRepository
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.junit.jupiter.MockitoExtension
@@ -17,7 +15,6 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
-import java.time.LocalDateTime
 
 @ExtendWith(MockitoExtension::class)
 class TokenServiceTest {
