@@ -76,7 +76,7 @@ CREATE TABLE payment_history (
     `transaction_key` varchar(255) null,
     `amount` DECIMAL(19, 4) null,
     `status` varchar(255) null,
-    `create_time`	datetime not null,
+    `occurred_time`	datetime not null,
     `update_time`	datetime null,
     `payment_id` bigint not null,
     `point_id` bigint not null,

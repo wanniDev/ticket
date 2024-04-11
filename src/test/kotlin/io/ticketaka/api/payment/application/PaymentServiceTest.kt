@@ -1,10 +1,11 @@
 package io.ticketaka.api.payment.application
 
-import io.ticketaka.api.reservation.domain.payment.PaymentGatewayApproval
-import io.ticketaka.api.reservation.domain.payment.PaymentInfoValidator
 import io.ticketaka.api.point.domain.Point
 import io.ticketaka.api.reservation.application.PaymentService
 import io.ticketaka.api.reservation.application.dto.PaymentCommand
+import io.ticketaka.api.reservation.domain.payment.Payment
+import io.ticketaka.api.reservation.domain.payment.PaymentHistoryRepository
+import io.ticketaka.api.reservation.domain.payment.PaymentRepository
 import io.ticketaka.api.user.domain.User
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -19,30 +20,20 @@ class PaymentServiceTest {
         val point = Point.newInstance()
         val user =
             User("userTsid1", point)
-        val paymentInfoValidator = mock<PaymentInfoValidator>()
-        val paymentGatewayApproval = mock<PaymentGatewayApproval>()
-        val paymentService = PaymentService(
-            paymentInfoValidator,
-            paymentGatewayApproval
-        )
+        val mockPaymentRepository = mock<PaymentRepository> {
+            on { save(any()) } doReturn Payment.newInstance(1000.toBigDecimal())
+        }
+        val mockPaymentHistoryRepository = mock<PaymentHistoryRepository>()
+        val paymentService = PaymentService(mockPaymentRepository, mockPaymentHistoryRepository)
         val paymentCommand = PaymentCommand(
-            user.tsid,
-            20000.toBigDecimal(),
-            "ord-123456789",
-            "cardExpiration",
-            "cardCvc",
-            2024,
-            4,
-            "12**",
-            "991299-1******",
+            userTsid = user.tsid,
+            amount = 1000.toBigDecimal()
         )
-        val paymentInfoData = paymentCommand.toDomain()
 
         // when
         paymentService.paymentApproval(paymentCommand)
 
         // then
-        verify(paymentInfoValidator).validate(paymentInfoData)
-        verify(paymentGatewayApproval).approve(paymentInfoData)
+        verify(mockPaymentRepository, times(1)).save(any())
     }
 }

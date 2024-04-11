@@ -26,25 +26,11 @@ class BalanceServiceTest {
         val user = User("userTsid1", point)
         val rechargeCommand = RechargeCommand(
             user.tsid,
-            20000.toBigDecimal(),
-            "ord-123456789",
-            "cardExpiration",
-            "cardCvc",
-            2024,
-            4,
-            "12**",
-            "991299-1******",
+            20000.toBigDecimal()
         )
         val paymentCommand = PaymentCommand(
             userTsid = user.tsid,
-            amount = rechargeCommand.amount,
-            orderId = rechargeCommand.orderId,
-            orderName = rechargeCommand.orderName,
-            cardNumber = rechargeCommand.cardNumber,
-            cardExpirationYear = rechargeCommand.cardExpirationYear,
-            cardExpirationMonth = rechargeCommand.cardExpirationMonth,
-            cardPasswordPrefix = rechargeCommand.cardPasswordPrefix,
-            customerIdentityNumber = rechargeCommand.customerIdentityNumber
+            amount = rechargeCommand.amount
         )
 
         val mockUserRepository = mock<UserRepository> {

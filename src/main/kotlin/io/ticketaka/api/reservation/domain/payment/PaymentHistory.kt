@@ -1,5 +1,6 @@
 package io.ticketaka.api.reservation.domain.payment
 
+import com.github.f4b6a3.tsid.TsidCreator
 import io.ticketaka.api.common.infrastructure.tsid.TsIdKeyGenerator
 import io.ticketaka.api.point.domain.Point
 import jakarta.persistence.*
@@ -13,26 +14,27 @@ class PaymentHistory(
     val tsid: String,
     val transactionKey: String,
     val amount: BigDecimal,
-    val status: String, // TODO pg사의 결제 상태 리서치하고 enum 으로 변경
-    val createTime: LocalDateTime,
+    @Enumerated(EnumType.STRING)
+    val status: Status,
+    val occurredTime: LocalDateTime,
     val updateTime: LocalDateTime,
-    @ManyToOne(targetEntity = Point::class, optional = false, fetch = FetchType.LAZY)
-    val point: Point,
     @ManyToOne(targetEntity = Payment::class, optional = false, fetch = FetchType.LAZY)
     val payment: Payment
 ) {
+    enum class Status {
+        SUCCESS, CANCEL, ABORT
+    }
 
     companion object {
-        fun newInstance(transactionKey: String, amount: BigDecimal, status: String, point: Point, payment: Payment): PaymentHistory {
+        fun newInstance(amount: BigDecimal, status: Status, payment: Payment): PaymentHistory {
             val now = LocalDateTime.now()
             return PaymentHistory(
                 tsid = TsIdKeyGenerator.next("pmu"),
-                transactionKey = transactionKey,
+                transactionKey = TsidCreator.getTsid().toString(),
                 amount = amount,
                 status = status,
-                createTime = now,
+                occurredTime = payment.paymentTime,
                 updateTime = now,
-                point = point,
                 payment = payment
             )
         }

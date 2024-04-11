@@ -22,14 +22,7 @@ class BalanceService(
         paymentService.paymentApproval(
             PaymentCommand(
                 userTsid = user.tsid,
-                amount = rechargeCommand.amount,
-                orderId = rechargeCommand.orderId,
-                orderName = rechargeCommand.orderName,
-                cardNumber = rechargeCommand.cardNumber,
-                cardExpirationYear = rechargeCommand.cardExpirationYear,
-                cardExpirationMonth = rechargeCommand.cardExpirationMonth,
-                cardPasswordPrefix = rechargeCommand.cardPasswordPrefix,
-                customerIdentityNumber = rechargeCommand.customerIdentityNumber
+                amount = rechargeCommand.amount
             )
         )
 

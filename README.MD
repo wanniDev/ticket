@@ -102,8 +102,7 @@ sequenceDiagram
     
 ### 5. 결제 API
 > 해당 API는 PG 사에서 제공하는 결제 모달창 UI를 통해 결제 정보를 입력한 이후에 호출되는 API입니다.</br>
-> 이번 프로젝트에서는 비즈니스 로직 구현에 집중하기 위해 PG 연동은 생략하였으며, 결제 정보가 이미 db에 저장되어 있다고 가정합니다.</br>
-> 따라서, 결제 API는 기존에 입력한 결제 정보를 검증하고, 결제가 완료되면 결제 내역을 저장하는 역할을 합니다.
+> 이번 프로젝트에서는 비즈니스 로직 구현에 집중하기 위해 PG 연동은 생략하였습니다. </br>
 ```mermaid
 sequenceDiagram
   participant C as Client
@@ -432,18 +431,17 @@ erDiagram
         datetime payment_time
     }
     
-    payment_usage {
+    payment_history {
         bigint id pk
         varchar tsid
         varchar transaction_key
         varchar status
-        datetime create_time
+        datetime occurred_time
         datetime update_time
     }
     
     concert ||--o{ seat : "1"
-    point ||--o{ payment_usage : "1"
-    payment ||--o{ payment_usage : "1"
+    payment ||--o{ payment_history : "1"
     point ||--o{ point_usage : "1"
     user ||--o{ point_usage : "1"
     user ||--o| token : "1"
