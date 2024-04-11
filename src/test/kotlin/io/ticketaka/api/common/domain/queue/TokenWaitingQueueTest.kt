@@ -17,6 +17,7 @@ class TokenWaitingQueueTest {
     @Test
     fun `test offer`() {
         // given
+        val user = User("userTsid1", Point.newInstance())
         val point = Point.newInstance()
         val mockTokenWaitingQueue = mock<TokenWaitingQueue> {
             on { offer(any()) } doReturn true

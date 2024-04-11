@@ -10,8 +10,13 @@ class Point protected constructor(
     val tsid: String,
     val balance: BigDecimal,
     val createTime: LocalDateTime,
-    val updateTime: LocalDateTime
+    var updateTime: LocalDateTime
 ) {
+    fun recharge(amount: BigDecimal) {
+        this.balance.plus(amount)
+        this.updateTime = LocalDateTime.now()
+    }
+
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
 

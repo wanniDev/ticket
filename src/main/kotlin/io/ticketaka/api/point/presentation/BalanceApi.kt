@@ -1,5 +1,6 @@
 package io.ticketaka.api.point.presentation
 
+import io.ticketaka.api.point.application.BalanceService
 import io.ticketaka.api.point.presentation.dto.BalanceResponse
 import io.ticketaka.api.point.presentation.dto.RechargeRequest
 import io.ticketaka.api.point.presentation.dto.RechargeResponse
@@ -14,27 +15,18 @@ import java.math.BigDecimal
 
 @RestController
 @RequestMapping("/api/balance")
-class BalanceApi: BalanceApiSpecification {
+class BalanceApi(
+    private val balanceService: BalanceService
+): BalanceApiSpecification {
     @PostMapping("/recharge")
-    override fun recharge(@RequestBody request: RechargeRequest): ResponseEntity<RechargeResponse> {
-        /**
-         * 1. 요청 입력값 검증
-         * 2. 사용자 id 검증
-         * 3. 결제 승인 호출
-         * 4. 사용자 잔액 업데이트
-         * 5. 응답
-         * 6. 로깅
-         */
-        return ResponseEntity.ok(RechargeResponse("userId", request.amount))
+    override fun recharge(@RequestBody request: RechargeRequest): ResponseEntity<Void> {
+        balanceService.recharge(request.toCommand())
+        return ResponseEntity.noContent().build()
     }
 
     @GetMapping("/balance")
-    override fun getBalance(@RequestParam userId: String): ResponseEntity<BalanceResponse> {
-        /**
-         * 1. 사용자 id 검증
-         * 2. 사용자 잔액 조회
-         * 3. 응답
-         */
+    override fun getBalance(@RequestParam userTsid: String): ResponseEntity<BalanceResponse> {
+        balanceService.getBalance(userTsid)
         return ResponseEntity.ok(BalanceResponse("userId", BigDecimal(10000)))
     }
 }

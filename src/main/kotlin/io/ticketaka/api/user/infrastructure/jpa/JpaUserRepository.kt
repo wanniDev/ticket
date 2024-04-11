@@ -4,5 +4,5 @@ import io.ticketaka.api.user.domain.User
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface JpaUserRepository: JpaRepository<User, Long> {
-    fun findByTsid(userTsid: String): User
+    fun findByTsid(userTsid: String): User?
 }

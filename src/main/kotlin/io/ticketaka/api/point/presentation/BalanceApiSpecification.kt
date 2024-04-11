@@ -15,8 +15,8 @@ interface BalanceApiSpecification {
         summary = "충전 API",
         description = "사용자의 잔액을 충전하는 API를 제공합니다."
     )
-    @ApiResponse(responseCode = "200", description = "충전 성공")
-    fun recharge(request: RechargeRequest): ResponseEntity<RechargeResponse>
+    @ApiResponse(responseCode = "204", description = "충전 성공")
+    fun recharge(request: RechargeRequest): ResponseEntity<Void>
 
     @Operation(
         summary = "잔액 조회 API",
