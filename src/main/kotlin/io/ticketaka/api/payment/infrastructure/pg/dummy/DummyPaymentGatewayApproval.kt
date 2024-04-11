@@ -28,6 +28,8 @@ class DummyPaymentGatewayApproval(
             LocalDateTime.now(),
             "APPROVED"
         )
+        // 실제 PG 승인 요청을 할 경우, 그리고 그 요청이 실패할 경우, 예외를 throw 하여 아래, db 저장 로직이 실행되지 않도록 해야 함
+
         val point = pointRepository.findByTsid(paymentInfoData.userTsid)!!
         val payment = paymentRepository.save(Payment.newInstance(paymentInfoData.amount))
 

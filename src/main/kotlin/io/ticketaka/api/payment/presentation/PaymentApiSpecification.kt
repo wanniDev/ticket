@@ -12,5 +12,5 @@ interface PaymentApiSpecification {
         description = "결제를 진행하는 API를 제공합니다."
     )
     @ApiResponse(responseCode = "200", description = "결제 성공")
-    fun pay(request: PayRequest): ResponseEntity<Void>
+    fun pay(request: PaymentApprovalRequest): ResponseEntity<Void>
 }
