@@ -8,13 +8,12 @@ import io.ticketaka.api.user.domain.domain.Token
 import io.ticketaka.api.user.domain.domain.TokenRepository
 import io.ticketaka.api.user.domain.User
 import io.ticketaka.api.user.domain.UserRepository
+import io.ticketaka.api.user.infrastructure.persistence.exception.NotFoundUserException
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.junit.jupiter.MockitoExtension
-import org.mockito.kotlin.any
-import org.mockito.kotlin.doReturn
-import org.mockito.kotlin.mock
-import org.mockito.kotlin.verify
+import org.mockito.kotlin.*
 
 @ExtendWith(MockitoExtension::class)
 class TokenServiceTest {
@@ -42,5 +41,24 @@ class TokenServiceTest {
 
         // then
         verify(mockJwtProvider).generate("userTsid1")
+    }
+
+    @Test
+    fun `when user not found then throw exception`() {
+        // given
+        val mockJwtProvider = mock<JwtProvider>()
+        val mockTokenRepository = mock<TokenRepository>()
+        val mockUserRepository = mock<UserRepository> {
+            on { findByTsid(any()) } doThrow NotFoundUserException()
+        }
+        val tokenService = TokenService(mockJwtProvider, mockTokenRepository, mockUserRepository)
+
+        // when
+        assertThrows<NotFoundUserException> {
+            tokenService.createToken("userTsid1")
+        }
+
+        // then
+        verify(mockUserRepository).findByTsid("userTsid1")
     }
 }
