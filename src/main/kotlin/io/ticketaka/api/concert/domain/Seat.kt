@@ -1,5 +1,6 @@
 package io.ticketaka.api.concert.domain
 
+import io.ticketaka.api.common.infrastructure.tsid.TsIdKeyGenerator
 import jakarta.persistence.*
 
 @Entity
@@ -16,5 +17,16 @@ class Seat(
 
     enum class Status {
         AVAILABLE, RESERVED, OCCUPIED
+    }
+
+    companion object {
+        fun newInstance(number: String, concertDate: ConcertDate): Seat {
+            return Seat(
+                tsid = TsIdKeyGenerator.next("st"),
+                number = number,
+                status = Status.AVAILABLE,
+                concertDate = concertDate
+            )
+        }
     }
 }

@@ -1,5 +1,6 @@
 package io.ticketaka.api.reservation.domain
 
+import io.ticketaka.api.common.infrastructure.tsid.TsIdKeyGenerator
 import io.ticketaka.api.concert.domain.Seat
 import io.ticketaka.api.user.domain.User
 import jakarta.persistence.*
@@ -22,5 +23,18 @@ class Reservation(
 
     enum class Status {
         PENDING, CONFIRMED, CANCELLED
+    }
+
+    companion object {
+        fun createPendingReservation(user: User, seat: Seat): Reservation {
+            return Reservation(
+                TsIdKeyGenerator.next("rev"),
+                Status.PENDING,
+                LocalDateTime.now(),
+                LocalDateTime.now().plusMinutes(5L),
+                user,
+                seat
+            )
+        }
     }
 }

@@ -1,5 +1,6 @@
 package io.ticketaka.api.concert.infrastructure.persistence
 
+import io.ticketaka.api.concert.domain.ConcertDate
 import io.ticketaka.api.concert.domain.Seat
 import io.ticketaka.api.concert.domain.SeatRepository
 import io.ticketaka.api.concert.infrastructure.jpa.JpaSeatRepository
@@ -15,5 +16,9 @@ class SeatRepositoryComposition(
 
     override fun findByConcertDateId(concertDateId: Long): List<Seat> {
         return jpaSeatRepository.findByConcertDateId(concertDateId)
+    }
+
+    override fun findByNumberAndConcertDate(tsid: String, concertDate: ConcertDate): Seat? {
+        return jpaSeatRepository.findByTsidAndConcertDate(tsid, concertDate)
     }
 }

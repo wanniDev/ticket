@@ -4,5 +4,5 @@ import java.time.LocalDate
 
 interface ConcertDateRepository {
     fun findByTsid(tsid: String): ConcertDate?
-    fun findByDate(date: LocalDate): ConcertDate
+    fun findByDate(date: LocalDate): ConcertDate?
 }

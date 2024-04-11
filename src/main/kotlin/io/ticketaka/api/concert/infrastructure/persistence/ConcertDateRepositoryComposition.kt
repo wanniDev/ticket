@@ -14,7 +14,7 @@ class ConcertDateRepositoryComposition(
         return jpaConcertDateRepository.findByTsid(tsid)
     }
 
-    override fun findByDate(date: LocalDate): ConcertDate {
+    override fun findByDate(date: LocalDate): ConcertDate? {
         return jpaConcertDateRepository.findByDate(date)
     }
 }
