@@ -372,6 +372,7 @@ sequenceDiagram
     ```
 
 ## 데이터베이스 스키마
+> tsid는 Time Series ID의 약자로, 고유한 시간을 나타내는 문자열입니다. 현재 프로젝트에서는 pk의 보조키로 활용되고 있습니다.
 ```mermaid
 erDiagram
     user {
@@ -399,7 +400,7 @@ erDiagram
         varchar status
         varchar user_tsid
     }
-    concert_Date {
+    concert {
         bigint id pk
         varchar tsid
         decimal price
@@ -411,7 +412,7 @@ erDiagram
         varchar tsid
         varchar number
         varchar status
-        bigint concert_date_id
+        bigint concert_id
     }
 
     reservation {
@@ -440,7 +441,7 @@ erDiagram
         datetime update_time
     }
     
-    concert_Date ||--o{ seat : "1"
+    concert ||--o{ seat : "1"
     point ||--o{ payment_usage : "1"
     payment ||--o{ payment_usage : "1"
     point ||--o{ point_usage : "1"
