@@ -24,7 +24,7 @@ sequenceDiagram
     participant A as API
     participant Q as 대기열
     C->>F: api 요청
-    F->>F: 토큰 검증
+    F->>DB: 토큰 검증
     opt 잘못된 토큰
         F-->>C: 401 Unauthorized
     end
@@ -55,16 +55,9 @@ sequenceDiagram
 ```mermaid
 sequenceDiagram
     participant C as Client
-    participant AO as AOP
     participant A as API
     participant DB as Database
-    C->>AO: api 요청
-    alt 대기열 사용가능
-      AO->>A: api 요청 처리 위임
-    else 대기열 사용불가
-      AO-->>C: 429 Too Many Requests
-    end
-    AO->>A: api 요청 처리 위임
+    C->>A: api 요청 처리 위임
     A->>DB: 사용자 조회
     DB->>DB: 사용자 식별 정보 확인
     DB-->>A: 사용자 식별 정보 결과 return
@@ -108,6 +101,37 @@ sequenceDiagram
   - 조회는 사용자 본인의 잔액에 한정됩니다.
     
 ### 5. 결제 API
+> 해당 API는 PG 사에서 제공하는 결제 모달창 UI를 통해 결제 정보를 입력한 이후에 호출되는 API입니다.</br>
+> 이번 프로젝트에서는 비즈니스 로직 구현에 집중하기 위해 PG 연동은 생략하였으며, 결제 정보가 이미 db에 저장되어 있다고 가정합니다.</br>
+> 따라서, 결제 API는 기존에 입력한 결제 정보를 검증하고, 결제가 완료되면 결제 내역을 저장하는 역할을 합니다.
+```mermaid
+sequenceDiagram
+  participant C as Client
+  participant F as Filter
+  participant AO as AOP
+  participant Q as 대기열
+  participant A as API
+  participant PG as PaymentGateway
+  participant DB as Database
+
+  C->>F: api 요청
+  F->>DB: 토큰 검증
+  opt 잘못된 토큰
+    F-->>C: 401 Unauthorized
+  end
+  alt 대기열 사용가능
+    AO->>A: api 요청 처리 위임
+  else 대기열 사용불가
+    AO-->>C: 429 Too Many Requests
+  end
+  A->>DB: 결제 정보 검증
+  opt 결제 정보 불일치
+    A-->>C: 400 Bad Request
+  end
+  A->>PG: 결제 승인 요청
+  PG-->>A: 결제 승인 결과 수신
+  A->>DB: 결제 승인 결과(결제 내역) 저장
+```
 - 목적: 사용자가 좌석 예약에 대해 결제를 완료할 수 있어야 합니다.
 - 핵심 요구사항:
   - 사용자는 잔액을 이용하여 예약한 좌석에 대한 결제를 진행할 수 있어야 합니다.
