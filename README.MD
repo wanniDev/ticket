@@ -390,7 +390,7 @@ erDiagram
       varchar tsid
       varchar transaction_type
       bigint user_id fk
-      bigint balance_id fk
+      bigint point_id fk
     }
     token {
         bigint id pk
@@ -428,8 +428,6 @@ erDiagram
         varchar tsid
         decimal amount
         datetime payment_time
-        bigint reservation_id fk
-        bigint point_id fk
     }
     
     payment_usage {
@@ -439,8 +437,6 @@ erDiagram
         varchar status
         datetime create_time
         datetime update_time
-        bigint payment_id fk
-        bigint point_id fk
     }
     
     point ||--o{ payment_usage : "1"

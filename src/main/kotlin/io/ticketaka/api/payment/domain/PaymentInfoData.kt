@@ -3,6 +3,7 @@ package io.ticketaka.api.payment.domain
 import java.math.BigDecimal
 
 data class PaymentInfoData(
+    val userTsid: String,
     val amount: BigDecimal,
     val orderId: String,
     val orderName: String,

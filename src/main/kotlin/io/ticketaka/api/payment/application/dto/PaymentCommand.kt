@@ -4,6 +4,7 @@ import io.ticketaka.api.payment.domain.PaymentInfoData
 import java.math.BigDecimal
 
 data class PaymentCommand(
+    val userTsid: String,
     val amount: BigDecimal,
     val orderId: String,
     val orderName: String,
@@ -14,6 +15,7 @@ data class PaymentCommand(
     val customerIdentityNumber: String
 ) {
     fun toDomain() = PaymentInfoData(
+        userTsid = userTsid,
         amount = amount,
         orderId = orderId,
         orderName = orderName,

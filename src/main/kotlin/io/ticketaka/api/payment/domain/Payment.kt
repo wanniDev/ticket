@@ -12,23 +12,16 @@ class Payment(
     val tsid: String,
     val amount: BigDecimal,
     val paymentTime: LocalDateTime,
-    @ManyToOne(targetEntity = Point::class, optional = false, fetch = FetchType.LAZY)
-    val point: Point,
-    @ManyToOne(targetEntity = Reservation::class, optional = false, fetch = FetchType.LAZY)
-    val reservation: Reservation
 ) {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
 
     companion object {
-        fun newInstance(amount: BigDecimal, point: Point, reservation: Reservation): Payment {
-            val now = LocalDateTime.now()
+        fun newInstance(amount: BigDecimal): Payment {
             return Payment(
                 tsid = TsIdKeyGenerator.next("pm"),
                 amount = amount,
-                paymentTime = now,
-                point = point,
-                reservation = reservation
+                paymentTime = LocalDateTime.now(),
             )
         }
     }
