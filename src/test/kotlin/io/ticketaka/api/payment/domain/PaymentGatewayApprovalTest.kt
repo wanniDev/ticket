@@ -20,8 +20,8 @@ class PaymentGatewayApprovalTest {
         val mockPaymentRepository = mock<PaymentRepository>() {
             on { save(any()) } doReturn Payment.newInstance(20000.toBigDecimal())
         }
-        val mockPaymentUsageRepository = mock<PaymentUsageRepository>() {
-            on { save(any()) } doReturn PaymentUsage.newInstance(
+        val mockPaymentHistoryRepository = mock<PaymentUsageRepository>() {
+            on { save(any()) } doReturn PaymentHistory.newInstance(
                 "transactionKey",
                 20000.toBigDecimal(),
                 "cardExpiration",
@@ -34,7 +34,7 @@ class PaymentGatewayApprovalTest {
         }
         val paymentGatewayApproval = DummyPaymentGatewayApproval(
             mockPaymentRepository,
-            mockPaymentUsageRepository,
+            mockPaymentHistoryRepository,
             mockPointRepository
         )
         // when
@@ -55,6 +55,6 @@ class PaymentGatewayApprovalTest {
         // then
         verify(mockPointRepository).findByTsid(any())
         verify(mockPaymentRepository).save(any())
-        verify(mockPaymentUsageRepository).save(any())
+        verify(mockPaymentHistoryRepository).save(any())
     }
 }

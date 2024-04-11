@@ -4,11 +4,9 @@ import io.ticketaka.api.payment.application.PaymentService
 import io.ticketaka.api.payment.application.dto.PaymentCommand
 import io.ticketaka.api.point.application.dto.BalanceQueryModel
 import io.ticketaka.api.point.application.dto.RechargeCommand
-import io.ticketaka.api.point.domain.PointRepository
 import io.ticketaka.api.user.domain.UserRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.math.BigDecimal
 
 @Service
 @Transactional(readOnly = true)
@@ -21,7 +19,7 @@ class BalanceService(
         val user = userRepository.findByTsid(rechargeCommand.userTsid)
 
         // 실제로는 PG 승인 요청을 수행하는 로직이 들어가야 함
-        paymentService.pay(
+        paymentService.paymentApproval(
             PaymentCommand(
                 userTsid = user.tsid,
                 amount = rechargeCommand.amount,

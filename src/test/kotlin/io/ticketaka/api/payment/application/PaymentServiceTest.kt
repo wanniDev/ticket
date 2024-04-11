@@ -5,7 +5,6 @@ import io.ticketaka.api.payment.domain.PaymentGatewayApproval
 import io.ticketaka.api.payment.domain.PaymentInfoValidator
 import io.ticketaka.api.point.domain.Point
 import io.ticketaka.api.user.domain.User
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.junit.jupiter.MockitoExtension
@@ -36,7 +35,7 @@ class PaymentServiceTest {
         val paymentInfoData = paymentCommand.toDomain()
 
         // when
-        paymentService.pay(paymentCommand)
+        paymentService.paymentApproval(paymentCommand)
 
         // then
         verify(paymentInfoValidator).validate(paymentInfoData)

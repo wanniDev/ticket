@@ -15,7 +15,7 @@ class PaymentApi(
 
     @PostMapping
     override fun pay(@RequestBody request: PaymentApprovalRequest): ResponseEntity<Void> {
-        paymentService.pay(request.toCommand())
+        paymentService.paymentApproval(request.toCommand())
         return ResponseEntity.ok().build()
     }
 }

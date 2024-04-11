@@ -402,6 +402,7 @@ erDiagram
     concert_Date {
         bigint id pk
         varchar tsid
+        decimal price
         date date
     }
     
@@ -439,13 +440,13 @@ erDiagram
         datetime update_time
     }
     
+    concert_Date ||--o{ seat : "1"
     point ||--o{ payment_usage : "1"
     payment ||--o{ payment_usage : "1"
     point ||--o{ point_usage : "1"
     user ||--o{ point_usage : "1"
     user ||--o| token : "1"
     user ||--o{ reservation : "1"
-    concert_Date ||--o{ seat : "1"
 ```
 
 ## 플로우 차트

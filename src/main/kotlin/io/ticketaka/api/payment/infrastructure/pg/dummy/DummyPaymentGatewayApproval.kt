@@ -2,9 +2,7 @@ package io.ticketaka.api.payment.infrastructure.pg.dummy
 
 import io.ticketaka.api.payment.domain.*
 import io.ticketaka.api.point.domain.PointRepository
-import io.ticketaka.api.user.domain.UserRepository
 import org.springframework.stereotype.Component
-import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -33,8 +31,8 @@ class DummyPaymentGatewayApproval(
         val point = pointRepository.findByTsid(paymentInfoData.userTsid)!!
         val payment = paymentRepository.save(Payment.newInstance(paymentInfoData.amount))
 
-        val paymentUsage = PaymentUsage.newInstance(paymentResult.transactionKey, paymentResult.amount, paymentResult.status, point, payment)
-        paymentUsageRepository.save(paymentUsage)
+        val paymentHistory = PaymentHistory.newInstance(paymentResult.transactionKey, paymentResult.amount, paymentResult.status, point, payment)
+        paymentUsageRepository.save(paymentHistory)
     }
 
     private fun getDummyTransactionKey(): String {
