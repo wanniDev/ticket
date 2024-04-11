@@ -55,12 +55,11 @@ CREATE TABLE `payment` (
     `tsid` varchar(255) not null unique,
 	`amount`	DECIMAL(19, 4)	null,
 	`payment_time`	datetime null,
-	`reservation_id`	bigint	not null,
 	`point_id`	bigint not null,
     INDEX payment_tsid_idx (tsid)
 );
 
-CREATE TABLE `point_usage` (
+CREATE TABLE point_history (
     `id` bigint auto_increment primary key,
     `tsid` varchar(255) not null unique,
     `transaction_type` varchar(255) null,
@@ -68,10 +67,10 @@ CREATE TABLE `point_usage` (
     `point_id`	bigint	not null,
     `create_time`	datetime not null,
     `update_time`	datetime not null,
-    INDEX point_usage_tsid_idx (tsid)
+    INDEX point_history_tsid_idx (tsid)
 );
 
-CREATE TABLE `payment_usage`(
+CREATE TABLE payment_history (
     `id` bigint auto_increment primary key,
     `tsid` varchar(255) not null unique,
     `transaction_key` varchar(255) null,
@@ -81,7 +80,7 @@ CREATE TABLE `payment_usage`(
     `update_time`	datetime null,
     `payment_id` bigint not null,
     `point_id` bigint not null,
-    INDEX payment_usage_tsid_idx (tsid)
+    INDEX payment_history_tsid_idx (tsid)
 );
 
 insert into `point` (`id`, `tsid`, `balance`, `create_time`, `update_time`) values (1, 'point1', 1000, '2024-01-01 00:00:00', '2024-01-01 00:00:00');
