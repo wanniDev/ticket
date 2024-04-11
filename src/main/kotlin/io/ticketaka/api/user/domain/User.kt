@@ -1,5 +1,6 @@
 package io.ticketaka.api.user.domain
 
+import io.ticketaka.api.common.infrastructure.tsid.TsIdKeyGenerator
 import io.ticketaka.api.point.domain.Point
 import jakarta.persistence.*
 
@@ -12,4 +13,13 @@ class User(
 ) {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
+
+    companion object {
+        fun newInstance(point: Point): User {
+            return User(
+                tsid = TsIdKeyGenerator.next("usr"),
+                point = point
+            )
+        }
+    }
 }

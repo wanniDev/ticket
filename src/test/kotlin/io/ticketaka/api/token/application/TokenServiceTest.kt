@@ -23,8 +23,9 @@ class TokenServiceTest {
     @Test
     fun createTokenTest() {
         // given
+        val point = Point.newInstance()
         val user =
-            User("userTsid1", Point("pointTsid1", 0.0.toBigDecimal(), LocalDateTime.now(), LocalDateTime.now()))
+            User("userTsid1", point)
 
         val mockJwtProvider = mock<JwtProvider> {
             on { generate(any())} doReturn JwtTokens("accessToken", "refreshToken")}
