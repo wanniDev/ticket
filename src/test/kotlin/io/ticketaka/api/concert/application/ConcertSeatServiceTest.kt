@@ -1,7 +1,7 @@
 package io.ticketaka.api.concert.application
 
-import io.ticketaka.api.concert.domain.ConcertDate
-import io.ticketaka.api.concert.domain.ConcertDateRepository
+import io.ticketaka.api.concert.domain.Concert
+import io.ticketaka.api.concert.domain.ConcertRepository
 import io.ticketaka.api.concert.domain.Seat
 import io.ticketaka.api.concert.domain.SeatRepository
 import org.junit.jupiter.api.Assertions.*
@@ -11,7 +11,6 @@ import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
-import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.on
 import java.time.LocalDate
 
 @ExtendWith(MockitoExtension::class)
@@ -20,22 +19,22 @@ class ConcertSeatServiceTest {
     fun `find available seats by date`() {
         // given
         val date = LocalDate.of(2024, 4, 1)
-        val concertDate = ConcertDate("concertDateTsid", date)
-        concertDate.id = 1L
+        val concert = Concert("concertDateTsid", date)
+        concert.id = 1L
         val seatNumber = "1"
         val mockSeatRepository = mock<SeatRepository> {
-            on { findByConcertDateId(any()) } doReturn listOf(
+            on { findByConcertId(any()) } doReturn listOf(
                 Seat(
                     "tsid",
                     seatNumber,
-                    Seat.Status.AVAILABLE, concertDate
+                    Seat.Status.AVAILABLE, concert
                 )
             )
         }
-        val mockConcertDateRepository = mock<ConcertDateRepository> {
-            on { findByDate(date) } doReturn concertDate
+        val mockConcertRepository = mock<ConcertRepository> {
+            on { findByDate(date) } doReturn concert
         }
-        val concertSeatService = ConcertSeatService(mockSeatRepository, mockConcertDateRepository)
+        val concertSeatService = ConcertSeatService(mockSeatRepository, mockConcertRepository)
 
         // when
         val result = concertSeatService.getSeats(date)

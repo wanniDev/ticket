@@ -1,9 +1,10 @@
 package io.ticketaka.api.payment.application
 
-import io.ticketaka.api.payment.application.dto.PaymentCommand
-import io.ticketaka.api.payment.domain.PaymentGatewayApproval
-import io.ticketaka.api.payment.domain.PaymentInfoValidator
+import io.ticketaka.api.reservation.domain.payment.PaymentGatewayApproval
+import io.ticketaka.api.reservation.domain.payment.PaymentInfoValidator
 import io.ticketaka.api.point.domain.Point
+import io.ticketaka.api.reservation.application.PaymentService
+import io.ticketaka.api.reservation.application.dto.PaymentCommand
 import io.ticketaka.api.user.domain.User
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -20,7 +21,10 @@ class PaymentServiceTest {
             User("userTsid1", point)
         val paymentInfoValidator = mock<PaymentInfoValidator>()
         val paymentGatewayApproval = mock<PaymentGatewayApproval>()
-        val paymentService = PaymentService(paymentInfoValidator, paymentGatewayApproval)
+        val paymentService = PaymentService(
+            paymentInfoValidator,
+            paymentGatewayApproval
+        )
         val paymentCommand = PaymentCommand(
             user.tsid,
             20000.toBigDecimal(),

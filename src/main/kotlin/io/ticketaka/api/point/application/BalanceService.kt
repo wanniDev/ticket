@@ -1,9 +1,9 @@
 package io.ticketaka.api.point.application
 
-import io.ticketaka.api.payment.application.PaymentService
-import io.ticketaka.api.payment.application.dto.PaymentCommand
+import io.ticketaka.api.reservation.application.PaymentService
 import io.ticketaka.api.point.application.dto.BalanceQueryModel
 import io.ticketaka.api.point.application.dto.RechargeCommand
+import io.ticketaka.api.reservation.application.dto.PaymentCommand
 import io.ticketaka.api.user.domain.UserRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional

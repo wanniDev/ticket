@@ -1,6 +1,6 @@
 package io.ticketaka.api.concert.application
 
-import io.ticketaka.api.concert.domain.ConcertDateRepository
+import io.ticketaka.api.concert.domain.ConcertRepository
 import io.ticketaka.api.concert.domain.SeatRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -10,10 +10,10 @@ import java.time.LocalDate
 @Transactional(readOnly = true)
 class ConcertSeatService(
     private val seatRepository: SeatRepository,
-    private val concertDateRepository: ConcertDateRepository
+    private val concertRepository: ConcertRepository
 ) {
     fun getSeats(date: LocalDate): List<Int> {
-        val concertDate = concertDateRepository.findByDate(date) ?: throw IllegalArgumentException("Concert date not found")
-        return seatRepository.findByConcertDateId(concertDate.id!!).map { it.number.toInt() }
+        val concertDate = concertRepository.findByDate(date) ?: throw IllegalArgumentException("Concert date not found")
+        return seatRepository.findByConcertId(concertDate.id!!).map { it.number.toInt() }
     }
 }

@@ -3,6 +3,7 @@ package io.ticketaka.api.payment.domain
 import io.ticketaka.api.payment.infrastructure.pg.dummy.DummyPaymentGatewayApproval
 import io.ticketaka.api.point.domain.Point
 import io.ticketaka.api.point.domain.PointRepository
+import io.ticketaka.api.reservation.domain.payment.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.junit.jupiter.MockitoExtension

@@ -1,7 +1,7 @@
 package io.ticketaka.api.common.infrastructure.queue
 
-import io.ticketaka.api.token.domain.Token
-import io.ticketaka.api.token.domain.TokenRepository
+import io.ticketaka.api.user.domain.domain.Token
+import io.ticketaka.api.user.domain.domain.TokenRepository
 import io.ticketaka.api.common.domain.queue.TokenWaitingQueue
 import org.springframework.stereotype.Component
 

@@ -1,9 +1,9 @@
 package io.ticketaka.api.point.application
 
-import io.ticketaka.api.payment.application.PaymentService
-import io.ticketaka.api.payment.application.dto.PaymentCommand
+import io.ticketaka.api.reservation.application.PaymentService
 import io.ticketaka.api.point.application.dto.RechargeCommand
 import io.ticketaka.api.point.domain.Point
+import io.ticketaka.api.reservation.application.dto.PaymentCommand
 import io.ticketaka.api.user.domain.User
 import io.ticketaka.api.user.domain.UserRepository
 import org.junit.jupiter.api.Test

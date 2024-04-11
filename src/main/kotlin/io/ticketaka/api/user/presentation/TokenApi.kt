@@ -1,0 +1,28 @@
+package io.ticketaka.api.user.presentation
+
+import io.ticketaka.api.user.application.TokenService
+import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
+import java.time.LocalDateTime
+
+@RestController
+@RequestMapping("/api/token")
+class TokenApi(
+    private val tokenService: TokenService
+) : TokenApiSpecification {
+    @PostMapping
+    override fun createToken(@RequestBody request: CreateTokenRequest): ResponseEntity<CreateTokenResponse> {
+        val tokens = tokenService.createToken(request.userTsid)
+        return ResponseEntity
+            .ok(CreateTokenResponse(tokens.accessToken, tokens.refreshToken))
+    }
+
+    @PostMapping("/peek")
+    override fun peekToken(@RequestBody request: PeekTokenRequest): ResponseEntity<PeekTokenResponse> {
+        return ResponseEntity
+            .ok(PeekTokenResponse(true, LocalDateTime.now()))
+    }
+}

@@ -1,7 +1,7 @@
 package io.ticketaka.api.common.domain.queue
 
 import io.ticketaka.api.point.domain.Point
-import io.ticketaka.api.token.domain.Token
+import io.ticketaka.api.user.domain.domain.Token
 import io.ticketaka.api.user.domain.User
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test

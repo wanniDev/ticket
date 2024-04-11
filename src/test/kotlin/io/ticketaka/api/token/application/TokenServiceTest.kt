@@ -4,8 +4,9 @@ import io.jsonwebtoken.impl.security.EdwardsCurve.findById
 import io.ticketaka.api.common.infrastructure.jwt.JwtProvider
 import io.ticketaka.api.common.infrastructure.jwt.JwtTokens
 import io.ticketaka.api.point.domain.Point
-import io.ticketaka.api.token.domain.Token
-import io.ticketaka.api.token.domain.TokenRepository
+import io.ticketaka.api.user.application.TokenService
+import io.ticketaka.api.user.domain.domain.Token
+import io.ticketaka.api.user.domain.domain.TokenRepository
 import io.ticketaka.api.user.domain.User
 import io.ticketaka.api.user.domain.UserRepository
 import org.junit.jupiter.api.Assertions.*

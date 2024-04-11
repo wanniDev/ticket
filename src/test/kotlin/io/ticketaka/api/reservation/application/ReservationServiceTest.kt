@@ -1,7 +1,7 @@
 package io.ticketaka.api.reservation.application
 
-import io.ticketaka.api.concert.domain.ConcertDate
-import io.ticketaka.api.concert.domain.ConcertDateRepository
+import io.ticketaka.api.concert.domain.Concert
+import io.ticketaka.api.concert.domain.ConcertRepository
 import io.ticketaka.api.concert.domain.Seat
 import io.ticketaka.api.concert.domain.SeatRepository
 import io.ticketaka.api.point.domain.Point
@@ -28,23 +28,23 @@ class ReservationServiceTest {
         val date = LocalDate.of(2024, 4, 10)
         val seatNumber = "A24"
         val user = User.newInstance(point)
-        val concertDate = ConcertDate.newInstance(date)
-        val seat = Seat.newInstance(seatNumber, concertDate)
+        val concert = Concert.newInstance(date)
+        val seat = Seat.newInstance(seatNumber, concert)
 
         val mockUserRepository = mock<UserRepository> {
             on { findByTsid(any()) } doReturn user
         }
-        val mockConcertDateRepository = mock<ConcertDateRepository> {
-            on { findByDate(date) } doReturn concertDate
+        val mockConcertRepository = mock<ConcertRepository> {
+            on { findByDate(date) } doReturn concert
         }
         val mockSeatRepository = mock<SeatRepository> {
-            on { findByNumberAndConcertDate(any(), any()) } doReturn seat
+            on { findByNumberAndConcert(any(), any()) } doReturn seat
         }
         val mockReservationRepository = mock<ReservationRepository>() {
             on { save(any()) } doReturn Reservation.createPendingReservation(user, seat)
         }
 
-        val reservationService = ReservationService(mockUserRepository, mockConcertDateRepository, mockSeatRepository, mockReservationRepository)
+        val reservationService = ReservationService(mockUserRepository, mockConcertRepository, mockSeatRepository, mockReservationRepository)
 
         // when
         val result = reservationService.createReservation(

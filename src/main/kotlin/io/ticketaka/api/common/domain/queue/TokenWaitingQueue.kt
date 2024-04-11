@@ -1,6 +1,6 @@
 package io.ticketaka.api.common.domain.queue
 
-import io.ticketaka.api.token.domain.Token
+import io.ticketaka.api.user.domain.domain.Token
 
 interface TokenWaitingQueue {
     fun offer(element: Token): Boolean

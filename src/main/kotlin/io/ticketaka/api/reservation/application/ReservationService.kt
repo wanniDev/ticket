@@ -1,6 +1,6 @@
 package io.ticketaka.api.reservation.application
 
-import io.ticketaka.api.concert.domain.ConcertDateRepository
+import io.ticketaka.api.concert.domain.ConcertRepository
 import io.ticketaka.api.concert.domain.SeatRepository
 import io.ticketaka.api.reservation.application.dto.CreateReservationCommand
 import io.ticketaka.api.reservation.application.dto.CreateReservationResult
@@ -15,7 +15,7 @@ import java.time.LocalDateTime
 @Transactional(readOnly = true)
 class ReservationService(
     private val userRepository: UserRepository,
-    private val concertDateRepository: ConcertDateRepository,
+    private val concertRepository: ConcertRepository,
     private val seatRepository: SeatRepository,
     private val reservationRepository: ReservationRepository
 ) {
@@ -23,10 +23,10 @@ class ReservationService(
     fun createReservation(command: CreateReservationCommand): CreateReservationResult {
         val user = userRepository.findByTsid(command.userTsid)
             ?: throw IllegalArgumentException("User not found")
-        val concertDate = concertDateRepository.findByDate(command.date)
+        val concertDate = concertRepository.findByDate(command.date)
             ?: throw IllegalArgumentException("Concert date not found")
 
-        val seat = seatRepository.findByNumberAndConcertDate(command.seatNumber, concertDate)
+        val seat = seatRepository.findByNumberAndConcert(command.seatNumber, concertDate)
             ?: throw IllegalArgumentException("Seat not found")
 
         val reservation = Reservation.createPendingReservation(user, seat)

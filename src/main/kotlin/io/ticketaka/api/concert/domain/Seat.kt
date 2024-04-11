@@ -9,8 +9,8 @@ class Seat(
     val number: String,
     @Enumerated(EnumType.STRING)
     val status: Status,
-    @ManyToOne(targetEntity = ConcertDate::class, optional = false, fetch = FetchType.LAZY)
-    val concertDate: ConcertDate
+    @ManyToOne(targetEntity = Concert::class, optional = false, fetch = FetchType.LAZY)
+    val concert: Concert
 ) {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
@@ -20,12 +20,12 @@ class Seat(
     }
 
     companion object {
-        fun newInstance(number: String, concertDate: ConcertDate): Seat {
+        fun newInstance(number: String, concert: Concert): Seat {
             return Seat(
                 tsid = TsIdKeyGenerator.next("st"),
                 number = number,
                 status = Status.AVAILABLE,
-                concertDate = concertDate
+                concert = concert
             )
         }
     }

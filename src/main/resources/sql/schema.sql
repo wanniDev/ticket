@@ -23,11 +23,11 @@ CREATE TABLE `token` (
     INDEX token_tsid_idx (tsid)
 );
 
-CREATE TABLE `concert_date` (
+CREATE TABLE `concert` (
     `id` bigint auto_increment primary key,
     `tsid` varchar(255) not null unique,
 	`date`	date null,
-    INDEX concert_date_tsid_idx (tsid)
+    INDEX concert_tsid_idx (tsid)
 );
 
 CREATE TABLE `seat` (
@@ -35,7 +35,7 @@ CREATE TABLE `seat` (
     `tsid` varchar(255) not null unique,
 	`number`	varchar(255) null,
 	`status`	varchar(255) null ,
-	`concert_date_id`	bigint not null,
+	`concert_id`	bigint not null,
     INDEX seat_tsid_idx (tsid)
 );
 
