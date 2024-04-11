@@ -16,6 +16,21 @@ import java.time.LocalDate
 @ExtendWith(MockitoExtension::class)
 class ConcertSeatServiceTest {
     @Test
+    fun `find available date by status`() {
+        // given
+        val mockSeatRepository = mock<SeatRepository> {
+            on { findConcertDateByStatus(Seat.Status.AVAILABLE) } doReturn listOf(LocalDate.of(2024, 4, 1))
+        }
+        val concertSeatService = ConcertSeatService(mockSeatRepository, mock())
+
+        // when
+        val result = concertSeatService.getDates()
+
+        // then
+        assertEquals(listOf(LocalDate.of(2024, 4, 1)), result)
+    }
+
+    @Test
     fun `find available seats by date`() {
         // given
         val date = LocalDate.of(2024, 4, 1)

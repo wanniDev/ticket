@@ -5,6 +5,7 @@ import io.ticketaka.api.concert.domain.Seat
 import io.ticketaka.api.concert.domain.SeatRepository
 import io.ticketaka.api.concert.infrastructure.jpa.JpaSeatRepository
 import org.springframework.stereotype.Repository
+import java.time.LocalDate
 
 @Repository
 class SeatRepositoryComposition(
@@ -20,5 +21,9 @@ class SeatRepositoryComposition(
 
     override fun findByNumberAndConcert(tsid: String, concert: Concert): Seat? {
         return jpaSeatRepository.findByTsidAndConcert(tsid, concert)
+    }
+
+    override fun findConcertDateByStatus(status: Seat.Status): List<LocalDate> {
+        return jpaSeatRepository.findConcertDateByStatus(status)
     }
 }

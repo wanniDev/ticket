@@ -6,5 +6,5 @@ interface SeatRepository {
     fun findByTsid(tsid: String): Seat?
     fun findByConcertId(concertId: Long): List<Seat>
     fun findByNumberAndConcert(tsid: String, concert: Concert): Seat?
-    fun findConcertDateByStatus(status: Seat.Status): List<LocalDate>
+    fun findConcertDateByStatus(status: Seat.Status): Set<LocalDate>
 }
