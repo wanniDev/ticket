@@ -28,7 +28,7 @@ class ReservationServiceTest {
         val date = LocalDate.of(2024, 4, 10)
         val seatNumber = "A24"
         val user = User.newInstance(point)
-        val concert = Concert.newInstance(date)
+        val concert = Concert.newInstance(1000.toBigDecimal() ,date)
         val seat = Seat.newInstance(seatNumber, concert)
 
         val mockUserRepository = mock<UserRepository> {

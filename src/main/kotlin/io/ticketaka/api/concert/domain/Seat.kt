@@ -10,7 +10,7 @@ class Seat(
     @Enumerated(EnumType.STRING)
     val status: Status,
     @ManyToOne(targetEntity = Concert::class, optional = false, fetch = FetchType.LAZY)
-    val concert: Concert
+    val concert: Concert,
 ) {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null

@@ -16,6 +16,10 @@ class User(
         this.point.recharge(amount)
     }
 
+    fun chargePoint(price: BigDecimal) {
+        this.point.charge(price)
+    }
+
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
 

@@ -17,6 +17,10 @@ class Point protected constructor(
         this.updateTime = LocalDateTime.now()
     }
 
+    fun charge(price: BigDecimal) {
+        this.balance.minus(price)
+    }
+
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
 

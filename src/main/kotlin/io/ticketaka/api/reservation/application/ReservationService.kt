@@ -23,14 +23,15 @@ class ReservationService(
     fun createReservation(command: CreateReservationCommand): CreateReservationResult {
         val user = userRepository.findByTsid(command.userTsid)
             ?: throw IllegalArgumentException("User not found")
-        val concertDate = concertRepository.findByDate(command.date)
+        val concert = concertRepository.findByDate(command.date)
             ?: throw IllegalArgumentException("Concert date not found")
 
-        val seat = seatRepository.findByNumberAndConcert(command.seatNumber, concertDate)
+        val seat = seatRepository.findByNumberAndConcert(command.seatNumber, concert)
             ?: throw IllegalArgumentException("Seat not found")
 
         val reservation = Reservation.createPendingReservation(user, seat)
         reservationRepository.save(reservation)
+        user.chargePoint(concert.price)
 
         return CreateReservationResult(
             "reservationId",

@@ -19,7 +19,7 @@ class ConcertSeatServiceTest {
     fun `find available seats by date`() {
         // given
         val date = LocalDate.of(2024, 4, 1)
-        val concert = Concert("concertDateTsid", date)
+        val concert = Concert("concertDateTsid", 1000.toBigDecimal(), date)
         concert.id = 1L
         val seatNumber = "1"
         val mockSeatRepository = mock<SeatRepository> {
