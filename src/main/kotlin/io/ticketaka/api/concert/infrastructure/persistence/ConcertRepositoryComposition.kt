@@ -17,4 +17,8 @@ class ConcertRepositoryComposition(
     override fun findByDate(date: LocalDate): Concert? {
         return jpaConcertRepository.findByDate(date)
     }
+
+    override fun findAll(): List<Concert> {
+        return jpaConcertRepository.findAll()
+    }
 }

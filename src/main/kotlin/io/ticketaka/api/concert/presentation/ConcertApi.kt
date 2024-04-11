@@ -17,12 +17,7 @@ class ConcertApi(private val concertSeatService: ConcertSeatService) : ConcertAp
     override fun getConcertDate(): ResponseEntity<ConcertDateResponse> {
         return ResponseEntity.ok(
             ConcertDateResponse(
-                listOf(
-                    LocalDate.of(2024, 4, 1),
-                    LocalDate.of(2024, 4, 2),
-                    LocalDate.of(2024, 4, 3),
-                    LocalDate.of(2024, 4, 4),
-                )
+                concertSeatService.getDates()
             )
         )
     }

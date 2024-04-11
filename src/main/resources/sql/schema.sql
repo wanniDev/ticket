@@ -72,18 +72,5 @@ CREATE TABLE point_history (
     INDEX point_history_tsid_idx (tsid)
 );
 
-CREATE TABLE payment_history (
-    `id` bigint auto_increment primary key,
-    `tsid` varchar(255) not null unique,
-    `transaction_key` varchar(255) null,
-    `amount` DECIMAL(19, 4) null,
-    `status` varchar(255) null,
-    `occurred_time`	datetime not null,
-    `update_time`	datetime null,
-    `payment_id` bigint not null,
-    `point_id` bigint not null,
-    INDEX payment_history_tsid_idx (tsid)
-);
-
 insert into `point` (`id`, `tsid`, `balance`, `create_time`, `update_time`) values (1, 'point1', 1000, '2024-01-01 00:00:00', '2024-01-01 00:00:00');
 insert into `users` (`id`, `tsid`, `point_id`) values (1, 'user1', 1);
