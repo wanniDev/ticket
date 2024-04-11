@@ -23,7 +23,7 @@ class SeatRepositoryComposition(
         return jpaSeatRepository.findByTsidAndConcert(tsid, concert)
     }
 
-    override fun findConcertDateByStatus(status: Seat.Status): List<LocalDate> {
+    override fun findConcertDateByStatus(status: Seat.Status): Set<LocalDate> {
         return jpaSeatRepository.findConcertDateByStatus(status)
     }
 }
