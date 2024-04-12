@@ -1,19 +1,20 @@
 package io.ticketaka.api.token.application
 
+import io.ticketaka.api.common.exception.NotFoundException
 import io.ticketaka.api.common.infrastructure.jwt.JwtProvider
 import io.ticketaka.api.common.infrastructure.jwt.JwtTokens
 import io.ticketaka.api.reservation.domain.point.Point
 import io.ticketaka.api.user.application.TokenUserService
-import io.ticketaka.api.user.domain.domain.Token
-import io.ticketaka.api.user.domain.domain.TokenRepository
 import io.ticketaka.api.user.domain.User
 import io.ticketaka.api.user.domain.UserRepository
-import io.ticketaka.api.common.exception.NotFoundException
+import io.ticketaka.api.user.domain.domain.Token
+import io.ticketaka.api.user.domain.domain.TokenRepository
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.*
+import kotlin.test.assertFalse
 
 @ExtendWith(MockitoExtension::class)
 class TokenUserServiceTest {
@@ -60,5 +61,39 @@ class TokenUserServiceTest {
 
         // then
         verify(mockUserRepository).findByTsid("userTsid1")
+    }
+
+    @Test
+    fun `peekToken returns true when the order of the token queue matches`() {
+        // given
+        val tokenPosition0 = Token.newInstance(User("userTsid0", Point.newInstance()))
+        val mockTokenRepository = mock<TokenRepository> {
+            on { findFirstTokenOrderByIssuedTimeAscLimit1() } doReturn tokenPosition0
+        }
+        val tokenUserService = TokenUserService(mock(), mockTokenRepository, mock())
+
+        // when
+        val peekToken = tokenUserService.peekToken(tokenPosition0.tsid!!)
+        // then
+        verify(mockTokenRepository).findFirstTokenOrderByIssuedTimeAscLimit1()
+        assert(peekToken)
+    }
+
+    @Test
+    fun `peekToken returns false when the order of the token queue does not match`() {
+        // given
+        val tokenPosition0 = Token.newInstance(User("userTsid0", Point.newInstance()))
+        val tokenPosition1 = Token.newInstance(User("userTsid1", Point.newInstance()))
+        val mockTokenRepository = mock<TokenRepository> {
+            on { findFirstTokenOrderByIssuedTimeAscLimit1() } doReturn tokenPosition0
+        }
+        val tokenUserService = TokenUserService(mock(), mockTokenRepository, mock())
+
+        // when
+        val peekToken = tokenUserService.peekToken(tokenPosition1.tsid!!)
+
+        // then
+        verify(mockTokenRepository).findFirstTokenOrderByIssuedTimeAscLimit1()
+        assertFalse(peekToken)
     }
 }

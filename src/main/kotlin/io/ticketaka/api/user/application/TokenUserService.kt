@@ -30,4 +30,10 @@ class TokenUserService(
     fun getUser(tsId: String): User {
         return userRepository.findByTsid(tsId)
     }
+
+    fun peekToken(tokenId: String): Boolean {
+        tokenRepository.findFirstTokenOrderByIssuedTimeAscLimit1().let {
+            return it.tsid == tokenId
+        }
+    }
 }
