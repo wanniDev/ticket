@@ -7,8 +7,8 @@ import io.ticketaka.api.reservation.domain.point.Point
 import io.ticketaka.api.user.application.TokenUserService
 import io.ticketaka.api.user.domain.User
 import io.ticketaka.api.user.domain.UserRepository
-import io.ticketaka.api.user.domain.domain.Token
-import io.ticketaka.api.user.domain.domain.TokenRepository
+import io.ticketaka.api.user.domain.Token
+import io.ticketaka.api.user.domain.TokenRepository
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith

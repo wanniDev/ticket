@@ -1,7 +1,6 @@
 package io.ticketaka.api.common.infrastructure.aop
 
 import io.ticketaka.api.common.domain.queue.TokenWaitingQueue
-import io.ticketaka.api.user.domain.domain.Token
 import org.aspectj.lang.annotation.Aspect
 import org.aspectj.lang.annotation.Before
 import org.aspectj.lang.annotation.Pointcut

@@ -1,6 +1,6 @@
 package io.ticketaka.api.user.infrastructure.jpa
 
-import io.ticketaka.api.user.domain.domain.Token
+import io.ticketaka.api.user.domain.Token
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 

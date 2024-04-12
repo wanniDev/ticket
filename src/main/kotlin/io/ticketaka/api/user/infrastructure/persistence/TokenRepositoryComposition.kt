@@ -1,8 +1,8 @@
 package io.ticketaka.api.user.infrastructure.persistence
 
 import io.ticketaka.api.common.exception.NotFoundException
-import io.ticketaka.api.user.domain.domain.Token
-import io.ticketaka.api.user.domain.domain.TokenRepository
+import io.ticketaka.api.user.domain.Token
+import io.ticketaka.api.user.domain.TokenRepository
 import io.ticketaka.api.user.infrastructure.jpa.JpaTokenRepository
 import org.springframework.stereotype.Component
 

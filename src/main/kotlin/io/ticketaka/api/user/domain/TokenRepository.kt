@@ -1,4 +1,6 @@
-package io.ticketaka.api.user.domain.domain
+package io.ticketaka.api.user.domain
+
+import io.ticketaka.api.user.domain.Token
 
 interface TokenRepository {
     fun save(token: Token): Token

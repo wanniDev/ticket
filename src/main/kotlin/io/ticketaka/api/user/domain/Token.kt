@@ -1,7 +1,6 @@
-package io.ticketaka.api.user.domain.domain
+package io.ticketaka.api.user.domain
 
 import io.ticketaka.api.common.infrastructure.tsid.TsIdKeyGenerator
-import io.ticketaka.api.user.domain.User
 import jakarta.persistence.*
 import java.time.LocalDateTime
 
