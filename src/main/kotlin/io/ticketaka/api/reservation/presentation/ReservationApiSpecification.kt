@@ -13,5 +13,6 @@ interface ReservationApiSpecification {
         description = "예약을 생성하는 API를 제공합니다."
     )
     @ApiResponse(responseCode = "200", description = "예약 생성 성공")
+    @ApiResponse(responseCode = "400", description = "예약 생성 실패")
     fun createReservation(request: CreateReservationRequest): CreateReservationResponse
 }
