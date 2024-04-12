@@ -70,7 +70,7 @@ class ConcertSeatServiceTest {
         val result = concertSeatService.getSeats(date)
 
         // then
-        assertEquals(listOf(seatNumber.toInt()), result)
+        assertEquals(listOf(seatNumber), result)
     }
 
     @Test
