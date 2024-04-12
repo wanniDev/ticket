@@ -15,7 +15,7 @@ class Point protected constructor(
     var updateTime: LocalDateTime
 ) {
     fun recharge(amount: BigDecimal) {
-        if (amount <= BigDecimal.ZERO) throw BadClientRequestException("충전 금액은 0보다 커야 합니다.")
+        if (amount < BigDecimal.ZERO) throw BadClientRequestException("충전 금액은 0보다 커야 합니다.")
         this.balance.plus(amount)
         this.updateTime = LocalDateTime.now()
     }
