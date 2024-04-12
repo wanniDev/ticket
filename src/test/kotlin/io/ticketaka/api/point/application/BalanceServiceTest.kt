@@ -1,5 +1,6 @@
 package io.ticketaka.api.point.application
 
+import io.ticketaka.api.common.exception.BadClientRequestException
 import io.ticketaka.api.reservation.application.PaymentService
 import io.ticketaka.api.reservation.application.dto.RechargeCommand
 import io.ticketaka.api.reservation.domain.point.Point
@@ -16,6 +17,7 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
+import kotlin.test.assertFailsWith
 
 @ExtendWith(MockitoExtension::class)
 class BalanceServiceTest {
@@ -45,6 +47,30 @@ class BalanceServiceTest {
 
         // then
         verify(mockPaymentService).paymentApproval(paymentCommand)
+    }
+
+    @Test
+    fun `if user try to recharge with negative amount, then throw BadClientRequestException`() {
+        // given
+        val point = Point.newInstance()
+        val user = User("userTsid1", point)
+        val rechargeCommand = RechargeCommand(
+            user.tsid,
+            (-20000).toBigDecimal()
+        )
+
+        val mockUserRepository = mock<UserRepository> {
+            on { findByTsid(any()) } doReturn user
+        }
+        val balanceService = BalanceService(mockUserRepository, mock())
+
+        // when
+        val exception = assertFailsWith<BadClientRequestException> {
+            balanceService.recharge(rechargeCommand)
+        }
+
+        // then
+        assertEquals("충전 금액은 0보다 커야 합니다.", exception.message)
     }
 
     @Test
