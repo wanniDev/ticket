@@ -135,7 +135,7 @@ sequenceDiagram
     
 ### 5. 결제 API
 > 해당 API는 PG 사에서 제공하는 결제 모달창 UI를 통해 결제 정보를 입력한 이후에 호출되는 API입니다.</br>
-> 이번 프로젝트에서는 비즈니스 로직 구현에 집중하기 위해 PG 연동은 생략하였습니다. </br>
+> 이번 프로젝트에서는 예약과 대기열등 핵심 비즈니스 로직 구현에 집중하기 위해 PG 연동은 생략하였습니다. </br>
 ```mermaid
 sequenceDiagram
   participant C as Client
