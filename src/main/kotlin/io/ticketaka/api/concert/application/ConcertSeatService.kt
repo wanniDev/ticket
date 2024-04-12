@@ -1,5 +1,6 @@
 package io.ticketaka.api.concert.application
 
+import io.ticketaka.api.concert.domain.Concert
 import io.ticketaka.api.concert.domain.ConcertRepository
 import io.ticketaka.api.concert.domain.Seat
 import io.ticketaka.api.concert.domain.SeatRepository
@@ -20,5 +21,14 @@ class ConcertSeatService(
     fun getSeats(date: LocalDate): List<Int> {
         val concertDate = concertRepository.findByDate(date) ?: throw IllegalArgumentException("Concert date not found")
         return seatRepository.findByConcertId(concertDate.id!!).map { it.number.toInt() }
+    }
+
+    fun getAvailableConcert(date: LocalDate, seatNumber: String): Concert {
+        return concertRepository.findByDate(date)
+    }
+
+    fun getAvailableSeat(date: LocalDate, seatNumber: String): Seat {
+        val concert = concertRepository.findByDate(date)
+        return seatRepository.findByNumberAndConcert(seatNumber, concert)
     }
 }

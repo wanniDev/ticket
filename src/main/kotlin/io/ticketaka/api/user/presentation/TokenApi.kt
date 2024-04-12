@@ -1,6 +1,6 @@
 package io.ticketaka.api.user.presentation
 
-import io.ticketaka.api.user.application.TokenService
+import io.ticketaka.api.user.application.TokenUserService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -11,11 +11,11 @@ import java.time.LocalDateTime
 @RestController
 @RequestMapping("/api/token")
 class TokenApi(
-    private val tokenService: TokenService
+    private val tokenUserService: TokenUserService
 ) : TokenApiSpecification {
     @PostMapping
     override fun createToken(@RequestBody request: CreateTokenRequest): ResponseEntity<CreateTokenResponse> {
-        val tokens = tokenService.createToken(request.userTsid)
+        val tokens = tokenUserService.createToken(request.userTsid)
         return ResponseEntity
             .ok(CreateTokenResponse(tokens.accessToken, tokens.refreshToken))
     }

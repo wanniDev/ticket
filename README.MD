@@ -15,6 +15,39 @@
 - 잔액 충전 / 조회 API
 - 결제 API
 
+## 플로우 차트
+### 0. 유저 토큰 대기열 확인
+1. 클라이언트 토큰 입력 수신
+2. 토큰이 유효한지 확인
+3. 토큰이 유효하면 대기열 확인(peek)
+4. 대기열 순번의 토큰과 클라이언트 토큰이 일치하는지 확인
+5. 일치하면 true 리턴
+6. 일치하지 않으면 false 리턴
+
+### 1. 유저 토큰 발급 API
+![tokencreate drawio](https://github.com/wanniDev/ticket/assets/81374655/daecde77-3214-4149-9bf2-598279b55fb3)
+
+### 2. 예약 가능 날짜 조회 API
+![reservation_date_search drawio](https://github.com/wanniDev/ticket/assets/81374655/03b9cf95-6b12-4f64-9a07-584f26596919)
+
+### 3. 예약 가능 좌석 조회 API
+![reservation_seats_search drawio](https://github.com/wanniDev/ticket/assets/81374655/48b2d329-48b8-4749-b9d1-66f0f0b24f97)
+
+### 4. 좌석 예약 요청 API
+![reservation drawio](https://github.com/wanniDev/ticket/assets/81374655/45c31430-9b9d-4ef4-8fac-b68e2292f055)
+
+### 5. 잔액 충전 API
+![balance_charge drawio](https://github.com/wanniDev/ticket/assets/81374655/20615ee3-111c-487c-b3a4-48656c1e9aa5)
+
+### 6. 잔액 조회 API
+![balance_search drawio](https://github.com/wanniDev/ticket/assets/81374655/cbcc6bf8-8802-433e-80c1-942cfd0f43a0)
+
+### 7. 결제 API
+![payment drawio](https://github.com/wanniDev/ticket/assets/81374655/1a1b9aee-dd5a-4a2a-8376-c91eab917948)
+
+## 시퀀스 다이어그램
+> 이 부분은 새로운 다이어그램 작성 툴에 대한 학습을 해보기위해 별도로 진행해보는 작업입니다. </br>
+> 따라서, 아직 모든 내용이 제대로 반영된 부분은 아닐 수 있습니다.
 ### 0. 유저 토큰 대기열 검증
 ```mermaid
 sequenceDiagram
@@ -437,34 +470,4 @@ erDiagram
     user ||--o| token : "1"
     user ||--o{ reservation : "1"
 ```
-
-## 플로우 차트
-### 0. 유저 토큰 대기열 확인
-1. 클라이언트 토큰 입력 수신
-2. 토큰이 유효한지 확인
-3. 토큰이 유효하면 대기열 확인(peek)
-4. 대기열 순번의 토큰과 클라이언트 토큰이 일치하는지 확인
-5. 일치하면 true 리턴
-6. 일치하지 않으면 false 리턴
-
-### 1. 유저 토큰 발급 API
-![tokencreate drawio](https://github.com/wanniDev/ticket/assets/81374655/daecde77-3214-4149-9bf2-598279b55fb3)
-
-### 2. 예약 가능 날짜 조회 API
-![reservation_date_search drawio](https://github.com/wanniDev/ticket/assets/81374655/03b9cf95-6b12-4f64-9a07-584f26596919)
-
-### 3. 예약 가능 좌석 조회 API
-![reservation_seats_search drawio](https://github.com/wanniDev/ticket/assets/81374655/48b2d329-48b8-4749-b9d1-66f0f0b24f97)
-
-### 4. 좌석 예약 요청 API
-![reservation drawio](https://github.com/wanniDev/ticket/assets/81374655/45c31430-9b9d-4ef4-8fac-b68e2292f055)
-
-### 5. 잔액 충전 API
-![balance_charge drawio](https://github.com/wanniDev/ticket/assets/81374655/20615ee3-111c-487c-b3a4-48656c1e9aa5)
-
-### 6. 잔액 조회 API
-![balance_search drawio](https://github.com/wanniDev/ticket/assets/81374655/cbcc6bf8-8802-433e-80c1-942cfd0f43a0)
-
-### 7. 결제 API
-![payment drawio](https://github.com/wanniDev/ticket/assets/81374655/1a1b9aee-dd5a-4a2a-8376-c91eab917948)
 
