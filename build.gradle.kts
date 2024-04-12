@@ -54,6 +54,7 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
     testImplementation("org.mockito.kotlin:mockito-kotlin:5.2.1")
+    testImplementation(kotlin("test"))
 }
 
 tasks.withType<KotlinCompile> {

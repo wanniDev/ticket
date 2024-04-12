@@ -8,10 +8,18 @@ class Seat(
     val tsid: String,
     val number: String,
     @Enumerated(EnumType.STRING)
-    val status: Status,
+    var status: Status,
     @ManyToOne(targetEntity = Concert::class, optional = false, fetch = FetchType.LAZY)
     val concert: Concert,
 ) {
+    fun isAvailable(): Boolean {
+        return status == Status.AVAILABLE
+    }
+
+    fun occupy() {
+        status = Status.OCCUPIED
+    }
+
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
 

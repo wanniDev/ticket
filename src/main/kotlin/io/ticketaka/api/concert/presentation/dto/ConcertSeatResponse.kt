@@ -4,5 +4,5 @@ import java.time.LocalDate
 
 data class ConcertSeatResponse(
     val date: LocalDate,
-    val seats: List<Int>
+    val seats: List<String>
 )

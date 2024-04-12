@@ -22,7 +22,7 @@ class ReservationService(
 ) {
     @Transactional
     fun createReservation(command: CreateReservationCommand): CreateReservationResult {
-        val concert = concertSeatService.getAvailableConcert(command.date, command.seatNumber)
+        val concert = concertSeatService.getAvailableConcert(command.date)
         val seat = concertSeatService.getAvailableSeat(command.date, command.seatNumber)
         val user = tokenUserService.getUser(command.userTsid)
 
