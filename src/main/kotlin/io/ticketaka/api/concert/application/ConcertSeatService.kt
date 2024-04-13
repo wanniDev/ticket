@@ -19,20 +19,24 @@ class ConcertSeatService(
         return seatRepository.findConcertDateByStatus(Seat.Status.AVAILABLE).sorted()
     }
 
-    fun getSeats(date: LocalDate): List<String> {
-        val concertDate = concertRepository.findByDate(date)
-        return seatRepository.findByConcertId(concertDate.id!!)
+    fun getSeatNumbers(date: LocalDate): List<String> {
+        val concert = concertRepository.findByDate(date)
+            ?: throw BadClientRequestException("해당 날짜의 콘서트가 없습니다.")
+        return seatRepository.findByConcertId(concert.id!!)
             .filter { it.status == Seat.Status.AVAILABLE }
             .sortedBy { it.number}
             .map { it.number}
     }
 
     fun getAvailableConcert(date: LocalDate): Concert {
-        return concertRepository.findByDate(date)
+        val concert = concertRepository.findByDate(date)
+            ?: throw BadClientRequestException("해당 날짜의 콘서트가 없습니다.")
+        return concert
     }
 
     fun getAvailableSeats(date: LocalDate, seatNumbers: List<String>): Set<Seat> {
         val concert = concertRepository.findByDate(date)
+            ?: throw BadClientRequestException("해당 날짜의 콘서트가 없습니다.")
         val seats = seatRepository.findSeatsByConcertDateAndNumberIn(concert.date, seatNumbers)
         seats.forEach { seat ->
             if (seat.status != Seat.Status.AVAILABLE) {

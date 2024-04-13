@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository
 
 @Repository
 class UserRepositoryComposition(private val jpaUserRepository: JpaUserRepository): UserRepository {
-    override fun findByTsid(userTsid: String): User {
-        return jpaUserRepository.findByTsid(userTsid) ?: throw NotFoundException("사용자를 찾을 수 없습니다.")
+    override fun findByTsid(userTsid: String): User? {
+        return jpaUserRepository.findByTsid(userTsid)
     }
 }

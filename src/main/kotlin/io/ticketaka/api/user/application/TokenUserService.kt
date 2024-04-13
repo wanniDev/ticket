@@ -1,5 +1,6 @@
 package io.ticketaka.api.user.application
 
+import io.ticketaka.api.common.exception.NotFoundException
 import io.ticketaka.api.common.infrastructure.jwt.JwtProvider
 import io.ticketaka.api.common.infrastructure.jwt.JwtTokens
 import io.ticketaka.api.user.domain.User
@@ -18,7 +19,7 @@ class TokenUserService(
 ) {
     @Transactional
     fun createToken(userTsId: String): JwtTokens {
-        val user = userRepository.findByTsid(userTsId)
+        val user = userRepository.findByTsid(userTsId) ?: throw NotFoundException("사용자를 찾을 수 없습니다.")
 
         val token = Token.newInstance(user)
         val rawToken = jwtProvider.generate(user.tsid)
@@ -28,12 +29,15 @@ class TokenUserService(
 
     @Transactional
     fun getUser(tsId: String): User {
-        return userRepository.findByTsid(tsId)
+        return userRepository.findByTsid(tsId) ?: throw NotFoundException("사용자를 찾을 수 없습니다.")
     }
 
     fun peekToken(tokenId: String): Boolean {
-        tokenRepository.findFirstTokenOrderByIssuedTimeAscLimit1().let {
-            return it.tsid == tokenId
+        tokenRepository.findFirstTokenOrderByIssuedTimeAscLimit1().let {token ->
+            if (token == null) {
+                throw NotFoundException("토큰을 찾을 수 없습니다.")
+            }
+            return token.tsid == tokenId
         }
     }
 }

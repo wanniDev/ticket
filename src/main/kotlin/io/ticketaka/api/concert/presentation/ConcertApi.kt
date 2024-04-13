@@ -27,7 +27,7 @@ class ConcertApi(private val concertSeatService: ConcertSeatService) : ConcertAp
         return ResponseEntity.ok(
             ConcertSeatResponse(
                 date,
-                concertSeatService.getSeats(date)
+                concertSeatService.getSeatNumbers(date)
             )
         )
     }

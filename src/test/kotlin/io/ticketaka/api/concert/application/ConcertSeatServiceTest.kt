@@ -69,7 +69,7 @@ class ConcertSeatServiceTest {
         val concertSeatService = ConcertSeatService(mockSeatRepository, mockConcertRepository)
 
         // when
-        val result = concertSeatService.getSeats(date)
+        val result = concertSeatService.getSeatNumbers(date)
 
         // then
         assertEquals(listOf(seatNumber), result)
@@ -90,7 +90,7 @@ class ConcertSeatServiceTest {
         val concertSeatService = ConcertSeatService(mockSeatRepository, mockConcertRepository)
 
         // when
-        val result = concertSeatService.getSeats(date)
+        val result = concertSeatService.getSeatNumbers(date)
 
         // then
         assertEquals(emptyList<Int>(), result)

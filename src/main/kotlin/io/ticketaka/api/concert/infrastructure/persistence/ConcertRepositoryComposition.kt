@@ -11,12 +11,12 @@ import java.time.LocalDate
 class ConcertRepositoryComposition(
     private val jpaConcertRepository: JpaConcertRepository
 ): ConcertRepository {
-    override fun findByTsid(tsid: String): Concert {
-        return jpaConcertRepository.findByTsid(tsid) ?: throw NotFoundException("콘서트를 찾을 수 없습니다.")
+    override fun findByTsid(tsid: String): Concert? {
+        return jpaConcertRepository.findByTsid(tsid)
     }
 
-    override fun findByDate(date: LocalDate): Concert {
-        return jpaConcertRepository.findByDate(date) ?: throw NotFoundException("콘서트를 찾을 수 없습니다.")
+    override fun findByDate(date: LocalDate): Concert? {
+        return jpaConcertRepository.findByDate(date)
     }
 
     override fun findAll(): List<Concert> {

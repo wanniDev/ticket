@@ -18,8 +18,8 @@ class TokenRepositoryComposition(
         jpaTokenRepository.delete(token)
     }
 
-    override fun findFirstTokenOrderByIssuedTimeAscLimit1(): Token {
-        return jpaTokenRepository.findFirstTokenOrderByIssuedTimeAscLimit1() ?: throw NotFoundException("토큰을 찾을 수 없습니다.")
+    override fun findFirstTokenOrderByIssuedTimeAscLimit1(): Token? {
+        return jpaTokenRepository.findFirstTokenOrderByIssuedTimeAscLimit1()
     }
 
     override fun count(): Long {

@@ -14,6 +14,6 @@ class PointRepositoryComposition(
     }
 
     override fun findByTsid(tsid: String): Point? {
-        return jpaPointRepository.findByTsid(tsid) ?: throw RuntimeException("Point not found")
+        return jpaPointRepository.findByTsid(tsid)
     }
 }
