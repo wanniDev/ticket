@@ -11,6 +11,8 @@ interface JpaSeatRepository: JpaRepository<Seat, String>{
     fun findByConcertId(concertId: Long): List<Seat>
     fun findByTsidAndConcert(tsid: String, concert: Concert): Seat?
 
+    fun findSeatsByConcertDateAndNumberIn(date: LocalDate, seatNumbers: List<String>): List<Seat>
+
     @Query("SELECT DISTINCT s.concert.date FROM Seat s WHERE s.status = :status")
     fun findConcertDateByStatus(status: Seat.Status): Set<LocalDate>
 }

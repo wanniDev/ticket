@@ -2,6 +2,7 @@ package io.ticketaka.api.concert.domain
 
 import io.ticketaka.api.common.infrastructure.tsid.TsIdKeyGenerator
 import jakarta.persistence.*
+import java.math.BigDecimal
 
 @Entity
 class Seat(
@@ -9,6 +10,7 @@ class Seat(
     val number: String,
     @Enumerated(EnumType.STRING)
     var status: Status,
+    val price: BigDecimal,
     @ManyToOne(targetEntity = Concert::class, optional = false, fetch = FetchType.LAZY)
     val concert: Concert,
 ) {
@@ -28,12 +30,13 @@ class Seat(
     }
 
     companion object {
-        fun newInstance(number: String, concert: Concert): Seat {
+        fun newInstance(number: String, price: BigDecimal, concert: Concert): Seat {
             return Seat(
                 tsid = TsIdKeyGenerator.next("st"),
                 number = number,
                 status = Status.AVAILABLE,
-                concert = concert
+                price = price,
+                concert = concert,
             )
         }
     }

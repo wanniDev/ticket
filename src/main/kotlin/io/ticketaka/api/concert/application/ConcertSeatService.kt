@@ -31,12 +31,14 @@ class ConcertSeatService(
         return concertRepository.findByDate(date)
     }
 
-    fun getAvailableSeat(date: LocalDate, seatNumber: String): Seat {
+    fun getAvailableSeats(date: LocalDate, seatNumbers: List<String>): Set<Seat> {
         val concert = concertRepository.findByDate(date)
-        val seat = seatRepository.findByNumberAndConcert(seatNumber, concert)
-        if (!seat.isAvailable()) {
-            throw BadClientRequestException("이미 예약된 좌석입니다.")
+        val seats = seatRepository.findSeatsByConcertDateAndNumberIn(concert.date, seatNumbers)
+        seats.forEach { seat ->
+            if (seat.status != Seat.Status.AVAILABLE) {
+                throw BadClientRequestException("이미 예약된 좌석입니다.")
+            }
         }
-        return seat
+        return seats
     }
 }

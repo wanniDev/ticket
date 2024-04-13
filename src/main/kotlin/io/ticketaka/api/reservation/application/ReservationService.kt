@@ -1,14 +1,11 @@
 package io.ticketaka.api.reservation.application
 
 import io.ticketaka.api.concert.application.ConcertSeatService
-import io.ticketaka.api.concert.domain.ConcertRepository
-import io.ticketaka.api.concert.domain.SeatRepository
 import io.ticketaka.api.reservation.application.dto.CreateReservationCommand
 import io.ticketaka.api.reservation.application.dto.CreateReservationResult
 import io.ticketaka.api.reservation.domain.reservation.Reservation
 import io.ticketaka.api.reservation.domain.reservation.ReservationRepository
 import io.ticketaka.api.user.application.TokenUserService
-import io.ticketaka.api.user.domain.UserRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
@@ -22,14 +19,15 @@ class ReservationService(
 ) {
     @Transactional
     fun createReservation(command: CreateReservationCommand): CreateReservationResult {
-        val concert = concertSeatService.getAvailableConcert(command.date)
-        val seat = concertSeatService.getAvailableSeat(command.date, command.seatNumber)
         val user = tokenUserService.getUser(command.userTsid)
-
-        val reservation = Reservation.createPendingReservation(user, concert, seat)
-        user.chargePoint(concert.price)
+        val concert = concertSeatService.getAvailableConcert(command.date)
+        val seats = concertSeatService.getAvailableSeats(command.date, command.seatNumber)
+        val reservation = reservationRepository.save(Reservation.createPendingReservation(user, concert))
+        seats.forEach { seat ->
+            user.chargePoint(seat.price)
+        }
+        reservation.allocate(seats)
         reservation.confirm()
-        reservationRepository.save(reservation)
 
         return CreateReservationResult(
             "reservationId",

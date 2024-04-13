@@ -49,7 +49,7 @@ class ConcertSeatServiceTest {
     fun `find available seats by date`() {
         // given
         val date = LocalDate.of(2024, 4, 1)
-        val concert = Concert("concertDateTsid", 1000.toBigDecimal(), date)
+        val concert = Concert("concertDateTsid", date)
         concert.id = 1L
         val seatNumber = "1"
         val mockSeatRepository = mock<SeatRepository> {
@@ -57,7 +57,9 @@ class ConcertSeatServiceTest {
                 Seat(
                     "tsid",
                     seatNumber,
-                    Seat.Status.AVAILABLE, concert
+                    Seat.Status.AVAILABLE,
+                    1000.toBigDecimal(),
+                    concert
                 )
             )
         }
@@ -77,7 +79,7 @@ class ConcertSeatServiceTest {
     fun `if there is no seats available will return empty collection`() {
         // given
         val date = LocalDate.of(2024, 4, 1)
-        val concert = Concert("concertDateTsid", 1000.toBigDecimal(), date)
+        val concert = Concert("concertDateTsid", date)
         concert.id = 1L
         val mockSeatRepository = mock<SeatRepository> {
             on { findByConcertId(any()) } doReturn emptyList()

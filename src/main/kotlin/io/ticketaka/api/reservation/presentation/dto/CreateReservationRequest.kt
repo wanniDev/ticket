@@ -6,7 +6,7 @@ import java.time.LocalDate
 data class CreateReservationRequest(
     val usertsid: String,
     val date: LocalDate,
-    val seatNumber: String
+    val seatNumber: List<String>
 ) {
     fun toCommand() = CreateReservationCommand(
         userTsid = usertsid,

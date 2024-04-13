@@ -11,17 +11,15 @@ import java.time.LocalDate
 @Entity
 class Concert(
     val tsid: String,
-    val price: BigDecimal,
     val date: LocalDate
 ) {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
 
     companion object {
-        fun newInstance(price: BigDecimal, date: LocalDate): Concert {
+        fun newInstance(date: LocalDate): Concert {
             return Concert(
                 tsid = TsIdKeyGenerator.next("cd"),
-                price = price,
                 date = date
             )
         }

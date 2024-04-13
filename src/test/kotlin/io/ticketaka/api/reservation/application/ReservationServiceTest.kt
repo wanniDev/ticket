@@ -33,17 +33,17 @@ class ReservationServiceTest {
         val date = LocalDate.of(2024, 4, 10)
         val seatNumber = "A24"
         val user = User.newInstance(point)
-        val concert = Concert.newInstance(1000.toBigDecimal() ,date)
-        val seat = Seat.newInstance(seatNumber, concert)
+        val concert = Concert.newInstance(date)
+        val seats = setOf(Seat.newInstance(seatNumber, 1000.toBigDecimal(), concert))
 
         val mockConcertRepository = mock<ConcertRepository> {
             on { findByDate(date) } doReturn concert
         }
         val mockSeatRepository = mock<SeatRepository> {
-            on { findByNumberAndConcert(any(), any()) } doReturn seat
+            on { findSeatsByConcertDateAndNumberIn(any(), any()) } doReturn seats
         }
         val mockReservationRepository = mock<ReservationRepository>() {
-            on { save(any()) } doReturn Reservation.createPendingReservation(user, concert, seat)
+            on { save(any()) } doReturn Reservation.createPendingReservation(user, concert)
         }
 
         val mockUserService = mock<TokenUserService> {
@@ -55,7 +55,8 @@ class ReservationServiceTest {
 
         // when
         val result = reservationService.createReservation(
-            CreateReservationCommand("concertDateTsid", date, seatNumber))
+            CreateReservationCommand("concertDateTsid", date, seats.map { it.number }.toList())
+        )
 
         // then
         assertNotNull(result.reservationId)
@@ -68,15 +69,16 @@ class ReservationServiceTest {
         // given
         val date = LocalDate.of(2024, 4, 10)
         val seatNumber = "A24"
-        val concert = Concert.newInstance(1000.toBigDecimal() ,date)
-        val seat = Seat.newInstance(seatNumber, concert)
+        val concert = Concert.newInstance(date)
+        val seat = Seat.newInstance(seatNumber, 1000.toBigDecimal(), concert)
         seat.occupy()
+        val seats = setOf(seat)
 
         val mockConcertRepository = mock<ConcertRepository> {
             on { findByDate(date) } doReturn concert
         }
         val mockSeatRepository = mock<SeatRepository> {
-            on { findByNumberAndConcert(any(), any()) } doReturn seat
+            on { findSeatsByConcertDateAndNumberIn(any(), any()) } doReturn seats
         }
         val mockReservationRepository = mock<ReservationRepository>()
 
@@ -88,7 +90,7 @@ class ReservationServiceTest {
         // when
         val exception = assertFailsWith<BadClientRequestException> {
             reservationService.createReservation(
-                CreateReservationCommand("concertDateTsid", date, seatNumber))
+                CreateReservationCommand("concertDateTsid", date, listOf(seatNumber)))
         }
 
         // then
@@ -100,8 +102,8 @@ class ReservationServiceTest {
         // given
         val date = LocalDate.of(2024, 4, 10)
         val seatNumber = "A24"
-        val concert = Concert.newInstance(1000.toBigDecimal() ,date)
-        val seat = Seat.newInstance(seatNumber, concert)
+        val concert = Concert.newInstance( date)
+        val seat = Seat.newInstance(seatNumber, 1000.toBigDecimal(), concert)
         seat.occupy()
 
         val notFoundConcertErrorMessage = "콘서트를 찾을 수 없습니다."
@@ -119,7 +121,7 @@ class ReservationServiceTest {
         // when
         val exception = assertFailsWith<NotFoundException> {
             reservationService.createReservation(
-                CreateReservationCommand("concertDateTsid", date, seatNumber))
+                CreateReservationCommand("concertDateTsid", date, listOf(seatNumber)))
         }
 
         // then
@@ -133,14 +135,14 @@ class ReservationServiceTest {
         val date = LocalDate.of(2024, 4, 10)
         val seatNumber = "A24"
         val user = User.newInstance(point)
-        val concert = Concert.newInstance(1000.toBigDecimal() ,date)
-        val seat = Seat.newInstance(seatNumber, concert)
+        val concert = Concert.newInstance(date)
+        val seat = Seat.newInstance(seatNumber, 1000.toBigDecimal(), concert)
 
         val mockConcertRepository = mock<ConcertRepository> {
             on { findByDate(date) } doReturn concert
         }
         val mockSeatRepository = mock<SeatRepository> {
-            on { findByNumberAndConcert(any(), any()) } doReturn seat
+            on { findSeatsByConcertDateAndNumberIn(any(), any()) } doReturn setOf(seat)
         }
         val mockReservationRepository = mock<ReservationRepository>()
 
@@ -154,7 +156,7 @@ class ReservationServiceTest {
         // when
         val exception = assertFailsWith<BadClientRequestException> {
             reservationService.createReservation(
-                CreateReservationCommand("concertDateTsid", date, seatNumber))
+                CreateReservationCommand("concertDateTsid", date, listOf(seatNumber)))
         }
 
         // then
@@ -168,14 +170,14 @@ class ReservationServiceTest {
         val date = LocalDate.of(2024, 4, 10)
         val seatNumber = "A24"
         val user = User.newInstance(point)
-        val concert = Concert.newInstance((-1).toBigDecimal(),date)
-        val seat = Seat.newInstance(seatNumber, concert)
+        val concert = Concert.newInstance(date)
+        val seat = Seat.newInstance(seatNumber, (-1).toBigDecimal(), concert)
 
         val mockConcertRepository = mock<ConcertRepository> {
             on { findByDate(date) } doReturn concert
         }
         val mockSeatRepository = mock<SeatRepository> {
-            on { findByNumberAndConcert(any(), any()) } doReturn seat
+            on { findSeatsByConcertDateAndNumberIn(any(), any()) } doReturn setOf(seat)
         }
         val mockReservationRepository = mock<ReservationRepository>()
 
@@ -189,7 +191,7 @@ class ReservationServiceTest {
         // when
         val exception = assertFailsWith<BadClientRequestException> {
             reservationService.createReservation(
-                CreateReservationCommand("concertDateTsid", date, seatNumber))
+                CreateReservationCommand("concertDateTsid", date, listOf(seatNumber)))
         }
 
         // then
