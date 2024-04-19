@@ -124,7 +124,34 @@ sequenceDiagram
 - 제약사항 :
   - 한 사용자가 동시에 여러 좌석을 예약할 수 없습니다.
   - 임시 배정 시간 내에 결제가 완료되지 않으면, 좌석 배정이 자동으로 해제됩니다.
-
+```mermaid
+sequenceDiagram
+  participant C as Client
+  participant F as Filter
+  participant A as API
+  participant DB as Database
+  C->>A: api 요청(GET /api/concert/seat/{date})
+  A->>F: 요청 헤더의 토큰 복호화
+  F->>DB: 복호화된 토큰 조회 쿼리 요청
+  DB->>DB: 복호화된 토큰 조회 쿼리 수행
+  DB-->>F: 복호화된 토큰 조회 결과 return
+  alt 토큰이 만료된 경우
+    F-->>C: expired token error
+  else 토큰 검증 실패
+    F-->>C: Invalid token error
+  end
+  F->>A: api 요청 처리 위임
+  A->>DB: 해당 일자 예약 가능한 콘서트, 좌석 조회 쿼리 요청
+  DB->>DB: 해당 일자 예약 가능한 콘서트, 좌석 조회 쿼리 수행
+  DB-->>A: 해당 일자 예약 가능한 콘서트, 좌석 조회 결과 return
+  opt 예약 가능한 콘서트 및 좌석이 없는 경우
+    A-->>C: Not Found Available concert
+  end
+  A->>DB: 예약 정보 저장 쿼리 요청
+  DB->>DB: 예약 정보 저장 쿼리 수행
+  DB-->>A: 예약 정보 저장 결과 return
+  A-->>C: 예약 정보 저장 결과 return
+```
 ### 4. 잔액 충전 / 조회 API
 #### 잔액 충전
 - 목적 : 사용자가 예약 결제를 위해 잔액을 충전할 수 있어야 합니다.
@@ -132,6 +159,31 @@ sequenceDiagram
   - 사용자는 특정 금액을 지정하여 잔액을 충전할 수 있습니다.
 - 제약사항 :
   - 충전 금액은 양수여야 합니다. 
+```mermaid
+sequenceDiagram
+  participant C as Client
+  participant F as Filter
+  participant A as API
+  participant DB as Database
+  C->>A: api 요청
+  A->>F: 요청 헤더의 토큰 복호화
+  F->>DB: 복호화된 토큰 조회 쿼리 요청
+  DB->>DB: 복호화된 토큰 조회 쿼리 수행
+  DB-->>F: 복호화된 토큰 조회 결과 return
+  alt 토큰이 만료된 경우
+    F-->>C: expired token error
+  else 토큰 검증 실패
+    F-->>C: Invalid token error
+  end
+  F->>A: api 요청 처리 위임
+  A->>DB: 사용자 잔액 조회 쿼리 요청
+  DB->>DB: 사용자 잔액 조회 쿼리 수행
+  DB-->>A: 사용자 잔액 조회 결과 return
+  A->>DB: 사용자 잔액 업데이트 쿼리 요청
+  DB->>DB: 사용자 잔액 업데이트 쿼리 수행
+  DB-->>A: 사용자 잔액 업데이트 결과 return
+  A-->>C: 사용자 잔액 업데이트 결과 return
+```
 
 #### 잔액 조회
 - 목적 : 사용자가 자신의 현재 잔액을 조회할 수 있어야 합니다.
@@ -139,6 +191,28 @@ sequenceDiagram
   - 사용자는 자신의 잔액 정보를 언제든지 조회할 수 있어야 합니다.
 - 제약사항:
   - 조회는 사용자 본인의 잔액에 한정됩니다.
+```mermaid
+sequenceDiagram
+  participant C as Client
+  participant F as Filter
+  participant A as API
+  participant DB as Database
+  C->>A: api 요청
+  A->>F: 요청 헤더의 토큰 복호화
+  F->>DB: 복호화된 토큰 조회 쿼리 요청
+  DB->>DB: 복호화된 토큰 조회 쿼리 수행
+  DB-->>F: 복호화된 토큰 조회 결과 return
+  alt 토큰이 만료된 경우
+    F-->>C: expired token error
+  else 토큰 검증 실패
+    F-->>C: Invalid token error
+  end
+  F->>A: api 요청 처리 위임
+  A->>DB: 사용자 잔액 조회 쿼리 요청
+  DB->>DB: 사용자 잔액 조회 쿼리 수행
+  DB-->>A: 사용자 잔액 조회 결과 return
+  A-->>C: 사용자 잔액 조회 결과 return
+```
     
 ### 5. 결제 API
 > 해당 API는 PG 사에서 제공하는 결제 모달창 UI를 통해 결제 정보를 입력한 이후에 호출되는 API입니다.</br>
