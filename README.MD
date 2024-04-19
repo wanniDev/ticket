@@ -48,40 +48,24 @@
 ## 시퀀스 다이어그램
 > 이 부분은 새로운 다이어그램 작성 툴에 대한 학습을 해보기위해 별도로 진행해보는 작업입니다. </br>
 > 따라서, 아직 모든 내용이 제대로 반영된 부분은 아닐 수 있습니다.
+
 ### 0. 유저 토큰 대기열 검증
+현재 주어진 토큰이 대기열 우선순위에 들었는지 확인하는 API 입니다.
 ```mermaid
 sequenceDiagram
     participant C as Client
-    participant F as Filter
-    participant AO as AOP
     participant A as API
-    participant Q as 대기열
-    C->>F: api 요청
-    F->>DB: 토큰 검증
-    opt 잘못된 토큰
-        F-->>C: 401 Unauthorized
+    participant DB as Database
+    C->>A: api 요청(POST /api/token/peek)
+    A->>A: api 요청 바디 구성(토큰ID)
+    A->>DB: 제일 최근의 Token 조회 쿼리 요청
+    DB->>DB: 제일 최근의 Token 조회 쿼리 수행
+    DB-->>A: 제일 최근의 Token 조회 결과 return
+    opt 존재 하지 않는 토큰
+        A-->>C: NOT_FOUND 오류
     end
-    F->>AO: api 요청 처리 위임
-    alt 대기열 용량 허용
-      loop 시도 횟수 < 최대 횟수
-        AO->>Q: 대기열 확인
-        Q->>Q: 대기열 순번 확인
-        alt 대기열 순번이 일치
-          Q-->>AO: loop break
-        else 대기열 순번이 불일치
-          Q-->>AO: 시도 횟수++
-        end
-      end
-      alt 대기열 순번이 일치
-        AO->>A: api 요청 처리 위임
-        A->>A: api 로직 처리
-        A-->>C: api 응답
-      else 대기열 순번이 불일치
-        AO-->>C: 429 Too Many Requests
-      end
-    else 대기열 용량 초과
-        AO-->>C: 429 Too Many Requests
-    end
+    A-->>A: 요청한 토큰ID와 제일 최근의 토큰ID 비교
+    A-->>C: 제일 최근의 토큰ID 일치여부 응답 메시지 리턴
 ```
 
 ### 1. 유저 토큰 발급 API
@@ -108,6 +92,29 @@ sequenceDiagram
   - 사용자는 특정 날짜를 선택하여 그 날짜에 대한 예약 가능 좌석을 확인할 수 있어야 합니다.
 - 제약사항 :
   - 이미 예약되었거나 임시 배정된 좌석은 예약 가능한 좌석 목록에 포함되지 않아야 합니다.
+```mermaid
+sequenceDiagram
+    participant C as Client
+    participant F as Filter
+    participant A as API
+    participant DB as Database
+    C->>A: api 요청(GET /api/concert/seat/{date})
+    A->>F: 요청 헤더의 토큰 복호화
+    F->>DB: 복호화된 토큰 조회 쿼리 요청
+    DB->>DB: 복호화된 토큰 조회 쿼리 수행
+    DB-->>F: 복호화된 토큰 조회 결과 return
+    alt 토큰이 만료된 경우
+        F-->>C: expired token error
+    else 토큰 검증 실패 
+        F-->>C: Invalid token error
+    end
+    F->>A: api 요청 처리 위임
+    A->>DB: 해당 일자 좌석 조회 쿼리 요청
+    DB->>DB: 해당 일자 좌석 조회 쿼리 수행
+    DB-->>A: 해당 일자 좌석 조회 결과 return
+    A-->>A: 해당 좌석에 예약가능한 좌석 필터링 및 오름차순 정렬
+    A-->>C: 해당 일자 좌석 조회 결과 return
+```
 
 ### 3. 좌석 예약 요청 API
 - 목적 : 사용자가 특정 날짜와 좌석에 대해 예약을 요청할 수 있어야 합니다.
