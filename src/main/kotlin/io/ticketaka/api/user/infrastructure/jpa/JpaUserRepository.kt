@@ -3,6 +3,6 @@ package io.ticketaka.api.user.infrastructure.jpa
 import io.ticketaka.api.user.domain.User
 import org.springframework.data.jpa.repository.JpaRepository
 
-interface JpaUserRepository: JpaRepository<User, Long> {
+interface JpaUserRepository : JpaRepository<User, Long> {
     fun findByTsid(userTsid: String): User?
 }

@@ -3,7 +3,7 @@ package io.ticketaka.api.common.infrastructure.tsid
 import com.github.f4b6a3.tsid.TsidFactory
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
-import java.util.*
+import java.util.Objects
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
 import java.util.concurrent.CountDownLatch
@@ -11,12 +11,13 @@ import java.util.concurrent.ThreadLocalRandom
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.function.IntSupplier
 
-
 class TsidFactoryConcurrencyTest {
     private fun newFactory(nodeBits: Int): TsidFactory {
-        return TsidFactory.builder().withRandomFunction(IntSupplier {
-            ThreadLocalRandom.current().nextInt()
-        })
+        return TsidFactory.builder().withRandomFunction(
+            IntSupplier {
+                ThreadLocalRandom.current().nextInt()
+            },
+        )
             .withNodeBits(nodeBits)
             .build()
     }

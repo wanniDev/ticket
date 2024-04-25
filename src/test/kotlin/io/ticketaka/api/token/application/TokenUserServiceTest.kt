@@ -5,15 +5,19 @@ import io.ticketaka.api.common.infrastructure.jwt.JwtProvider
 import io.ticketaka.api.common.infrastructure.jwt.JwtTokens
 import io.ticketaka.api.reservation.domain.point.Point
 import io.ticketaka.api.user.application.TokenUserService
-import io.ticketaka.api.user.domain.User
-import io.ticketaka.api.user.domain.UserRepository
 import io.ticketaka.api.user.domain.Token
 import io.ticketaka.api.user.domain.TokenRepository
+import io.ticketaka.api.user.domain.User
+import io.ticketaka.api.user.domain.UserRepository
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.junit.jupiter.MockitoExtension
-import org.mockito.kotlin.*
+import org.mockito.kotlin.any
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.doThrow
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
 import kotlin.test.assertFalse
 
 @ExtendWith(MockitoExtension::class)
@@ -25,16 +29,20 @@ class TokenUserServiceTest {
         val user =
             User("userTsid1", point)
 
-        val mockJwtProvider = mock<JwtProvider> {
-            on { generate(any())} doReturn JwtTokens("accessToken", "refreshToken")}
+        val mockJwtProvider =
+            mock<JwtProvider> {
+                on { generate(any()) } doReturn JwtTokens("accessToken", "refreshToken")
+            }
 
-        val mockTokenRepository = mock<TokenRepository> {
-            on { save(any()) } doReturn Token.newInstance(user)
-        }
+        val mockTokenRepository =
+            mock<TokenRepository> {
+                on { save(any()) } doReturn Token.newInstance(user)
+            }
 
-        val mockUserRepository = mock<UserRepository> {
-            on { findByTsid(any()) } doReturn user
-        }
+        val mockUserRepository =
+            mock<UserRepository> {
+                on { findByTsid(any()) } doReturn user
+            }
         val tokenUserService = TokenUserService(mockJwtProvider, mockTokenRepository, mockUserRepository)
 
         // when
@@ -49,9 +57,10 @@ class TokenUserServiceTest {
         // given
         val mockJwtProvider = mock<JwtProvider>()
         val mockTokenRepository = mock<TokenRepository>()
-        val mockUserRepository = mock<UserRepository> {
-            on { findByTsid(any()) } doThrow NotFoundException("사용자를 찾을 수 없습니다.")
-        }
+        val mockUserRepository =
+            mock<UserRepository> {
+                on { findByTsid(any()) } doThrow NotFoundException("사용자를 찾을 수 없습니다.")
+            }
         val tokenUserService = TokenUserService(mockJwtProvider, mockTokenRepository, mockUserRepository)
 
         // when
@@ -67,9 +76,10 @@ class TokenUserServiceTest {
     fun `peekToken returns true when the order of the token queue matches`() {
         // given
         val tokenPosition0 = Token.newInstance(User("userTsid0", Point.newInstance()))
-        val mockTokenRepository = mock<TokenRepository> {
-            on { findFirstTokenOrderByIssuedTimeAscLimit1() } doReturn tokenPosition0
-        }
+        val mockTokenRepository =
+            mock<TokenRepository> {
+                on { findFirstTokenOrderByIssuedTimeAscLimit1() } doReturn tokenPosition0
+            }
         val tokenUserService = TokenUserService(mock(), mockTokenRepository, mock())
 
         // when
@@ -84,9 +94,10 @@ class TokenUserServiceTest {
         // given
         val tokenPosition0 = Token.newInstance(User("userTsid0", Point.newInstance()))
         val tokenPosition1 = Token.newInstance(User("userTsid1", Point.newInstance()))
-        val mockTokenRepository = mock<TokenRepository> {
-            on { findFirstTokenOrderByIssuedTimeAscLimit1() } doReturn tokenPosition0
-        }
+        val mockTokenRepository =
+            mock<TokenRepository> {
+                on { findFirstTokenOrderByIssuedTimeAscLimit1() } doReturn tokenPosition0
+            }
         val tokenUserService = TokenUserService(mock(), mockTokenRepository, mock())
 
         // when

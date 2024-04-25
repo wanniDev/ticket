@@ -15,7 +15,7 @@ import java.time.LocalDateTime
 class ReservationService(
     private val tokenUserService: TokenUserService,
     private val concertSeatService: ConcertSeatService,
-    private val reservationRepository: ReservationRepository
+    private val reservationRepository: ReservationRepository,
 ) {
     @Transactional
     fun createReservation(command: CreateReservationCommand): CreateReservationResult {
@@ -32,7 +32,7 @@ class ReservationService(
         return CreateReservationResult(
             "reservationId",
             reservation.status,
-            LocalDateTime.now().plusMinutes(5L)
+            LocalDateTime.now().plusMinutes(5L),
         )
     }
 }

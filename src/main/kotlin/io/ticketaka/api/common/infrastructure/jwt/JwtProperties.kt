@@ -12,5 +12,5 @@ class JwtProperties(
     @Value("\${jwt.tokenIssuer}")
     val tokenIssuer: String,
     @Value("\${jwt.base64TokenSigningKey}")
-    val base64TokenSigningKey: String
+    val base64TokenSigningKey: String,
 )

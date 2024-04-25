@@ -1,16 +1,15 @@
 package io.ticketaka.api.point.application
 
 import io.ticketaka.api.common.exception.BadClientRequestException
+import io.ticketaka.api.reservation.application.BalanceService
 import io.ticketaka.api.reservation.application.PaymentService
+import io.ticketaka.api.reservation.application.dto.PaymentCommand
 import io.ticketaka.api.reservation.application.dto.RechargeCommand
 import io.ticketaka.api.reservation.domain.point.Point
-import io.ticketaka.api.reservation.application.dto.PaymentCommand
-import io.ticketaka.api.reservation.application.BalanceService
 import io.ticketaka.api.user.domain.User
 import io.ticketaka.api.user.domain.UserRepository
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.any
@@ -21,24 +20,26 @@ import kotlin.test.assertFailsWith
 
 @ExtendWith(MockitoExtension::class)
 class BalanceServiceTest {
-
     @Test
     fun recharge() {
         // given
         val point = Point.newInstance()
         val user = User("userTsid1", point)
-        val rechargeCommand = RechargeCommand(
-            user.tsid,
-            20000.toBigDecimal()
-        )
-        val paymentCommand = PaymentCommand(
-            userTsid = user.tsid,
-            amount = rechargeCommand.amount
-        )
+        val rechargeCommand =
+            RechargeCommand(
+                user.tsid,
+                20000.toBigDecimal(),
+            )
+        val paymentCommand =
+            PaymentCommand(
+                userTsid = user.tsid,
+                amount = rechargeCommand.amount,
+            )
 
-        val mockUserRepository = mock<UserRepository> {
-            on { findByTsid(any()) } doReturn user
-        }
+        val mockUserRepository =
+            mock<UserRepository> {
+                on { findByTsid(any()) } doReturn user
+            }
         val mockPaymentService = mock<PaymentService>()
         val balanceService = BalanceService(mockUserRepository, mockPaymentService)
 
@@ -54,20 +55,23 @@ class BalanceServiceTest {
         // given
         val point = Point.newInstance()
         val user = User("userTsid1", point)
-        val rechargeCommand = RechargeCommand(
-            user.tsid,
-            (-20000).toBigDecimal()
-        )
+        val rechargeCommand =
+            RechargeCommand(
+                user.tsid,
+                (-20000).toBigDecimal(),
+            )
 
-        val mockUserRepository = mock<UserRepository> {
-            on { findByTsid(any()) } doReturn user
-        }
+        val mockUserRepository =
+            mock<UserRepository> {
+                on { findByTsid(any()) } doReturn user
+            }
         val balanceService = BalanceService(mockUserRepository, mock())
 
         // when
-        val exception = assertFailsWith<BadClientRequestException> {
-            balanceService.recharge(rechargeCommand)
-        }
+        val exception =
+            assertFailsWith<BadClientRequestException> {
+                balanceService.recharge(rechargeCommand)
+            }
 
         // then
         assertEquals("충전 금액은 0보다 커야 합니다.", exception.message)
@@ -78,9 +82,10 @@ class BalanceServiceTest {
         // given
         val point = Point.newInstance()
         val user = User("userTsid1", point)
-        val mockUserRepository = mock<UserRepository> {
-            on { findByTsid(any()) } doReturn user
-        }
+        val mockUserRepository =
+            mock<UserRepository> {
+                on { findByTsid(any()) } doReturn user
+            }
         val balanceService = BalanceService(mockUserRepository, mock())
 
         // when

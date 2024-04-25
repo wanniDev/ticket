@@ -11,17 +11,21 @@ import java.time.LocalDateTime
 @RestController
 @RequestMapping("/api/token")
 class TokenApi(
-    private val tokenUserService: TokenUserService
+    private val tokenUserService: TokenUserService,
 ) : TokenApiSpecification {
     @PostMapping
-    override fun createToken(@RequestBody request: CreateTokenRequest): ResponseEntity<CreateTokenResponse> {
+    override fun createToken(
+        @RequestBody request: CreateTokenRequest,
+    ): ResponseEntity<CreateTokenResponse> {
         val tokens = tokenUserService.createToken(request.userTsid)
         return ResponseEntity
             .ok(CreateTokenResponse(tokens.accessToken, tokens.refreshToken))
     }
 
     @PostMapping("/peek")
-    override fun peekToken(@RequestBody request: PeekTokenRequest): ResponseEntity<PeekTokenResponse> {
+    override fun peekToken(
+        @RequestBody request: PeekTokenRequest,
+    ): ResponseEntity<PeekTokenResponse> {
         val result = tokenUserService.peekToken(request.tokenTsid)
         return ResponseEntity
             .ok(PeekTokenResponse(result, LocalDateTime.now()))

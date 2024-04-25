@@ -1,7 +1,5 @@
 package io.ticketaka.api.concert.infrastructure.persistence
 
-import io.ticketaka.api.common.exception.NotFoundException
-import io.ticketaka.api.concert.domain.Concert
 import io.ticketaka.api.concert.domain.Seat
 import io.ticketaka.api.concert.domain.SeatRepository
 import io.ticketaka.api.concert.infrastructure.jpa.JpaSeatRepository
@@ -10,8 +8,8 @@ import java.time.LocalDate
 
 @Repository
 class SeatRepositoryComposition(
-    private val jpaSeatRepository: JpaSeatRepository
-): SeatRepository {
+    private val jpaSeatRepository: JpaSeatRepository,
+) : SeatRepository {
     override fun findByTsid(tsid: String): Seat? {
         return jpaSeatRepository.findByTsid(tsid)
     }
@@ -20,7 +18,10 @@ class SeatRepositoryComposition(
         return jpaSeatRepository.findByConcertId(concertDateId)
     }
 
-    override fun findSeatsByConcertDateAndNumberIn(date: LocalDate, numbers: List<String>): Set<Seat> {
+    override fun findSeatsByConcertDateAndNumberIn(
+        date: LocalDate,
+        numbers: List<String>,
+    ): Set<Seat> {
         return jpaSeatRepository.findSeatsByConcertDateAndNumberIn(date, numbers).toSet()
     }
 

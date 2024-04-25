@@ -10,7 +10,7 @@ import io.ticketaka.api.reservation.presentation.dto.CreateReservationResponse
 interface ReservationApiSpecification {
     @Operation(
         summary = "예약 생성 API",
-        description = "예약을 생성하는 API를 제공합니다."
+        description = "예약을 생성하는 API를 제공합니다.",
     )
     @ApiResponse(responseCode = "200", description = "예약 생성 성공")
     @ApiResponse(responseCode = "400", description = "예약 생성 실패")

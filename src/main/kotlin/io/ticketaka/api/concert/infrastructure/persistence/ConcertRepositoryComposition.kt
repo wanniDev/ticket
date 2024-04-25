@@ -1,6 +1,5 @@
 package io.ticketaka.api.concert.infrastructure.persistence
 
-import io.ticketaka.api.common.exception.NotFoundException
 import io.ticketaka.api.concert.domain.Concert
 import io.ticketaka.api.concert.domain.ConcertRepository
 import io.ticketaka.api.concert.infrastructure.jpa.JpaConcertRepository
@@ -9,8 +8,8 @@ import java.time.LocalDate
 
 @Repository
 class ConcertRepositoryComposition(
-    private val jpaConcertRepository: JpaConcertRepository
-): ConcertRepository {
+    private val jpaConcertRepository: JpaConcertRepository,
+) : ConcertRepository {
     override fun findByTsid(tsid: String): Concert? {
         return jpaConcertRepository.findByTsid(tsid)
     }

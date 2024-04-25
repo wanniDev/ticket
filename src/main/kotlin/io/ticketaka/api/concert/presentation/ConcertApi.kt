@@ -17,18 +17,20 @@ class ConcertApi(private val concertSeatService: ConcertSeatService) : ConcertAp
     override fun getConcertDate(): ResponseEntity<ConcertDateResponse> {
         return ResponseEntity.ok(
             ConcertDateResponse(
-                concertSeatService.getDates()
-            )
+                concertSeatService.getDates(),
+            ),
         )
     }
 
     @GetMapping("/seat")
-    override fun getConcertSeat(@RequestParam date: LocalDate): ResponseEntity<ConcertSeatResponse> {
+    override fun getConcertSeat(
+        @RequestParam date: LocalDate,
+    ): ResponseEntity<ConcertSeatResponse> {
         return ResponseEntity.ok(
             ConcertSeatResponse(
                 date,
-                concertSeatService.getSeatNumbers(date)
-            )
+                concertSeatService.getSeatNumbers(date),
+            ),
         )
     }
 }

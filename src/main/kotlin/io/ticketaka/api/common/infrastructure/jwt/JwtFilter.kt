@@ -14,29 +14,29 @@ import java.io.IOException
 @Order(1)
 class JwtFilter(
     private val jwtTokenParser: JwtTokenParser,
-): OncePerRequestFilter() {
+) : OncePerRequestFilter() {
     private val log = LoggerFactory.getLogger(this::class.java)
 
-    private val AUTHORIZATION_HEADER = "Authorization"
+//    private val authorizationHeader = "Authorization"
 
     @Throws(ServletException::class, IOException::class)
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
-        filterChain: FilterChain
+        filterChain: FilterChain,
     ) {
         log.info("JwtFilter")
         if (request.requestURI.contains("/api/token") ||
             request.requestURI.contains("/h2-console") ||
             request.requestURI.contains("/swagger") ||
             request.requestURI.contains("/api-docs")
-            ) {
+        ) {
             filterChain.doFilter(request, response)
             return
         }
-        
-        val header = request.getHeader(AUTHORIZATION_HEADER)
-        val tokenMap = jwtTokenParser.parse(header)
+
+//        val header = request.getHeader(authorizationHeader)
+//        val tokenMap = jwtTokenParser.parse(header)
 
         // TODO 사용자 검증
         filterChain.doFilter(request, response)

@@ -18,9 +18,10 @@ class TokenWaitingQueueTest {
         // given
         val user = User("userTsid1", Point.newInstance())
         val point = Point.newInstance()
-        val mockTokenWaitingQueue = mock<TokenWaitingQueue> {
-            on { offer(any()) } doReturn true
-        }
+        val mockTokenWaitingQueue =
+            mock<TokenWaitingQueue> {
+                on { offer(any()) } doReturn true
+            }
         val token = Token.newInstance(User("userTsid1", point))
 
         // when
@@ -34,9 +35,10 @@ class TokenWaitingQueueTest {
     fun `test poll`() {
         // given
         val point = Point.newInstance()
-        val mockTokenWaitingQueue = mock<TokenWaitingQueue> {
-            on { poll() } doReturn Token.newInstance(User("userTsid1", point))
-        }
+        val mockTokenWaitingQueue =
+            mock<TokenWaitingQueue> {
+                on { poll() } doReturn Token.newInstance(User("userTsid1", point))
+            }
 
         // when
         val result = mockTokenWaitingQueue.poll()
@@ -48,9 +50,10 @@ class TokenWaitingQueueTest {
     @Test
     fun `when polling an empty queue it will return null`() {
         // given
-        val mockTokenWaitingQueue = mock<TokenWaitingQueue> {
-            on { poll() } doReturn null
-        }
+        val mockTokenWaitingQueue =
+            mock<TokenWaitingQueue> {
+                on { poll() } doReturn null
+            }
 
         // when
         val result = mockTokenWaitingQueue.poll()
@@ -62,9 +65,10 @@ class TokenWaitingQueueTest {
     @Test
     fun `when peeking an empty queue it will return null`() {
         // given
-        val mockTokenWaitingQueue = mock<TokenWaitingQueue> {
-            on { peek() } doReturn null
-        }
+        val mockTokenWaitingQueue =
+            mock<TokenWaitingQueue> {
+                on { peek() } doReturn null
+            }
 
         // when
         val result = mockTokenWaitingQueue.peek()

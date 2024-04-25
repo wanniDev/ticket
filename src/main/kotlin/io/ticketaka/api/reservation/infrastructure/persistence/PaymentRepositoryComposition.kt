@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component
 
 @Component
 class PaymentRepositoryComposition(
-    private val jpaPaymentRepository: JpaPaymentRepository
-): PaymentRepository {
+    private val jpaPaymentRepository: JpaPaymentRepository,
+) : PaymentRepository {
     override fun save(payment: Payment): Payment {
         return jpaPaymentRepository.save(payment)
     }

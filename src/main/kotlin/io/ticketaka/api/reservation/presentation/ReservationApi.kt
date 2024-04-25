@@ -11,15 +11,17 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/api/reservation")
 class ReservationApi(
-    private val reservationService: ReservationService
+    private val reservationService: ReservationService,
 ) : ReservationApiSpecification {
     @PostMapping
-    override fun createReservation(@RequestBody request: CreateReservationRequest): CreateReservationResponse {
+    override fun createReservation(
+        @RequestBody request: CreateReservationRequest,
+    ): CreateReservationResponse {
         val result = reservationService.createReservation(request.toCommand())
         return CreateReservationResponse(
             result.reservationId,
             result.status,
-            result.expiration
+            result.expiration,
         )
     }
 }

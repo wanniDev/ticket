@@ -6,5 +6,5 @@ import java.time.LocalDateTime
 data class CreateReservationResponse(
     val reservationId: String,
     val status: Reservation.Status,
-    val expirationTime: LocalDateTime
+    val expirationTime: LocalDateTime,
 )

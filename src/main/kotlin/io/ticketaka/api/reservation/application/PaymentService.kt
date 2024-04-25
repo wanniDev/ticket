@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 @Transactional(readOnly = true)
 class PaymentService(
-    private val paymentRepository: PaymentRepository
+    private val paymentRepository: PaymentRepository,
 ) {
     @Transactional
     fun paymentApproval(paymentCommand: PaymentCommand) {

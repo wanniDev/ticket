@@ -4,7 +4,15 @@ import io.ticketaka.api.common.infrastructure.tsid.TsIdKeyGenerator
 import io.ticketaka.api.concert.domain.Concert
 import io.ticketaka.api.concert.domain.Seat
 import io.ticketaka.api.user.domain.User
-import jakarta.persistence.*
+import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
+import jakarta.persistence.FetchType
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
+import jakarta.persistence.Id
+import jakarta.persistence.ManyToOne
+import jakarta.persistence.OneToMany
 import java.time.LocalDateTime
 
 @Entity
@@ -19,7 +27,7 @@ class Reservation(
     @ManyToOne(targetEntity = Concert::class, optional = false, fetch = FetchType.LAZY)
     val concert: Concert,
     @OneToMany(targetEntity = ReservationSeat::class, fetch = FetchType.LAZY)
-    var seats: Set<ReservationSeat> = emptySet()
+    var seats: Set<ReservationSeat> = emptySet(),
 ) {
     fun confirm() {
         if (status != Status.PENDING) {
@@ -35,22 +43,28 @@ class Reservation(
         this.seats = seats.map { ReservationSeat.create(it, this) }.toSet()
     }
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
 
     enum class Status {
-        PENDING, CONFIRMED, CANCELLED
+        PENDING,
+        CONFIRMED,
+        CANCELLED,
     }
 
     companion object {
-        fun createPendingReservation(user: User, concert: Concert): Reservation {
+        fun createPendingReservation(
+            user: User,
+            concert: Concert,
+        ): Reservation {
             return Reservation(
                 TsIdKeyGenerator.next("rev"),
                 Status.PENDING,
                 LocalDateTime.now(),
                 LocalDateTime.now().plusMinutes(5L),
                 user,
-                concert
+                concert,
             )
         }
     }

@@ -7,8 +7,8 @@ import org.springframework.stereotype.Repository
 
 @Repository
 class PointRepositoryComposition(
-    private val jpaPointRepository: JpaPointRepository
-): PointRepository {
+    private val jpaPointRepository: JpaPointRepository,
+) : PointRepository {
     override fun save(point: Point): Point {
         return jpaPointRepository.save(point)
     }

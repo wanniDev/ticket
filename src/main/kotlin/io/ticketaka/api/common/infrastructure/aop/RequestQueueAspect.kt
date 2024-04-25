@@ -10,11 +10,13 @@ import org.springframework.stereotype.Component
 @Aspect
 @Component
 class RequestQueueAspect(
-    private val tokenWaitingQueue: TokenWaitingQueue
+    private val tokenWaitingQueue: TokenWaitingQueue,
 ) {
     private val logger = LoggerFactory.getLogger(this::class.java)
 
-    @Pointcut("@annotation(io.ticketaka.api.common.infrastructure.aop.OnQueue) || @within(io.ticketaka.api.common.infrastructure.aop.OnQueue)")
+    @Pointcut(
+        "@annotation(io.ticketaka.api.common.infrastructure.aop.OnQueue) || @within(io.ticketaka.api.common.infrastructure.aop.OnQueue)",
+    )
     fun onQueuePointcut() {
     }
 

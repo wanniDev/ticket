@@ -10,7 +10,7 @@ class TsidUniquenessTest(
     val threadCount: Int,
     val requestCount: Int,
     val hashSet: HashSet<Long>,
-    val verbose: Boolean
+    val verbose: Boolean,
 ) {
     fun start() {
         val threads = arrayOfNulls<Thread>(this.threadCount)
@@ -30,7 +30,12 @@ class TsidUniquenessTest(
     }
 }
 
-class UniquenessTestThread(private val id: Int, private val requestCount: Int, private val hashSet: HashSet<Long>, private val verbose: Boolean) : Runnable {
+class UniquenessTestThread(
+    private val id: Int,
+    private val requestCount: Int,
+    private val hashSet: HashSet<Long>,
+    private val verbose: Boolean,
+) : Runnable {
     private val factory: TsidFactory = TsidFactory.builder().withNode(id).withRandom(Random.asJavaRandom()).build()
 
     override fun run() {
@@ -55,8 +60,8 @@ class UniquenessTestThread(private val id: Int, private val requestCount: Int, p
                             id,
                             tsid,
                             i,
-                            progress
-                        )
+                            progress,
+                        ),
                     )
                 }
             }

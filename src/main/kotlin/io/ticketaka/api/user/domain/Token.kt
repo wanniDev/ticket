@@ -1,7 +1,12 @@
 package io.ticketaka.api.user.domain
 
 import io.ticketaka.api.common.infrastructure.tsid.TsIdKeyGenerator
-import jakarta.persistence.*
+import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
+import jakarta.persistence.Id
 import java.time.LocalDateTime
 
 @Entity
@@ -10,13 +15,15 @@ class Token protected constructor(
     val issuedTime: LocalDateTime,
     @Enumerated(EnumType.STRING)
     val status: Status,
-    val userTsid: String
+    val userTsid: String,
 ) {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
 
     enum class Status {
-        ACTIVE, EXPIRED
+        ACTIVE,
+        EXPIRED,
     }
 
     companion object {
@@ -25,7 +32,7 @@ class Token protected constructor(
                 tsid = TsIdKeyGenerator.next("token"),
                 issuedTime = LocalDateTime.now(),
                 status = Status.ACTIVE,
-                userTsid = user.tsid
+                userTsid = user.tsid,
             )
         }
     }

@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional(readOnly = true)
 class BalanceService(
     private val userRepository: UserRepository,
-    private val paymentService: PaymentService
+    private val paymentService: PaymentService,
 ) {
     @Transactional
     fun recharge(rechargeCommand: RechargeCommand) {
@@ -22,8 +22,8 @@ class BalanceService(
         paymentService.paymentApproval(
             PaymentCommand(
                 userTsid = user.tsid,
-                amount = rechargeCommand.amount
-            )
+                amount = rechargeCommand.amount,
+            ),
         )
 
         user.rechargePoint(rechargeCommand.amount)

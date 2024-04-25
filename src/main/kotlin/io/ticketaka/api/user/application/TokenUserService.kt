@@ -3,9 +3,9 @@ package io.ticketaka.api.user.application
 import io.ticketaka.api.common.exception.NotFoundException
 import io.ticketaka.api.common.infrastructure.jwt.JwtProvider
 import io.ticketaka.api.common.infrastructure.jwt.JwtTokens
-import io.ticketaka.api.user.domain.User
 import io.ticketaka.api.user.domain.Token
 import io.ticketaka.api.user.domain.TokenRepository
+import io.ticketaka.api.user.domain.User
 import io.ticketaka.api.user.domain.UserRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional
 class TokenUserService(
     private val jwtProvider: JwtProvider,
     private val tokenRepository: TokenRepository,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
 ) {
     @Transactional
     fun createToken(userTsId: String): JwtTokens {
@@ -33,7 +33,7 @@ class TokenUserService(
     }
 
     fun peekToken(tokenId: String): Boolean {
-        tokenRepository.findFirstTokenOrderByIssuedTimeAscLimit1().let {token ->
+        tokenRepository.findFirstTokenOrderByIssuedTimeAscLimit1().let { token ->
             if (token == null) {
                 throw NotFoundException("토큰을 찾을 수 없습니다.")
             }

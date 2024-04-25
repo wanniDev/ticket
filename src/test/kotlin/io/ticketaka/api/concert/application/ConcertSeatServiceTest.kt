@@ -4,7 +4,7 @@ import io.ticketaka.api.concert.domain.Concert
 import io.ticketaka.api.concert.domain.ConcertRepository
 import io.ticketaka.api.concert.domain.Seat
 import io.ticketaka.api.concert.domain.SeatRepository
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.junit.jupiter.MockitoExtension
@@ -18,9 +18,10 @@ class ConcertSeatServiceTest {
     @Test
     fun `find available date by status`() {
         // given
-        val mockSeatRepository = mock<SeatRepository> {
-            on { findConcertDateByStatus(Seat.Status.AVAILABLE) } doReturn setOf(LocalDate.of(2024, 4, 1))
-        }
+        val mockSeatRepository =
+            mock<SeatRepository> {
+                on { findConcertDateByStatus(Seat.Status.AVAILABLE) } doReturn setOf(LocalDate.of(2024, 4, 1))
+            }
         val concertSeatService = ConcertSeatService(mockSeatRepository, mock())
 
         // when
@@ -33,9 +34,10 @@ class ConcertSeatServiceTest {
     @Test
     fun `if there is no dates available will return empty collection`() {
         // given
-        val mockSeatRepository = mock<SeatRepository> {
-            on { findConcertDateByStatus(Seat.Status.AVAILABLE) } doReturn emptySet()
-        }
+        val mockSeatRepository =
+            mock<SeatRepository> {
+                on { findConcertDateByStatus(Seat.Status.AVAILABLE) } doReturn emptySet()
+            }
         val concertSeatService = ConcertSeatService(mockSeatRepository, mock())
 
         // when
@@ -52,20 +54,23 @@ class ConcertSeatServiceTest {
         val concert = Concert("concertDateTsid", date)
         concert.id = 1L
         val seatNumber = "1"
-        val mockSeatRepository = mock<SeatRepository> {
-            on { findByConcertId(any()) } doReturn listOf(
-                Seat(
-                    "tsid",
-                    seatNumber,
-                    Seat.Status.AVAILABLE,
-                    1000.toBigDecimal(),
-                    concert
-                )
-            )
-        }
-        val mockConcertRepository = mock<ConcertRepository> {
-            on { findByDate(date) } doReturn concert
-        }
+        val mockSeatRepository =
+            mock<SeatRepository> {
+                on { findByConcertId(any()) } doReturn
+                    listOf(
+                        Seat(
+                            "tsid",
+                            seatNumber,
+                            Seat.Status.AVAILABLE,
+                            1000.toBigDecimal(),
+                            concert,
+                        ),
+                    )
+            }
+        val mockConcertRepository =
+            mock<ConcertRepository> {
+                on { findByDate(date) } doReturn concert
+            }
         val concertSeatService = ConcertSeatService(mockSeatRepository, mockConcertRepository)
 
         // when
@@ -81,12 +86,14 @@ class ConcertSeatServiceTest {
         val date = LocalDate.of(2024, 4, 1)
         val concert = Concert("concertDateTsid", date)
         concert.id = 1L
-        val mockSeatRepository = mock<SeatRepository> {
-            on { findByConcertId(any()) } doReturn emptyList()
-        }
-        val mockConcertRepository = mock<ConcertRepository> {
-            on { findByDate(date) } doReturn concert
-        }
+        val mockSeatRepository =
+            mock<SeatRepository> {
+                on { findByConcertId(any()) } doReturn emptyList()
+            }
+        val mockConcertRepository =
+            mock<ConcertRepository> {
+                on { findByDate(date) } doReturn concert
+            }
         val concertSeatService = ConcertSeatService(mockSeatRepository, mockConcertRepository)
 
         // when

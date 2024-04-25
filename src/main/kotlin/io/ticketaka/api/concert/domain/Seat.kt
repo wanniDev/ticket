@@ -1,7 +1,14 @@
 package io.ticketaka.api.concert.domain
 
 import io.ticketaka.api.common.infrastructure.tsid.TsIdKeyGenerator
-import jakarta.persistence.*
+import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
+import jakarta.persistence.FetchType
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
+import jakarta.persistence.Id
+import jakarta.persistence.ManyToOne
 import java.math.BigDecimal
 
 @Entity
@@ -22,15 +29,22 @@ class Seat(
         status = Status.OCCUPIED
     }
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
 
     enum class Status {
-        AVAILABLE, RESERVED, OCCUPIED
+        AVAILABLE,
+        RESERVED,
+        OCCUPIED,
     }
 
     companion object {
-        fun newInstance(number: String, price: BigDecimal, concert: Concert): Seat {
+        fun newInstance(
+            number: String,
+            price: BigDecimal,
+            concert: Concert,
+        ): Seat {
             return Seat(
                 tsid = TsIdKeyGenerator.next("st"),
                 number = number,

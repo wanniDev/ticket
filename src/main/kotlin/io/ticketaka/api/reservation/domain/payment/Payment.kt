@@ -1,7 +1,10 @@
 package io.ticketaka.api.reservation.domain.payment
 
 import io.ticketaka.api.common.infrastructure.tsid.TsIdKeyGenerator
-import jakarta.persistence.*
+import jakarta.persistence.Entity
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
+import jakarta.persistence.Id
 import java.math.BigDecimal
 import java.time.LocalDateTime
 
@@ -11,7 +14,8 @@ class Payment(
     val amount: BigDecimal,
     val paymentTime: LocalDateTime,
 ) {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
 
     companion object {

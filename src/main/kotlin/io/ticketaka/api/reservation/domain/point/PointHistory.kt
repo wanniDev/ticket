@@ -1,7 +1,14 @@
 package io.ticketaka.api.reservation.domain.point
 
 import io.ticketaka.api.user.domain.User
-import jakarta.persistence.*
+import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
+import jakarta.persistence.FetchType
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
+import jakarta.persistence.Id
+import jakarta.persistence.ManyToOne
 
 @Entity
 class PointHistory(
@@ -16,6 +23,7 @@ class PointHistory(
     val point: Point,
 ) {
     enum class TransactionType {
-        CHARGE, USE
+        CHARGE,
+        USE,
     }
 }

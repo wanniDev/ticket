@@ -15,16 +15,20 @@ import java.math.BigDecimal
 @RestController
 @RequestMapping("/api/balance")
 class PointApi(
-    private val balanceService: BalanceService
-): PointApiSpecification {
+    private val balanceService: BalanceService,
+) : PointApiSpecification {
     @PostMapping("/recharge")
-    override fun recharge(@RequestBody request: RechargeRequest): ResponseEntity<Void> {
+    override fun recharge(
+        @RequestBody request: RechargeRequest,
+    ): ResponseEntity<Void> {
         balanceService.recharge(request.toCommand())
         return ResponseEntity.noContent().build()
     }
 
     @GetMapping("/balance")
-    override fun getBalance(@RequestParam userTsid: String): ResponseEntity<BalanceResponse> {
+    override fun getBalance(
+        @RequestParam userTsid: String,
+    ): ResponseEntity<BalanceResponse> {
         balanceService.getBalance(userTsid)
         return ResponseEntity.ok(BalanceResponse("userId", BigDecimal(10000)))
     }

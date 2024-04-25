@@ -6,12 +6,13 @@ import org.springframework.stereotype.Component
 import java.nio.charset.StandardCharsets
 import java.time.LocalDateTime
 import java.time.ZoneId
-import java.util.*
+import java.util.Date
+import java.util.UUID
 import kotlin.collections.HashMap
 
 @Component
 class JwtProvider(
-    private val jwtProperties: JwtProperties
+    private val jwtProperties: JwtProperties,
 ) {
     fun generate(tsid: String): JwtTokens {
         return JwtTokens(generateAccessToken(tsid), generateRefreshToken(tsid))
@@ -28,8 +29,11 @@ class JwtProvider(
             .issuer(jwtProperties.tokenIssuer)
             .issuedAt(Date.from(currentTime.atZone(ZoneId.systemDefault()).toInstant()))
             .expiration(
-                Date.from(currentTime.plusSeconds(jwtProperties.refreshExpirationSec)
-                .atZone(ZoneId.systemDefault()).toInstant()))
+                Date.from(
+                    currentTime.plusSeconds(jwtProperties.refreshExpirationSec)
+                        .atZone(ZoneId.systemDefault()).toInstant(),
+                ),
+            )
             .signWith(key)
             .compact()
     }
@@ -47,8 +51,11 @@ class JwtProvider(
             .issuer(jwtProperties.tokenIssuer)
             .issuedAt(Date.from(currentTime.atZone(ZoneId.systemDefault()).toInstant()))
             .expiration(
-                Date.from(currentTime.plusSeconds(jwtProperties.refreshExpirationSec.toLong())
-                .atZone(ZoneId.systemDefault()).toInstant()))
+                Date.from(
+                    currentTime.plusSeconds(jwtProperties.refreshExpirationSec.toLong())
+                        .atZone(ZoneId.systemDefault()).toInstant(),
+                ),
+            )
             .id(randomJti)
             .signWith(key)
             .compact()

@@ -4,5 +4,5 @@ import java.time.LocalDateTime
 
 data class PeekTokenResponse(
     val isTurn: Boolean,
-    val occurredTime: LocalDateTime
+    val occurredTime: LocalDateTime,
 )
