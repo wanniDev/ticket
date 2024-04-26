@@ -1,3 +1,13 @@
+drop table if exists `users`;
+drop table if exists `points`;
+drop table if exists `tokens`;
+drop table if exists `concerts`;
+drop table if exists `seats`;
+drop table if exists `reservations`;
+drop table if exists `payments`;
+drop table if exists `point_histories`;
+drop table if exists `reservations_seats`;
+
 CREATE TABLE `users` (
      `id` bigint auto_increment primary key,
     `tsid` varchar(255) NOT NULL UNIQUE,
@@ -18,7 +28,7 @@ CREATE TABLE `tokens` (
      `id` bigint auto_increment primary key,
     `tsid` varchar(255) not null unique,
 	`issued_time`	datetime null,
-	`status`	varchar(255) null,
+	`status`	enum('ACTIVE', 'EXPIRED') null,
 	`user_tsid`	varchar(255) not null,
     INDEX token_tsid_idx (tsid)
 );
@@ -35,7 +45,7 @@ CREATE TABLE `seats` (
     `tsid` varchar(255) not null unique,
 	`number`	varchar(255) null,
     `price`	DECIMAL(19, 4)	null,
-	`status`	varchar(255) null ,
+	`status`	enum('AVAILABLE', 'RESERVED', 'OCCUPIED') null ,
 	`concert_id`	bigint not null,
     INDEX seat_tsid_idx (tsid)
 );
@@ -43,7 +53,7 @@ CREATE TABLE `seats` (
 CREATE TABLE `reservations` (
     `id` bigint auto_increment primary key,
     `tsid` varchar(255) not null unique,
-    `status`	varchar(255) null,
+    `status`	enum('PENDING', 'CONFIRMED', 'CANCELLED') null,
 	`reservation_time`	datetime null,
 	`expiration_time`	datetime null,
 	`user_id`	bigint not null,
@@ -64,7 +74,7 @@ CREATE TABLE `payments` (
 CREATE TABLE point_histories (
     `id` bigint auto_increment primary key,
     `tsid` varchar(255) not null unique,
-    `transaction_type` varchar(255) null,
+    `transaction_type` enum('CHARGE','USE') null,
     `user_id`	bigint	not null,
     `point_id`	bigint	not null,
     `create_time`	datetime not null,
