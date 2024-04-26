@@ -9,8 +9,10 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.ManyToOne
+import jakarta.persistence.Table
 
 @Entity
+@Table(name = "point_histories")
 class PointHistory(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,

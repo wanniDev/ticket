@@ -5,7 +5,7 @@ CREATE TABLE `users` (
     INDEX user_tsid_idx (tsid)
 );
 
-CREATE TABLE `point` (
+CREATE TABLE `points` (
      `id` bigint auto_increment primary key,
     `tsid` varchar(255) not null unique ,
 	`balance`   decimal(19, 4)	null,
@@ -14,7 +14,7 @@ CREATE TABLE `point` (
     INDEX point_tsid_idx (tsid)
 );
 
-CREATE TABLE `token` (
+CREATE TABLE `tokens` (
      `id` bigint auto_increment primary key,
     `tsid` varchar(255) not null unique,
 	`issued_time`	datetime null,
@@ -23,24 +23,24 @@ CREATE TABLE `token` (
     INDEX token_tsid_idx (tsid)
 );
 
-CREATE TABLE `concert` (
+CREATE TABLE `concerts` (
     `id` bigint auto_increment primary key,
     `tsid` varchar(255) not null unique,
 	`date`	date null,
-    `price`   decimal(19, 4) not null,
     INDEX concert_tsid_idx (tsid)
 );
 
-CREATE TABLE `seat` (
+CREATE TABLE `seats` (
     `id` bigint auto_increment primary key,
     `tsid` varchar(255) not null unique,
 	`number`	varchar(255) null,
+    `price`	DECIMAL(19, 4)	null,
 	`status`	varchar(255) null ,
 	`concert_id`	bigint not null,
     INDEX seat_tsid_idx (tsid)
 );
 
-CREATE TABLE `reservation` (
+CREATE TABLE `reservations` (
     `id` bigint auto_increment primary key,
     `tsid` varchar(255) not null unique,
     `status`	varchar(255) null,
@@ -52,7 +52,7 @@ CREATE TABLE `reservation` (
     INDEX reservation_tsid_idx (tsid)
 );
 
-CREATE TABLE `payment` (
+CREATE TABLE `payments` (
     `id` bigint auto_increment primary key,
     `tsid` varchar(255) not null unique,
 	`amount`	DECIMAL(19, 4)	null,
@@ -61,7 +61,7 @@ CREATE TABLE `payment` (
     INDEX payment_tsid_idx (tsid)
 );
 
-CREATE TABLE point_history (
+CREATE TABLE point_histories (
     `id` bigint auto_increment primary key,
     `tsid` varchar(255) not null unique,
     `transaction_type` varchar(255) null,
@@ -71,6 +71,11 @@ CREATE TABLE point_history (
     `update_time`	datetime not null,
     INDEX point_history_tsid_idx (tsid)
 );
+CREATE TABLE `reservations_seats` (
+    `id` bigint auto_increment primary key,
+    `reservation_id`	bigint	not null,
+    `seat_id`	bigint	not null
+);
 
-insert into `point` (`id`, `tsid`, `balance`, `create_time`, `update_time`) values (1, 'point1', 1000, '2024-01-01 00:00:00', '2024-01-01 00:00:00');
+insert into `points` (`id`, `tsid`, `balance`, `create_time`, `update_time`) values (1, 'point1', 1000, '2024-01-01 00:00:00', '2024-01-01 00:00:00');
 insert into `users` (`id`, `tsid`, `point_id`) values (1, 'user1', 1);

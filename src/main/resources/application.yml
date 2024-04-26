@@ -6,19 +6,19 @@ spring:
       enabled: true
   datasource:
     driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:tiketatka;MODE=MYSQL;DB_CLOSE_DELAY=-1
-    username: sa
-    password:
-#  datasource:
-#    driver-class-name: com.mysql.cj.jdbc.Driver
-#    url: jdbc:mysql://localhost:3306/tiketatka?autoReconnect=true&allowMultiQueries=true&useUnicode=true&characterEncoding=utf8
-#    username: root
-#    password:
+    url: ${db.url:jdbc:h2:mem:tiketatka;MODE=MYSQL;DB_CLOSE_DELAY=-1}
+    username: ${db.username:sa}
+    password: ${db.password:}
+  #  datasource:
+  #    driver-class-name: com.mysql.cj.jdbc.Driver
+  #    url: jdbc:mysql://localhost:3306/tiketatka?autoReconnect=true&allowMultiQueries=true&useUnicode=true&characterEncoding=utf8
+  #    username: root
+  #    password:
   jpa:
     hibernate:
       ddl-auto: validate
-#    database: mysql
-#    database-platform: org.hibernate.dialect.MySQLDialect
+    database: ${db.database:h2}
+    database-platform: ${db.database-platform:org.hibernate.dialect.H2Dialect}
     properties:
       hibernate:
         show_sql: true

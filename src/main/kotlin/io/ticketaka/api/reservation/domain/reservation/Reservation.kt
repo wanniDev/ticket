@@ -13,9 +13,11 @@ import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.OneToMany
+import jakarta.persistence.Table
 import java.time.LocalDateTime
 
 @Entity
+@Table(name = "reservations")
 class Reservation(
     val tsid: String,
     @Enumerated(EnumType.STRING)
@@ -26,7 +28,7 @@ class Reservation(
     val user: User,
     @ManyToOne(targetEntity = Concert::class, optional = false, fetch = FetchType.LAZY)
     val concert: Concert,
-    @OneToMany(targetEntity = ReservationSeat::class, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "reservation", fetch = FetchType.LAZY)
     var seats: Set<ReservationSeat> = emptySet(),
 ) {
     fun confirm() {
