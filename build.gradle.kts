@@ -5,6 +5,7 @@ plugins {
     id("io.spring.dependency-management") version "1.1.4"
     id("org.asciidoctor.jvm.convert") version "3.3.2"
     id("org.jlleitschuh.gradle.ktlint") version "12.1.0"
+    id("com.google.cloud.tools.jib") version "3.4.0"
     kotlin("jvm") version "1.9.23"
     kotlin("plugin.spring") version "1.9.23"
     kotlin("plugin.jpa") version "1.9.23"
@@ -15,6 +16,30 @@ version = "0.0.1-SNAPSHOT"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
+}
+
+jib {
+    from {
+        image = "eclipse-temurin:17-jre-focal"
+        platforms {
+            platform {
+                architecture = "${findProperty("jibArchitecture") ?: "amd64"}"
+                os = "linux"
+            }
+        }
+    }
+    to {
+        image = "ticketaka"
+        tags = setOf("latest", if (project.version.toString().endsWith("-SNAPSHOT")) "snapshot" else project.version.toString())
+    }
+    container {
+        entrypoint = listOf("bash", "-c", "/entrypoint.sh")
+        ports = listOf("8080")
+    }
+    extraDirectories {
+        setPaths("src/main/docker/jib")
+        permissions.set(mapOf("/entrypoint.sh" to "755"))
+    }
 }
 
 repositories {

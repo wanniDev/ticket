@@ -11,9 +11,9 @@ import org.springframework.context.annotation.Configuration
 @OpenAPIDefinition(
     info =
         io.swagger.v3.oas.annotations.info.Info(
-            title = "tiketaka",
+            title = "ticketaka",
             version = "0.0.1",
-            description = "tiketaka API specification",
+            description = "ticketaka API specification",
         ),
 )
 @Configuration
