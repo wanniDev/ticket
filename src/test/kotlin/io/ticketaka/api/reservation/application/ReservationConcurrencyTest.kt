@@ -1,11 +1,13 @@
 package io.ticketaka.api.reservation.application
 
+import io.ticketaka.api.common.exception.BadClientRequestException
 import io.ticketaka.api.reservation.application.dto.CreateReservationCommand
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import java.time.LocalDate
 import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
 
 @SpringBootTest
@@ -15,30 +17,37 @@ class ReservationConcurrencyTest
         private val reservationService: ReservationService,
     ) {
         @Test
-        fun `ensure concurrent reservation once`() {
+        fun `only first reservation will success`() {
             val len = 10
             val createReservationCommand =
                 CreateReservationCommand(
-                    userTsid = "userTsid",
+                    userTsid = "user1",
                     date = LocalDate.of(2024, 5, 3),
                     seatNumbers = listOf("A1"),
                 )
             val executor = Executors.newFixedThreadPool(10)
-            val cnt = AtomicInteger(0)
+            val reservationCnt = AtomicInteger(0)
+            val failedCnt = AtomicInteger(0)
 
             // when
             (1..len).forEach { i ->
                 executor.submit {
                     try {
                         reservationService.createReservation(createReservationCommand)
-                        cnt.addAndGet(1)
+                        reservationCnt.addAndGet(1)
                     } catch (e: Exception) {
-                        println(e)
-                        println("error occurred $i")
+                        if (e is BadClientRequestException) {
+                            failedCnt.addAndGet(1)
+                        }
                     }
                 }
             }
 
+            executor.shutdown()
+            executor.awaitTermination(1, TimeUnit.MINUTES)
+
             // then
+            assert(reservationCnt.get() == 1)
+            assert(failedCnt.get() == len - reservationCnt.get())
         }
     }
