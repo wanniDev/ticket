@@ -19,7 +19,7 @@ class ReservationApi(
     ): CreateReservationResponse {
         val result = reservationService.createReservation(request.toCommand())
         return CreateReservationResponse(
-            result.reservationId,
+            result.reservationTsid,
             result.status,
             result.expiration,
         )
