@@ -15,14 +15,14 @@ class User(
     @Id
     val tsid: String,
     @ManyToOne(targetEntity = Point::class, optional = false, fetch = FetchType.LAZY)
-    val point: Point,
+    val point: Point?,
 ) {
     fun rechargePoint(amount: BigDecimal) {
-        this.point.recharge(amount)
+        this.point?.recharge(amount)
     }
 
     fun chargePoint(price: BigDecimal) {
-        this.point.charge(price)
+        this.point?.charge(price)
     }
 
     fun getId(): Long {
@@ -36,6 +36,13 @@ class User(
             return User(
                 tsid = TsIdKeyGenerator.next("usr"),
                 point = point,
+            )
+        }
+
+        fun newInstance(tsid: String): User {
+            return User(
+                tsid = tsid,
+                point = null,
             )
         }
     }
