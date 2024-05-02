@@ -5,6 +5,7 @@ import io.ticketaka.api.reservation.application.dto.PaymentCommand
 import io.ticketaka.api.reservation.domain.payment.Payment
 import io.ticketaka.api.reservation.domain.payment.PaymentRepository
 import io.ticketaka.api.reservation.domain.point.Point
+import io.ticketaka.api.user.application.TokenUserService
 import io.ticketaka.api.user.domain.User
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -23,11 +24,15 @@ class PaymentServiceTest {
         val point = Point.newInstance()
         val user =
             User("userTsid1", point)
+        val mockTokenUserService =
+            mock<TokenUserService> {
+                on { getUser(any()) } doReturn user
+            }
         val mockPaymentRepository =
             mock<PaymentRepository> {
-                on { save(any()) } doReturn Payment.newInstance(1000.toBigDecimal())
+                on { save(any()) } doReturn Payment.newInstance(1000.toBigDecimal(), user)
             }
-        val paymentService = PaymentService(mockPaymentRepository)
+        val paymentService = PaymentService(mockTokenUserService, mockPaymentRepository)
         val paymentCommand =
             PaymentCommand(
                 userTsid = user.tsid,
