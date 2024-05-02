@@ -24,11 +24,19 @@ class Seat(
     val concert: Concert,
 ) {
     fun isAvailable(): Boolean {
-        return status == Status.AVAILABLE
+        return this.status == Status.AVAILABLE
     }
 
     fun occupy() {
-        status = Status.OCCUPIED
+        this.status = Status.OCCUPIED
+    }
+
+    fun reserve() {
+        if (this.isAvailable()) {
+            this.status = Status.RESERVED
+        } else {
+            throw IllegalStateException("Seat number: ${this.number} is not available")
+        }
     }
 
     @Id

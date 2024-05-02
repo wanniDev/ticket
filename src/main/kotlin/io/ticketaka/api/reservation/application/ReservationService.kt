@@ -21,16 +21,17 @@ class ReservationService(
     fun createReservation(command: CreateReservationCommand): CreateReservationResult {
         val user = tokenUserService.getUser(command.userTsid)
         val concert = concertSeatService.getAvailableConcert(command.date)
-        val seats = concertSeatService.getAvailableSeats(command.date, command.seatNumber)
+        val seats = concertSeatService.getAvailableSeats(command.date, command.seatNumbers)
         val reservation = reservationRepository.save(Reservation.createPendingReservation(user, concert))
         seats.forEach { seat ->
             user.chargePoint(seat.price)
+            seat.reserve()
         }
         reservation.allocate(seats)
         reservation.confirm()
 
         return CreateReservationResult(
-            "reservationId",
+            reservation.tsid,
             reservation.status,
             LocalDateTime.now().plusMinutes(5L),
         )
