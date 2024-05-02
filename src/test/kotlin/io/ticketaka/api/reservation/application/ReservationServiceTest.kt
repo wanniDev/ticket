@@ -60,6 +60,7 @@ class ReservationServiceTest {
                 mockUserService,
                 ConcertSeatService(mockSeatRepository, mockConcertRepository),
                 mockReservationRepository,
+                mock(),
             )
 
         // when
@@ -101,6 +102,7 @@ class ReservationServiceTest {
                 mockUserService,
                 ConcertSeatService(mockSeatRepository, mockConcertRepository),
                 mockReservationRepository,
+                mock(),
             )
 
         // when
@@ -139,6 +141,7 @@ class ReservationServiceTest {
                 mockUserService,
                 ConcertSeatService(mockSeatRepository, mockConcertRepository),
                 mockReservationRepository,
+                mock(),
             )
 
         // when
@@ -183,6 +186,7 @@ class ReservationServiceTest {
                 mockUserService,
                 ConcertSeatService(mockSeatRepository, mockConcertRepository),
                 mockReservationRepository,
+                mock(),
             )
 
         // when
@@ -227,6 +231,7 @@ class ReservationServiceTest {
                 mockUserService,
                 ConcertSeatService(mockSeatRepository, mockConcertRepository),
                 mockReservationRepository,
+                mock(),
             )
 
         // when
