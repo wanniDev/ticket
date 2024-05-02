@@ -4,6 +4,8 @@ import io.ticketaka.api.common.exception.NotFoundException
 import io.ticketaka.api.reservation.application.dto.BalanceQueryModel
 import io.ticketaka.api.reservation.application.dto.PaymentCommand
 import io.ticketaka.api.reservation.application.dto.RechargeCommand
+import io.ticketaka.api.reservation.domain.point.Idempotent
+import io.ticketaka.api.reservation.domain.point.PointHistory
 import io.ticketaka.api.user.domain.UserRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -14,12 +16,25 @@ class BalanceService(
     private val userRepository: UserRepository,
     private val paymentService: PaymentService,
     private val pointService: PointService,
+    private val idempotentService: IdempotentService,
 ) {
     @Transactional
     fun recharge(rechargeCommand: RechargeCommand) {
         val user = userRepository.findByTsid(rechargeCommand.userTsid) ?: throw NotFoundException("사용자를 찾을 수 없습니다.")
         val userTsid = user.tsid
         val userPoint = user.point ?: throw NotFoundException("포인트를 찾을 수 없습니다.")
+        val idempotentKey =
+            idempotentService.findIdempotentKey(
+                rechargeCommand.userTsid,
+                rechargeCommand.tokenTsid,
+                rechargeCommand.amount,
+                PointHistory.TransactionType.RECHARGE,
+            )
+
+        if (idempotentKey != null) {
+            return
+        }
+
         // 실제로는 PG 승인 요청을 수행하는 로직이 들어가야 함
         paymentService.paymentApproval(
             PaymentCommand(
@@ -30,7 +45,14 @@ class BalanceService(
         )
 
         user.rechargePoint(rechargeCommand.amount)
-
+        idempotentService.save(
+            Idempotent.newInstance(
+                rechargeCommand.userTsid,
+                rechargeCommand.tokenTsid,
+                rechargeCommand.amount,
+                PointHistory.TransactionType.RECHARGE,
+            ),
+        )
         pointService.recordRechargePointHistory(user.getId(), userPoint.getId())
     }
 

@@ -85,6 +85,10 @@ CREATE TABLE `reservations_seats` (
     `reservation_id`	bigint not null,
     `seat_id`	bigint not null
 );
+CREATE TABLE `idempotent` (
+    `id` bigint auto_increment primary key,
+    `key` varchar(255) not null unique
+);
 
 insert into `points` (`id`, `tsid`, `balance`, `create_time`, `update_time`) values (1, 'point1', 1000, '2024-01-01 00:00:00', '2024-01-01 00:00:00');
 insert into `users` (`id`, `tsid`, `point_id`) values (1, 'user1', 1);
