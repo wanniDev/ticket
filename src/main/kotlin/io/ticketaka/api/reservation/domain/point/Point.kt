@@ -45,5 +45,14 @@ class Point protected constructor(
                 updateTime = now,
             )
         }
+
+        fun newInstance(tsid: String): Point {
+            return Point(
+                tsid = tsid,
+                balance = BigDecimal.ZERO,
+                createTime = LocalDateTime.now(),
+                updateTime = LocalDateTime.now(),
+            )
+        }
     }
 }

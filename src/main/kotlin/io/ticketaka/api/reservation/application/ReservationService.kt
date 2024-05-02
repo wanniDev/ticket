@@ -16,6 +16,7 @@ class ReservationService(
     private val tokenUserService: TokenUserService,
     private val concertSeatService: ConcertSeatService,
     private val reservationRepository: ReservationRepository,
+    private val pointService: PointService,
 ) {
     @Transactional
     fun createReservation(command: CreateReservationCommand): CreateReservationResult {
@@ -29,6 +30,9 @@ class ReservationService(
         }
         reservation.allocate(seats)
         reservation.confirm()
+
+        val userPointHistory = user.point?.tsid ?: throw IllegalStateException("포인트를 찾을 수 없습니다.")
+        pointService.recordReservationPointHistory(user.tsid, userPointHistory)
 
         return CreateReservationResult(
             reservation.tsid,
