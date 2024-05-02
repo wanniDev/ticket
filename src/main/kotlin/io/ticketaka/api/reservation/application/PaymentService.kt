@@ -14,6 +14,6 @@ class PaymentService(
     @Transactional
     fun paymentApproval(paymentCommand: PaymentCommand) {
         Thread.sleep((500..1000).random().toLong()) // PG 승인 요청 시간 대기
-        paymentRepository.save(Payment.newInstance(paymentCommand.amount, paymentCommand.userId, paymentCommand.pointId))
+        paymentRepository.save(Payment.newInstance(paymentCommand.amount, paymentCommand.userTsid, paymentCommand.pointTsid))
     }
 }

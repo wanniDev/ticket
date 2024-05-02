@@ -24,9 +24,7 @@ class BalanceServiceTest {
     fun recharge() {
         // given
         val point = Point.newInstance()
-        point.id = 1
         val user = User("userTsid1", point)
-        user.id = 1
         val rechargeCommand =
             RechargeCommand(
                 user.tsid,
@@ -34,8 +32,8 @@ class BalanceServiceTest {
             )
         val paymentCommand =
             PaymentCommand(
-                userId = user.getId(),
-                pointId = user.point.getId(),
+                userTsid = user.tsid,
+                pointTsid = point.tsid,
                 amount = rechargeCommand.amount,
             )
 
