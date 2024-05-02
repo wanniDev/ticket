@@ -43,7 +43,7 @@ class ConcertSeatService(
         val concert =
             concertRepository.findByDate(date)
                 ?: throw BadClientRequestException("해당 날짜의 콘서트가 없습니다.")
-        val seats = seatRepository.findSeatsByConcertDateAndNumberIn(concert.date, seatNumbers)
+        val seats = seatRepository.findSeatsByConcertDateAndNumberInOrderByNumber(concert.date, seatNumbers)
         seats.forEach { seat ->
             if (seat.status != Seat.Status.AVAILABLE) {
                 throw BadClientRequestException("이미 예약된 좌석입니다.")

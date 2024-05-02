@@ -1,39 +1,46 @@
 package io.ticketaka.api.reservation.application
 
+import io.ticketaka.api.reservation.domain.point.Point
 import io.ticketaka.api.reservation.domain.point.PointHistory
 import io.ticketaka.api.reservation.domain.point.PointHistoryRepository
+import io.ticketaka.api.reservation.domain.point.PointRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
 @Transactional(readOnly = true)
 class PointService(
+    private val pointRepository: PointRepository,
     private val pointHistoryRepository: PointHistoryRepository,
 ) {
     @Transactional
     fun recordRechargePointHistory(
-        userTsid: String,
-        userPointTsid: String,
+        userId: Long,
+        userPointId: Long,
     ) {
         val pointHistory =
             PointHistory.newInstance(
-                userTsid = userTsid,
-                pointTsid = userPointTsid,
+                userId = userId,
+                pointId = userPointId,
                 transactionType = PointHistory.TransactionType.RECHARGE,
             )
         pointHistoryRepository.save(pointHistory)
     }
 
     fun recordReservationPointHistory(
-        tsid: String,
-        userPointTsid: String,
+        userId: Long,
+        userPointId: Long,
     ) {
         val pointHistory =
             PointHistory.newInstance(
-                userTsid = tsid,
-                pointTsid = userPointTsid,
+                userId = userId,
+                pointId = userPointId,
                 transactionType = PointHistory.TransactionType.CHARGE,
             )
         pointHistoryRepository.save(pointHistory)
+    }
+
+    fun getPoint(pointTsid: String): Point {
+        return pointRepository.findByTsid(pointTsid) ?: throw IllegalArgumentException("포인트를 찾을 수 없습니다.")
     }
 }

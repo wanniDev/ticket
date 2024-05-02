@@ -12,5 +12,10 @@ interface SeatRepository {
         numbers: List<String>,
     ): Set<Seat>
 
+    fun findSeatsByConcertDateAndNumberInOrderByNumber(
+        date: LocalDate,
+        numbers: List<String>,
+    ): Set<Seat>
+
     fun findConcertDateByStatus(status: Seat.Status): Set<LocalDate>
 }

@@ -10,6 +10,7 @@ class ReservationRepositoryComposition(
     private val jpaReservationRepository: JpaReservationRepository,
 ) : ReservationRepository {
     override fun save(reservation: Reservation): Reservation {
-        return jpaReservationRepository.save(reservation)
+        val saved = jpaReservationRepository.save(reservation)
+        return saved
     }
 }

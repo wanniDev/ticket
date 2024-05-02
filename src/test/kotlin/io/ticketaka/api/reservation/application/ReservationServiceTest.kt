@@ -31,9 +31,11 @@ class ReservationServiceTest {
     fun `create reservation`() {
         // given
         val point = Point.newInstance(10000.toBigDecimal())
+        point.id = 1
         val date = LocalDate.of(2024, 4, 10)
         val seatNumber = "A24"
         val user = User.newInstance(point)
+        user.id = 1
         val concert = Concert.newInstance(date)
         val seats = setOf(Seat.newInstance(seatNumber, 1000.toBigDecimal(), concert))
 
@@ -43,7 +45,7 @@ class ReservationServiceTest {
             }
         val mockSeatRepository =
             mock<SeatRepository> {
-                on { findSeatsByConcertDateAndNumberIn(any(), any()) } doReturn seats
+                on { findSeatsByConcertDateAndNumberInOrderByNumber(any(), any()) } doReturn seats
             }
         val mockReservationRepository =
             mock<ReservationRepository> {
@@ -91,7 +93,7 @@ class ReservationServiceTest {
             }
         val mockSeatRepository =
             mock<SeatRepository> {
-                on { findSeatsByConcertDateAndNumberIn(any(), any()) } doReturn seats
+                on { findSeatsByConcertDateAndNumberInOrderByNumber(any(), any()) } doReturn seats
             }
         val mockReservationRepository = mock<ReservationRepository>()
 
@@ -172,7 +174,7 @@ class ReservationServiceTest {
             }
         val mockSeatRepository =
             mock<SeatRepository> {
-                on { findSeatsByConcertDateAndNumberIn(any(), any()) } doReturn setOf(seat)
+                on { findSeatsByConcertDateAndNumberInOrderByNumber(any(), any()) } doReturn setOf(seat)
             }
         val mockReservationRepository = mock<ReservationRepository>()
 
@@ -217,7 +219,7 @@ class ReservationServiceTest {
             }
         val mockSeatRepository =
             mock<SeatRepository> {
-                on { findSeatsByConcertDateAndNumberIn(any(), any()) } doReturn setOf(seat)
+                on { findSeatsByConcertDateAndNumberInOrderByNumber(any(), any()) } doReturn setOf(seat)
             }
         val mockReservationRepository = mock<ReservationRepository>()
 
