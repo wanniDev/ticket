@@ -31,9 +31,11 @@ class ReservationServiceTest {
     fun `create reservation`() {
         // given
         val point = Point.newInstance(10000.toBigDecimal())
+        point.id = 1
         val date = LocalDate.of(2024, 4, 10)
         val seatNumber = "A24"
         val user = User.newInstance(point)
+        user.id = 1
         val concert = Concert.newInstance(date)
         val seats = setOf(Seat.newInstance(seatNumber, 1000.toBigDecimal(), concert))
 

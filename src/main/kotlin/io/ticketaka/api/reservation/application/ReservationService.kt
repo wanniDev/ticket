@@ -31,8 +31,8 @@ class ReservationService(
         reservation.allocate(seats)
         reservation.confirm()
 
-        val userPointHistory = user.point?.tsid ?: throw IllegalStateException("포인트를 찾을 수 없습니다.")
-        pointService.recordReservationPointHistory(user.tsid, userPointHistory)
+        val userPoint = user.point ?: throw IllegalStateException("포인트를 찾을 수 없습니다.")
+        pointService.recordReservationPointHistory(user.getId(), userPoint.getId())
 
         return CreateReservationResult(
             reservation.tsid,

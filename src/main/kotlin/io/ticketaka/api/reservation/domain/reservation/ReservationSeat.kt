@@ -14,9 +14,9 @@ import jakarta.persistence.Table
 class ReservationSeat(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
-    @ManyToOne(targetEntity = Seat::class, optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(targetEntity = Seat::class, fetch = FetchType.LAZY)
     val seat: Seat,
-    @ManyToOne(targetEntity = Reservation::class, optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(targetEntity = Reservation::class, fetch = FetchType.LAZY)
     val reservation: Reservation,
 ) {
     companion object {

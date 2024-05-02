@@ -3,6 +3,8 @@ package io.ticketaka.api.reservation.domain.point
 import io.ticketaka.api.common.exception.BadClientRequestException
 import io.ticketaka.api.common.infrastructure.tsid.TsIdKeyGenerator
 import jakarta.persistence.Entity
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Table
 import java.math.BigDecimal
@@ -11,7 +13,6 @@ import java.time.LocalDateTime
 @Entity
 @Table(name = "points")
 class Point protected constructor(
-    @Id
     val tsid: String,
     val balance: BigDecimal,
     val createTime: LocalDateTime,
@@ -33,6 +34,8 @@ class Point protected constructor(
         return id ?: throw IllegalStateException("point Id가 없습니다.")
     }
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
 
     companion object {

@@ -1,27 +1,27 @@
 package io.ticketaka.api.reservation.domain.point
 
 import io.ticketaka.api.common.infrastructure.tsid.TsIdKeyGenerator
-import io.ticketaka.api.user.domain.User
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
-import jakarta.persistence.FetchType
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
-import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
+import java.time.LocalDateTime
 
 @Entity
 @Table(name = "point_histories")
 class PointHistory(
-    @Id
     val tsid: String,
     @Enumerated(EnumType.STRING)
     val transactionType: TransactionType,
-    @ManyToOne(targetEntity = User::class, optional = false, fetch = FetchType.LAZY)
-    val user: User,
-    @ManyToOne(targetEntity = Point::class, optional = false, fetch = FetchType.LAZY)
-    val point: Point,
+    val userId: Long,
+    val pointId: Long,
+    val createTime: LocalDateTime = LocalDateTime.now(),
 ) {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
 
     enum class TransactionType {
@@ -31,14 +31,14 @@ class PointHistory(
 
     companion object {
         fun newInstance(
-            userTsid: String,
-            pointTsid: String,
+            userId: Long,
+            pointId: Long,
             transactionType: TransactionType,
         ): PointHistory {
             return PointHistory(
                 tsid = TsIdKeyGenerator.next("ph"),
-                user = User.newInstance(tsid = userTsid),
-                point = Point.newInstance(tsid = pointTsid),
+                userId = userId,
+                pointId = pointId,
                 transactionType = transactionType,
             )
         }
