@@ -67,6 +67,7 @@ CREATE TABLE `payments` (
     `tsid` varchar(255) not null unique,
 	`amount`	DECIMAL(19, 4)	null,
 	`payment_time`	datetime null,
+    `user_id`	bigint not null,
 	`point_id`	bigint not null,
     INDEX payment_tsid_idx (tsid)
 );

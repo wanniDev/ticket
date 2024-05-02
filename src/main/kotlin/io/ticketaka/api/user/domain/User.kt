@@ -26,6 +26,10 @@ class User(
         this.point.charge(price)
     }
 
+    fun getId(): Long {
+        return id ?: throw IllegalStateException("User Id가 없습니다.")
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null

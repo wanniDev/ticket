@@ -24,7 +24,9 @@ class BalanceServiceTest {
     fun recharge() {
         // given
         val point = Point.newInstance()
+        point.id = 1
         val user = User("userTsid1", point)
+        user.id = 1
         val rechargeCommand =
             RechargeCommand(
                 user.tsid,
@@ -32,7 +34,8 @@ class BalanceServiceTest {
             )
         val paymentCommand =
             PaymentCommand(
-                userTsid = user.tsid,
+                userId = user.getId(),
+                pointId = user.point.getId(),
                 amount = rechargeCommand.amount,
             )
 
@@ -54,7 +57,9 @@ class BalanceServiceTest {
     fun `if user try to recharge with negative amount, then throw BadClientRequestException`() {
         // given
         val point = Point.newInstance()
+        point.id = 1
         val user = User("userTsid1", point)
+        user.id = 1
         val rechargeCommand =
             RechargeCommand(
                 user.tsid,

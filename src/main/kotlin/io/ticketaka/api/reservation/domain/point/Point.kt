@@ -30,6 +30,10 @@ class Point protected constructor(
         this.balance.minus(price)
     }
 
+    fun getId(): Long {
+        return id ?: throw IllegalStateException("point Id가 없습니다.")
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null

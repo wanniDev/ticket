@@ -5,7 +5,6 @@ import io.ticketaka.api.reservation.application.dto.PaymentCommand
 import io.ticketaka.api.reservation.domain.payment.Payment
 import io.ticketaka.api.reservation.domain.payment.PaymentRepository
 import io.ticketaka.api.reservation.domain.point.Point
-import io.ticketaka.api.user.application.TokenUserService
 import io.ticketaka.api.user.domain.User
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -22,20 +21,19 @@ class PaymentServiceTest {
     fun `when payment approval api invoked verify payment information before approval`() {
         // given
         val point = Point.newInstance()
+        point.id = 1
         val user =
             User("userTsid1", point)
-        val mockTokenUserService =
-            mock<TokenUserService> {
-                on { getUser(any()) } doReturn user
-            }
+        user.id = 1
         val mockPaymentRepository =
             mock<PaymentRepository> {
-                on { save(any()) } doReturn Payment.newInstance(1000.toBigDecimal(), user)
+                on { save(any()) } doReturn Payment.newInstance(1000.toBigDecimal(), user.getId(), point.getId())
             }
-        val paymentService = PaymentService(mockTokenUserService, mockPaymentRepository)
+        val paymentService = PaymentService(mockPaymentRepository)
         val paymentCommand =
             PaymentCommand(
-                userTsid = user.tsid,
+                userId = user.getId(),
+                pointId = point.getId(),
                 amount = 1000.toBigDecimal(),
             )
 
