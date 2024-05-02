@@ -8,8 +8,6 @@ import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
 import jakarta.persistence.FetchType
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.OneToMany
@@ -19,6 +17,7 @@ import java.time.LocalDateTime
 @Entity
 @Table(name = "reservations")
 class Reservation(
+    @Id
     val tsid: String,
     @Enumerated(EnumType.STRING)
     var status: Status,
@@ -45,8 +44,6 @@ class Reservation(
         this.seats = seats.map { ReservationSeat.create(it, this) }.toSet()
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
 
     enum class Status {

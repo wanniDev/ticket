@@ -21,19 +21,19 @@ class PaymentServiceTest {
     fun `when payment approval api invoked verify payment information before approval`() {
         // given
         val point = Point.newInstance()
-        point.id = 1
         val user =
             User("userTsid1", point)
-        user.id = 1
+        val userTsid = user.tsid
+        val pointTsid = point.tsid
         val mockPaymentRepository =
             mock<PaymentRepository> {
-                on { save(any()) } doReturn Payment.newInstance(1000.toBigDecimal(), user.getId(), point.getId())
+                on { save(any()) } doReturn Payment.newInstance(1000.toBigDecimal(), userTsid, pointTsid)
             }
         val paymentService = PaymentService(mockPaymentRepository)
         val paymentCommand =
             PaymentCommand(
-                userId = user.getId(),
-                pointId = point.getId(),
+                userTsid = userTsid,
+                pointTsid = pointTsid,
                 amount = 1000.toBigDecimal(),
             )
 
