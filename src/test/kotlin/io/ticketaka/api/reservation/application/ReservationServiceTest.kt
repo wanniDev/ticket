@@ -43,7 +43,7 @@ class ReservationServiceTest {
             }
         val mockSeatRepository =
             mock<SeatRepository> {
-                on { findSeatsByConcertDateAndNumberIn(any(), any()) } doReturn seats
+                on { findSeatsByConcertDateAndNumberInOrderByNumber(any(), any()) } doReturn seats
             }
         val mockReservationRepository =
             mock<ReservationRepository> {
@@ -91,7 +91,7 @@ class ReservationServiceTest {
             }
         val mockSeatRepository =
             mock<SeatRepository> {
-                on { findSeatsByConcertDateAndNumberIn(any(), any()) } doReturn seats
+                on { findSeatsByConcertDateAndNumberInOrderByNumber(any(), any()) } doReturn seats
             }
         val mockReservationRepository = mock<ReservationRepository>()
 
@@ -172,7 +172,7 @@ class ReservationServiceTest {
             }
         val mockSeatRepository =
             mock<SeatRepository> {
-                on { findSeatsByConcertDateAndNumberIn(any(), any()) } doReturn setOf(seat)
+                on { findSeatsByConcertDateAndNumberInOrderByNumber(any(), any()) } doReturn setOf(seat)
             }
         val mockReservationRepository = mock<ReservationRepository>()
 
@@ -217,7 +217,7 @@ class ReservationServiceTest {
             }
         val mockSeatRepository =
             mock<SeatRepository> {
-                on { findSeatsByConcertDateAndNumberIn(any(), any()) } doReturn setOf(seat)
+                on { findSeatsByConcertDateAndNumberInOrderByNumber(any(), any()) } doReturn setOf(seat)
             }
         val mockReservationRepository = mock<ReservationRepository>()
 
