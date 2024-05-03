@@ -16,7 +16,6 @@ class ReservationService(
     private val tokenUserService: TokenUserService,
     private val concertSeatService: ConcertSeatService,
     private val reservationRepository: ReservationRepository,
-    private val pointService: PointService,
 ) {
     @Transactional
     fun createReservation(command: CreateReservationCommand): CreateReservationResult {
@@ -25,14 +24,10 @@ class ReservationService(
         val seats = concertSeatService.getAvailableSeats(command.date, command.seatNumbers)
         val reservation = reservationRepository.save(Reservation.createPendingReservation(user, concert))
         seats.forEach { seat ->
-            user.chargePoint(seat.price)
             seat.reserve()
         }
         reservation.allocate(seats)
         reservation.confirm()
-
-        val userPoint = user.point ?: throw IllegalStateException("포인트를 찾을 수 없습니다.")
-        pointService.recordReservationPointHistory(user.getId(), userPoint.getId())
 
         return CreateReservationResult(
             reservation.tsid,

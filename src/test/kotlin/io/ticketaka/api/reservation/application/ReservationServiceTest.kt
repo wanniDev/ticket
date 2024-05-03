@@ -62,7 +62,6 @@ class ReservationServiceTest {
                 mockUserService,
                 ConcertSeatService(mockSeatRepository, mockConcertRepository),
                 mockReservationRepository,
-                mock(),
             )
 
         // when
@@ -104,7 +103,6 @@ class ReservationServiceTest {
                 mockUserService,
                 ConcertSeatService(mockSeatRepository, mockConcertRepository),
                 mockReservationRepository,
-                mock(),
             )
 
         // when
@@ -143,7 +141,6 @@ class ReservationServiceTest {
                 mockUserService,
                 ConcertSeatService(mockSeatRepository, mockConcertRepository),
                 mockReservationRepository,
-                mock(),
             )
 
         // when
@@ -156,95 +153,5 @@ class ReservationServiceTest {
 
         // then
         assertEquals(notFoundConcertErrorMessage, exception.message)
-    }
-
-    @Test
-    fun `if user try to have a reservation with not enough balance will throw BadClientException`() {
-        // given
-        val point = Point.newInstance()
-        val date = LocalDate.of(2024, 4, 10)
-        val seatNumber = "A24"
-        val user = User.newInstance(point)
-        val concert = Concert.newInstance(date)
-        val seat = Seat.newInstance(seatNumber, 1000.toBigDecimal(), concert)
-
-        val mockConcertRepository =
-            mock<ConcertRepository> {
-                on { findByDate(date) } doReturn concert
-            }
-        val mockSeatRepository =
-            mock<SeatRepository> {
-                on { findSeatsByConcertDateAndNumberInOrderByNumber(any(), any()) } doReturn setOf(seat)
-            }
-        val mockReservationRepository = mock<ReservationRepository>()
-
-        val mockUserService =
-            mock<TokenUserService> {
-                on { getUser(any()) } doReturn user
-            }
-
-        val reservationService =
-            ReservationService(
-                mockUserService,
-                ConcertSeatService(mockSeatRepository, mockConcertRepository),
-                mockReservationRepository,
-                mock(),
-            )
-
-        // when
-        val exception =
-            assertFailsWith<BadClientRequestException> {
-                reservationService.createReservation(
-                    CreateReservationCommand("concertDateTsid", date, listOf(seatNumber)),
-                )
-            }
-
-        // then
-        assertEquals("잔액이 부족합니다.", exception.message)
-    }
-
-    @Test
-    fun `if user try to have a reservation with negative price will throw BadClientException`() {
-        // given
-        val point = Point.newInstance()
-        val date = LocalDate.of(2024, 4, 10)
-        val seatNumber = "A24"
-        val user = User.newInstance(point)
-        val concert = Concert.newInstance(date)
-        val seat = Seat.newInstance(seatNumber, (-1).toBigDecimal(), concert)
-
-        val mockConcertRepository =
-            mock<ConcertRepository> {
-                on { findByDate(date) } doReturn concert
-            }
-        val mockSeatRepository =
-            mock<SeatRepository> {
-                on { findSeatsByConcertDateAndNumberInOrderByNumber(any(), any()) } doReturn setOf(seat)
-            }
-        val mockReservationRepository = mock<ReservationRepository>()
-
-        val mockUserService =
-            mock<TokenUserService> {
-                on { getUser(any()) } doReturn user
-            }
-
-        val reservationService =
-            ReservationService(
-                mockUserService,
-                ConcertSeatService(mockSeatRepository, mockConcertRepository),
-                mockReservationRepository,
-                mock(),
-            )
-
-        // when
-        val exception =
-            assertFailsWith<BadClientRequestException> {
-                reservationService.createReservation(
-                    CreateReservationCommand("concertDateTsid", date, listOf(seatNumber)),
-                )
-            }
-
-        // then
-        assertEquals("결제 금액은 0보다 커야 합니다.", exception.message)
     }
 }
