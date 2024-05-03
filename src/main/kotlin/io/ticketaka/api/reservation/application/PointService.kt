@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional
 class PointService(
     private val pointRepository: PointRepository,
     private val pointHistoryRepository: PointHistoryRepository,
+    private val paymentService: PaymentService,
 ) {
     @Transactional
     fun recordRechargePointHistory(
