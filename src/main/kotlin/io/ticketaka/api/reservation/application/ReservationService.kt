@@ -27,7 +27,6 @@ class ReservationService(
             seat.reserve()
         }
         reservation.allocate(seats)
-        reservation.confirm()
 
         return CreateReservationResult(
             reservation.tsid,

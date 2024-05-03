@@ -72,7 +72,7 @@ class ReservationServiceTest {
 
         // then
         assertNotNull(result.reservationTsid)
-        assertEquals(Reservation.Status.CONFIRMED, result.status)
+        assertEquals(Reservation.Status.PENDING, result.status)
         assertNotNull(result.expiration)
     }
 
