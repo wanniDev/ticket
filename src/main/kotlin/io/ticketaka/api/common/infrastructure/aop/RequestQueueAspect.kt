@@ -31,7 +31,7 @@ class RequestQueueAspect(
         val authorizationHeader =
             requestAttributes?.request?.getHeader(
                 "tokenTsid",
-            ) ?: throw IllegalArgumentException("Authorization header is not found")
+            ) ?: throw IllegalArgumentException("요청 헤더에 토큰이 존재하지 않습니다.")
 
         val firstToken = tokenWaitingQueue.peek()
 
