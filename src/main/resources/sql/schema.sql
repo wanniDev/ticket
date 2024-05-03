@@ -7,6 +7,7 @@ drop table if exists `reservations`;
 drop table if exists `payments`;
 drop table if exists `point_histories`;
 drop table if exists `reservations_seats`;
+drop table if exists `idempotent`;
 
 CREATE TABLE `users` (
      `id` bigint auto_increment primary key,

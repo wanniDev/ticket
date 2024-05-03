@@ -23,5 +23,8 @@ class RequestQueueAspect(
     @Before("onQueuePointcut()")
     fun beforeOnQueueAdvice() {
         logger.info("RequestQueueAspect")
+        tokenWaitingQueue.peek()?.let {
+            logger.info("Token: ${it.tsid}")
+        }
     }
 }
