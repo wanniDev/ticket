@@ -15,7 +15,7 @@ import java.time.LocalDateTime
 @Entity
 @Table(name = "tokens")
 class Token protected constructor(
-    var tsid: String? = null,
+    var tsid: String,
     val issuedTime: LocalDateTime,
     @Enumerated(EnumType.STRING)
     val status: Status,

@@ -6,6 +6,7 @@ import io.ticketaka.api.reservation.application.PaymentService
 import io.ticketaka.api.reservation.application.dto.PaymentCommand
 import io.ticketaka.api.reservation.application.dto.RechargeCommand
 import io.ticketaka.api.reservation.domain.point.Point
+import io.ticketaka.api.user.domain.Token
 import io.ticketaka.api.user.domain.User
 import io.ticketaka.api.user.domain.UserRepository
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -27,9 +28,11 @@ class BalanceServiceTest {
         point.id = 1
         val user = User("userTsid1", point)
         user.id = 1
+        val token = Token.newInstance(user)
         val rechargeCommand =
             RechargeCommand(
                 user.tsid,
+                token.tsid,
                 20000.toBigDecimal(),
             )
         val paymentCommand =
@@ -44,7 +47,7 @@ class BalanceServiceTest {
                 on { findByTsid(any()) } doReturn user
             }
         val mockPaymentService = mock<PaymentService>()
-        val balanceService = BalanceService(mockUserRepository, mockPaymentService, mock())
+        val balanceService = BalanceService(mockUserRepository, mockPaymentService, mock(), mock())
 
         // when
         balanceService.recharge(rechargeCommand)
@@ -60,9 +63,11 @@ class BalanceServiceTest {
         point.id = 1
         val user = User("userTsid1", point)
         user.id = 1
+        val token = Token.newInstance(user)
         val rechargeCommand =
             RechargeCommand(
                 user.tsid,
+                token.tsid,
                 (-20000).toBigDecimal(),
             )
 
@@ -70,7 +75,7 @@ class BalanceServiceTest {
             mock<UserRepository> {
                 on { findByTsid(any()) } doReturn user
             }
-        val balanceService = BalanceService(mockUserRepository, mock(), mock())
+        val balanceService = BalanceService(mockUserRepository, mock(), mock(), mock())
 
         // when
         val exception =
@@ -91,7 +96,7 @@ class BalanceServiceTest {
             mock<UserRepository> {
                 on { findByTsid(any()) } doReturn user
             }
-        val balanceService = BalanceService(mockUserRepository, mock(), mock())
+        val balanceService = BalanceService(mockUserRepository, mock(), mock(), mock())
 
         // when
         val balanceQueryModel = balanceService.getBalance(user.tsid)
