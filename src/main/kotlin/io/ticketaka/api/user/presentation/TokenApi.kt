@@ -17,9 +17,9 @@ class TokenApi(
     override fun createToken(
         @RequestBody request: CreateTokenRequest,
     ): ResponseEntity<CreateTokenResponse> {
-        val tokens = tokenUserService.createToken(request.userTsid)
+        val createdTokenTsid = tokenUserService.createToken(request.userTsid)
         return ResponseEntity
-            .ok(CreateTokenResponse(tokens.accessToken, tokens.refreshToken))
+            .ok(CreateTokenResponse(createdTokenTsid))
     }
 
     @PostMapping("/peek")
