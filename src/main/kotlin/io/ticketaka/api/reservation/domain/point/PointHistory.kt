@@ -8,6 +8,7 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Table
+import java.math.BigDecimal
 import java.time.LocalDateTime
 
 @Entity
@@ -18,6 +19,7 @@ class PointHistory(
     val transactionType: TransactionType,
     val userId: Long,
     val pointId: Long,
+    val amount: BigDecimal,
     val createTime: LocalDateTime = LocalDateTime.now(),
 ) {
     @Id
@@ -33,12 +35,14 @@ class PointHistory(
         fun newInstance(
             userId: Long,
             pointId: Long,
+            amount: BigDecimal,
             transactionType: TransactionType,
         ): PointHistory {
             return PointHistory(
                 tsid = TsIdKeyGenerator.next("ph"),
                 userId = userId,
                 pointId = pointId,
+                amount = amount,
                 transactionType = transactionType,
             )
         }

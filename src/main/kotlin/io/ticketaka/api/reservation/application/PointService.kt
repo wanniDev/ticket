@@ -6,23 +6,25 @@ import io.ticketaka.api.reservation.domain.point.PointHistoryRepository
 import io.ticketaka.api.reservation.domain.point.PointRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.math.BigDecimal
 
 @Service
 @Transactional(readOnly = true)
 class PointService(
     private val pointRepository: PointRepository,
     private val pointHistoryRepository: PointHistoryRepository,
-    private val paymentService: PaymentService,
 ) {
     @Transactional
     fun recordRechargePointHistory(
         userId: Long,
         userPointId: Long,
+        amount: BigDecimal,
     ) {
         val pointHistory =
             PointHistory.newInstance(
                 userId = userId,
                 pointId = userPointId,
+                amount = amount,
                 transactionType = PointHistory.TransactionType.RECHARGE,
             )
         pointHistoryRepository.save(pointHistory)
@@ -31,11 +33,13 @@ class PointService(
     fun recordReservationPointHistory(
         userId: Long,
         userPointId: Long,
+        amount: BigDecimal,
     ) {
         val pointHistory =
             PointHistory.newInstance(
                 userId = userId,
                 pointId = userPointId,
+                amount = amount,
                 transactionType = PointHistory.TransactionType.CHARGE,
             )
         pointHistoryRepository.save(pointHistory)

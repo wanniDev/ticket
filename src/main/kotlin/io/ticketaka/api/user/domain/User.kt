@@ -42,4 +42,22 @@ class User(
             )
         }
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as User
+
+        if (tsid != other.tsid) return false
+        if (id != other.id) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = tsid.hashCode()
+        result = 31 * result + (id?.hashCode() ?: 0)
+        return result
+    }
 }

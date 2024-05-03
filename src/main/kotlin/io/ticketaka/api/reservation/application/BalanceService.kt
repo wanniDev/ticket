@@ -22,16 +22,17 @@ class BalanceService(
         val userPoint = user.point ?: throw NotFoundException("포인트를 찾을 수 없습니다.")
 
         // 실제로는 PG 승인 요청을 수행하는 로직이 들어가야 함
+        val amount = rechargeCommand.amount
         paymentService.paymentApproval(
             PaymentCommand(
                 userTsid = userTsid,
                 pointTsid = userPoint.tsid,
-                amount = rechargeCommand.amount,
+                amount = amount,
             ),
         )
 
-        user.rechargePoint(rechargeCommand.amount)
-        pointService.recordRechargePointHistory(user.getId(), userPoint.getId())
+        user.rechargePoint(amount)
+        pointService.recordRechargePointHistory(user.getId(), userPoint.getId(), amount)
     }
 
     fun getBalance(userTsid: String): BalanceQueryModel {

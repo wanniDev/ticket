@@ -13,4 +13,8 @@ class ReservationRepositoryComposition(
         val saved = jpaReservationRepository.save(reservation)
         return saved
     }
+
+    override fun findByTsid(reservationTsid: String): Reservation? {
+        return jpaReservationRepository.findByTsid(reservationTsid)
+    }
 }

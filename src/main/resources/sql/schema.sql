@@ -78,6 +78,7 @@ CREATE TABLE point_histories (
     `transaction_type` enum('CHARGE','USE') null,
     `user_id`	bigint not null,
     `point_id`	bigint not null,
+    `amount`	DECIMAL(19, 4)	null,
     `create_time`	datetime not null,
     INDEX point_history_tsid_idx (tsid)
 );

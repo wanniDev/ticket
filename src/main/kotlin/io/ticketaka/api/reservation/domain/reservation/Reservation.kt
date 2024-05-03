@@ -33,17 +33,25 @@ class Reservation(
     var seats: Set<ReservationSeat> = emptySet(),
 ) {
     fun confirm() {
-        if (status != Status.PENDING) {
-            throw IllegalStateException("Reservation is not pending")
-        }
+        validatePending()
         status = Status.CONFIRMED
     }
 
     fun allocate(seats: Set<Seat>) {
-        if (status != Status.PENDING) {
+        validatePending()
+        this.seats = seats.map { ReservationSeat.create(it, this) }.toSet()
+    }
+
+    fun validateUser(user: User) {
+        if (this.user != user) {
+            throw IllegalStateException("User is not matched")
+        }
+    }
+
+    fun validatePending() {
+        if (this.status != Status.PENDING) {
             throw IllegalStateException("Reservation is not pending")
         }
-        this.seats = seats.map { ReservationSeat.create(it, this) }.toSet()
     }
 
     @Id

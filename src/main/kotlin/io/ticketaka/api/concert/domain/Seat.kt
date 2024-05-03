@@ -39,6 +39,12 @@ class Seat(
         }
     }
 
+    fun validateReserved() {
+        if (this.status != Status.RESERVED) {
+            throw IllegalStateException("Seat number: ${this.number} is not reserved")
+        }
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
