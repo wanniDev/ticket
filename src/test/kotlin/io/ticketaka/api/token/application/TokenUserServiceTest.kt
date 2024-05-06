@@ -2,13 +2,13 @@ package io.ticketaka.api.token.application
 
 import io.ticketaka.api.common.exception.NotFoundException
 import io.ticketaka.api.common.infrastructure.jwt.JwtProvider
-import io.ticketaka.api.common.infrastructure.jwt.JwtTokens
 import io.ticketaka.api.reservation.domain.point.Point
 import io.ticketaka.api.user.application.TokenUserService
 import io.ticketaka.api.user.domain.Token
 import io.ticketaka.api.user.domain.TokenRepository
 import io.ticketaka.api.user.domain.User
 import io.ticketaka.api.user.domain.UserRepository
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
@@ -29,27 +29,23 @@ class TokenUserServiceTest {
         val user =
             User("userTsid1", point)
 
-        val mockJwtProvider =
-            mock<JwtProvider> {
-                on { generate(any()) } doReturn JwtTokens("accessToken", "refreshToken")
-            }
-
+        val token = Token.newInstance(user)
         val mockTokenRepository =
             mock<TokenRepository> {
-                on { save(any()) } doReturn Token.newInstance(user)
+                on { save(any()) } doReturn token
             }
 
         val mockUserRepository =
             mock<UserRepository> {
                 on { findByTsid(any()) } doReturn user
             }
-        val tokenUserService = TokenUserService(mockJwtProvider, mockTokenRepository, mockUserRepository)
+        val tokenUserService = TokenUserService(mock(), mockTokenRepository, mockUserRepository)
 
         // when
-        tokenUserService.createToken("userTsid1")
+        val createToken = tokenUserService.createToken("userTsid1")
 
         // then
-        verify(mockJwtProvider).generate("userTsid1")
+        assertThat(createToken).isNotNull
     }
 
     @Test
