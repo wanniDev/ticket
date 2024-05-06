@@ -67,6 +67,11 @@ dependencies {
     // swagger
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2")
 
+    // testcontainers
+    testImplementation("org.testcontainers:junit-jupiter")
+    testImplementation("org.springframework.boot:spring-boot-testcontainers")
+    testImplementation("org.testcontainers:mysql")
+
     // h2
     runtimeOnly("com.h2database:h2")
 
