@@ -29,7 +29,7 @@ jib {
         }
     }
     to {
-        image = "ticketaka"
+        image = "ticketaka-dev"
         tags = setOf("latest", if (project.version.toString().endsWith("-SNAPSHOT")) "snapshot" else project.version.toString())
     }
     container {
