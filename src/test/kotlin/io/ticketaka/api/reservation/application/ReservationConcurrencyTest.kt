@@ -37,6 +37,7 @@ class ReservationConcurrencyTest
 
 //        @Test
 //        @Disabled
+        @Suppress("ktlint:standard:function-naming")
         fun `only first reservation will success`() {
             val len = 10
             val createReservationCommand =

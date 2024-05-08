@@ -16,7 +16,8 @@ class ExecutionTimer {
     private val logger = LoggerFactory.getLogger(this::class.java)
 
     @Pointcut(
-        "@annotation(org.springframework.web.bind.annotation.GetMapping) || @annotation(org.springframework.web.bind.annotation.PostMapping)",
+        "@annotation(org.springframework.web.bind.annotation.GetMapping) " +
+            "|| @annotation(org.springframework.web.bind.annotation.PostMapping)",
     )
     fun timerPointcut() {
     }
