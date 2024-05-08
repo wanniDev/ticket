@@ -23,13 +23,14 @@ class ExecutionTimer {
     }
 
     @Around("timerPointcut()")
-    fun assumeExecutionTime(joinPoint: ProceedingJoinPoint) {
+    fun assumeExecutionTime(joinPoint: ProceedingJoinPoint): Any {
         val stopWatch = StopWatch()
 
         stopWatch.start()
-        joinPoint.proceed()
+        val result = joinPoint.proceed()
         stopWatch.stop()
 
         logger.info("Execution time: ${stopWatch.totalTimeMillis} ms")
+        return result
     }
 }

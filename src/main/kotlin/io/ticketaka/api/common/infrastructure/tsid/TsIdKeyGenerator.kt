@@ -8,7 +8,7 @@ class TsIdKeyGenerator {
             if (prefix.contains("-")) {
                 prefix.replace("-", "")
             }
-            return TsidCreator.getTsid().format("$prefix-%S")
+            return "$prefix-${TsidCreator.getTsid().toLong()}"
         }
     }
 }
