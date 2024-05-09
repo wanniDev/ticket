@@ -6,6 +6,153 @@
 
 프로젝트를 구성하는데 필요한 마일스톤은 https://github.com/wanniDev/ticket/milestones 에서 확인할 수 있습니다.
 
+## 데이터베이스 인덱스 구성 개요
+- 데이터베이스 스키마에 적절한 인덱스를 구성하면, 데이터베이스 스캔 범위를 최소화하여 빠른 조회 성능을 기대할 수 있습니다.
+- 적절한 인덱스를 구성하기 위해선, 데이터베이스의 카디널리티와 데이터 분포도의 특성을 파악해야 합니다.
+- 데이터베이스의 카디널리티는 해당 컬럼의 중복되지 않는 값의 개수를 의미합니다. 카디널리티가 높을수록, 데이터의 중복수치가 낮습니다.
+- 데이터베이스의 데이터 분포도는 해당 컬럼의 데이터가 얼마나 균등하게 분포되어 있는지를 의미합니다.
+  - 데이터 분포도를 나타내는 공식은 대략 `1/고유 데이터 개수 * 100` 입니다.
+  - 그래서 일반적으로 "분포도가 좋다"라는 표현은 카디널리티가 높은 경우를 의미합니다.
+- 데이터베이스의 카디널리티와 데이터 분포도를 파악하여, 적절한 인덱스를 구성해보겠습니다.
+
+### 인덱스 선정하기
+테이블 별로, 컬럼을 카디널리티 내림차순으로 나열하면 아래와 같습니다.
+```
+-- `users` 테이블
+`tsid`, `id`, `point_id`
+
+-- `points` 테이블
+`tsid`, `id`, `create_time`, `update_time`, `balance`
+
+-- `tokens` 테이블
+`tsid`, `id`, `user_id`, `issued_time`, `status`
+
+-- `concerts` 테이블
+`tsid`, `id`, `date`
+
+-- `seats` 테이블
+`tsid`, `id`, `concert_id`, `number`, `price`, `status`
+
+-- `reservations` 테이블
+`tsid`, `id`, `user_id`, `concert_id`, `status`, `reservation_time`, `expiration_time`
+
+-- `payments` 테이블
+`tsid`, `id`, `user_id`, `point_id`, `payment_time`, `amount`
+
+-- `point_histories` 테이블
+`tsid`, `id`, `user_id`, `point_id`, `create_time`, `transaction_type`, `amount`
+
+-- `reservations_seats` 테이블
+`id`, `reservation_id`, `seat_id`
+```
+인덱스 컬럼 지정 1순위: `tsid`
+- `tsid`는 Time Series ID의 약자로, 고유한 시간을 나타내는 문자열입니다. 현재 프로젝트에서는 pk의 보조키로 활용되고 있습니다. 
+  - 도메인 모델의 식별자 역할을 하므로, 사실상 카디널리티는 `id`와 동일합니다.
+- 이러한 특성으로 `tsid`는 unique 제약조건을 가지고 있고, 인덱스로 구성되어 데이터 조회시 가장 많이 활용되고 있습니다.
+
+인덱스 컬럼 지정 2순위: `${도메인명}_id`
+- `${도메인명}_id`는 각 테이블의 fk 처럼 활용되는 컬럼입니다.
+- 경우에 따라서, 카디널리티 자체는 날짜계열 컬럼(`data`, `create_time` 등)보다는 낮을 수 있습니다.
+- 그러나, 해당 컬럼은 다른 테이블과의 관계를 나타내는 컬럼으로, 조건구문에서 날짜계열 컬럼보다는 더 많이 활용합니다.
+
+인덱스 컬럼 지정 3순위: `날짜계열 컬럼`
+- 해당 컬럼은 `date`, `create_time`, `update_time` 등의 날짜계열 컬럼입니다.
+- 카디널리티는 낮을 수 있지만, 데이터 분포도가 좋은 컬럼입니다.
+- 따라서, 해당 컬럼 역시 인덱스를 지정하면 데이터 조회 성능을 향상시킬 수 있습니다.
+- 그러나, 테이블에 인덱스를 너무 많이 지정할 경우, 데이터 삽입 및 갱신 성능이 저하될 수 있습니다.
+- 대기열 토큰의 경우, 가장 최근 시간에 발급된 토큰을 조회하는 쿼리가 많이 발생하므로, `issued_time` 컬럼에 인덱스를 지정하면 조회 성능을 향상시킬 수 있습니다.
+
+인덱스 컬럼 지정 4순위: `상태계열 컬럼`
+- 해당 컬럼은 `status`와 같이 상태를 나타내는 컬럼입니다.
+- 대체로 카디널리티가 제일 낮습니다.
+- 인덱스를 적용하면 좋을수도 있지만, 각 도메인의 id 별로 상태가 변경되는 경우가 많고, 절대적인 데이터 갯수가 적은 편입니다.
+  - 인덱스는 데이터의 조회 성능을 높이는 대신, 추가, 갱신 성능을 저하시킬 수 있습니다.
+  - 데이터의 갯수가 적은 경우, 인덱스를 지정해도 데이터베이스 스캔 범위를 줄이는 효과가 미미할 수 있습니다.
+
+요약
+- 공통으로 `tsid` 컬럼에 인덱스를 지정하는 것은 필수입니다.
+- `id`의 경우, pk로서 클러스터드 인덱스로 구성되어 있으므로, 별도로 인덱스를 지정할 필요가 없습니다.
+- `${도메인명}_id` 컬럼은 각 테이블의 fk처럼 활용되는 컬럼이므로, 인덱스를 지정하는 것이 좋습니다.
+- 날짜계열 컬럼은 데이터 분포도가 좋으므로, 인덱스를 지정하는 것이 좋습니다.
+  - 하지만, 인덱스를 지정할 경우, 데이터 삽입 및 갱신 성능이 저하될 수 있으므로, 적절한 상황에서 인덱스를 지정하는 것이 좋습니다.
+  - 이번 프로젝트의 경우, 콘서트, 토큰과 같이 날짜계열 컬럼을 조건구문으로 활용하는 테이블에만 인덱스를 지정하는 것이 좋습니다.
+- 상태계열 컬럼은 특성상 갱신 빈도수가 높으므로, 바로 인덱스를 적용하는 것보다는 시연 후에 데이터의 절대적인 갯수룰 보고 결정하는 것이 좋습니다.
+
+주의사항
+- 인덱스를 이용한 조회를 할 경우, 사용하는 연산자에 따라 인덱스 적용이 안될 수 있습니다. 따라서, 쿼리를 적용하기전에 해당 쿼리를 분석을 선행해야합니다.
+- 만약 테이블 하나에 여러 컬럼이 인덱스로 지정되어 있다면, 카디널리티가 높은 순으로 배치해야합니다.
+  - reservation 테이블을 예로들자면, `tsid`, `user_id`, `concert_id` 순으로 인덱스를 지정할 수 있습니다.
+
+## 데이터베이스 스키마
+
+```mermaid
+erDiagram
+    users {
+        bigint id PK "유저 ID"
+        varchar tsid "유저 Time Series ID"
+        bigint point_id "포인트 ID"
+    }
+    points {
+      bigint id PK "포인트 ID"
+      varchar tsid "포인트 Time Series ID"
+      decimal balance "잔액"
+      datetime create_time "생성 시간"
+      datetime update_time "업데이트 시간"
+    }
+    point_histories {
+      bigint id PK "포인트 이력 ID"
+      varchar tsid "포인트 이력 Time Series ID"
+      varchar transaction_type "거래 유형"
+      bigint user_id "유저 ID"
+      bigint point_id "포인트 ID"
+      decimal amount "거래 금액"
+      datetime create_time "생성 시간"
+    }
+    tokens {
+        bigint id PK "토큰 ID"
+        varchar tsid "토큰 Time Series ID"
+        datetime issued_time "발급 시간"
+        varchar status "토큰 상태(ACTIVE, EXPIRED)"
+        bigint user_id "유저 ID"
+    }
+    concerts {
+        bigint id PK "콘서트 ID"
+        varchar tsid "콘서트 Time Series ID"
+        date date "콘서트 날짜"
+    }
+    
+    seats { 
+        bigint id PK "좌석 ID"
+        varchar tsid "좌석 Time Series ID"
+        varchar number "좌석 번호"
+        varchar status "좌석 상태(AVAILABLE, RESERVED, OCCUPIED)"
+        bigint concert_id "콘서트 ID"
+    }
+
+    reservations {
+        bigint id PK "예약 ID"
+        string tsid "예약 Time Series ID"
+        string status "예약 상태(PENDING, CONFIRMED, CANCELLED)"
+        datetime reservation_time "예약 시간"
+        datetime expiration_time "만료 시간"
+        bigint user_id "유저 ID"
+        bigint seat_id "좌석 ID"
+    }
+    
+    payments {
+        bigint id PK "결제 ID"
+        varchar tsid "결제 Time Series ID"
+        decimal amount "결제 금액"
+        datetime payment_time "결제 시간"
+    }
+
+    concerts ||--o{ seats : "1"
+    points ||--o{ point_histories : "1"
+    users ||--o{ point_histories : "1"
+    users ||--o| tokens : "1"
+    users ||--o{ reservations : "1"
+```
+
 ## 동시성 시나리오
 
 ### 동시성 이슈가 발생할 수 있는 경우 1: 예약시 좌석 선점
@@ -392,74 +539,4 @@ sequenceDiagram
 - 제약사항:
   - 사용자의 잔액은 결제 금액 이상이어야 합니다.
   - 결제 요청은 유효한 예약 정보에 대해서만 가능해야 합니다.
-
-## 데이터베이스 스키마
-> tsid는 Time Series ID의 약자로, 고유한 시간을 나타내는 문자열입니다. 현재 프로젝트에서는 pk의 보조키로 활용되고 있습니다.
-```mermaid
-erDiagram
-    users {
-        bigint id PK "유저 ID"
-        varchar tsid "유저 Time Series ID"
-        bigint point_id "포인트 ID"
-    }
-    points {
-      bigint id PK "포인트 ID"
-      varchar tsid "포인트 Time Series ID"
-      decimal balance "잔액"
-      datetime create_time "생성 시간"
-      datetime update_time "업데이트 시간"
-    }
-    point_histories {
-      bigint id PK "포인트 이력 ID"
-      varchar tsid "포인트 이력 Time Series ID"
-      varchar transaction_type "거래 유형"
-      bigint user_id "유저 ID"
-      bigint point_id "포인트 ID"
-      decimal amount "거래 금액"
-      datetime create_time "생성 시간"
-    }
-    tokens {
-        bigint id PK "토큰 ID"
-        varchar tsid "토큰 Time Series ID"
-        datetime issued_time "발급 시간"
-        varchar status "토큰 상태(ACTIVE, EXPIRED)"
-        bigint user_id "유저 ID"
-    }
-    concerts {
-        bigint id PK "콘서트 ID"
-        varchar tsid "콘서트 Time Series ID"
-        date date "콘서트 날짜"
-    }
-    
-    seats { 
-        bigint id PK "좌석 ID"
-        varchar tsid "좌석 Time Series ID"
-        varchar number "좌석 번호"
-        varchar status "좌석 상태(AVAILABLE, RESERVED, OCCUPIED)"
-        bigint concert_id "콘서트 ID"
-    }
-
-    reservations {
-        bigint id PK "예약 ID"
-        string tsid "예약 Time Series ID"
-        string status "예약 상태(PENDING, CONFIRMED, CANCELLED)"
-        datetime reservation_time "예약 시간"
-        datetime expiration_time "만료 시간"
-        bigint user_id "유저 ID"
-        bigint seat_id "좌석 ID"
-    }
-    
-    payments {
-        bigint id PK "결제 ID"
-        varchar tsid "결제 Time Series ID"
-        decimal amount "결제 금액"
-        datetime payment_time "결제 시간"
-    }
-
-    concerts ||--o{ seats : "1"
-    points ||--o{ point_histories : "1"
-    users ||--o{ point_histories : "1"
-    users ||--o| tokens : "1"
-    users ||--o{ reservations : "1"
-```
 
