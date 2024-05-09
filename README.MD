@@ -397,67 +397,69 @@ sequenceDiagram
 > tsid는 Time Series ID의 약자로, 고유한 시간을 나타내는 문자열입니다. 현재 프로젝트에서는 pk의 보조키로 활용되고 있습니다.
 ```mermaid
 erDiagram
-    user {
-        bigint id pk
-        varchar tsid
+    users {
+        bigint id PK "유저 ID"
+        varchar tsid "유저 Time Series ID"
+        bigint point_id "포인트 ID"
     }
-    point {
-      bigint id pk
-      varchar tsid
-      decimal balance
-      datetime create_time
-      datetime update_time
+    points {
+      bigint id PK "포인트 ID"
+      varchar tsid "포인트 Time Series ID"
+      decimal balance "잔액"
+      datetime create_time "생성 시간"
+      datetime update_time "업데이트 시간"
     }
-    point_usage {
-      bigint id pk
-      varchar tsid
-      varchar transaction_type
-      bigint user_id fk
-      bigint point_id fk
+    point_histories {
+      bigint id PK "포인트 이력 ID"
+      varchar tsid "포인트 이력 Time Series ID"
+      varchar transaction_type "거래 유형"
+      bigint user_id "유저 ID"
+      bigint point_id "포인트 ID"
+      decimal amount "거래 금액"
+      datetime create_time "생성 시간"
     }
-    token {
-        bigint id pk
-        varchar tsid
-        datetime issued_time
-        varchar status
-        varchar user_tsid
+    tokens {
+        bigint id PK "토큰 ID"
+        varchar tsid "토큰 Time Series ID"
+        datetime issued_time "발급 시간"
+        varchar status "토큰 상태(ACTIVE, EXPIRED)"
+        bigint user_id "유저 ID"
     }
-    concert {
-        bigint id pk
-        varchar tsid
-        decimal price
-        date date
+    concerts {
+        bigint id PK "콘서트 ID"
+        varchar tsid "콘서트 Time Series ID"
+        date date "콘서트 날짜"
     }
     
-    seat { 
-        bigint id pk
-        varchar tsid
-        varchar number
-        varchar status
-        bigint concert_id
+    seats { 
+        bigint id PK "좌석 ID"
+        varchar tsid "좌석 Time Series ID"
+        varchar number "좌석 번호"
+        varchar status "좌석 상태(AVAILABLE, RESERVED, OCCUPIED)"
+        bigint concert_id "콘서트 ID"
     }
 
-    reservation {
-        bigint id pk
-        string tsid
-        string status
-        datetime reservation_time
-        datetime expiration_time
-        bigint user_id fk
-        bigint seat_id fk
+    reservations {
+        bigint id PK "예약 ID"
+        string tsid "예약 Time Series ID"
+        string status "예약 상태(PENDING, CONFIRMED, CANCELLED)"
+        datetime reservation_time "예약 시간"
+        datetime expiration_time "만료 시간"
+        bigint user_id "유저 ID"
+        bigint seat_id "좌석 ID"
     }
     
-    payment {
-        bigint id pk
-        varchar tsid
-        decimal amount
-        datetime payment_time
+    payments {
+        bigint id PK "결제 ID"
+        varchar tsid "결제 Time Series ID"
+        decimal amount "결제 금액"
+        datetime payment_time "결제 시간"
     }
-    
-    concert ||--o{ seat : "1"
-    point ||--o{ point_usage : "1"
-    user ||--o{ point_usage : "1"
-    user ||--o| token : "1"
-    user ||--o{ reservation : "1"
+
+    concerts ||--o{ seats : "1"
+    points ||--o{ point_histories : "1"
+    users ||--o{ point_histories : "1"
+    users ||--o| tokens : "1"
+    users ||--o{ reservations : "1"
 ```
 
