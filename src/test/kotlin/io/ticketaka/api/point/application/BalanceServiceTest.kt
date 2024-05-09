@@ -6,7 +6,6 @@ import io.ticketaka.api.reservation.application.PaymentService
 import io.ticketaka.api.reservation.application.dto.PaymentCommand
 import io.ticketaka.api.reservation.application.dto.RechargeCommand
 import io.ticketaka.api.reservation.domain.point.Point
-import io.ticketaka.api.user.domain.Token
 import io.ticketaka.api.user.domain.User
 import io.ticketaka.api.user.domain.UserRepository
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -28,7 +27,6 @@ class BalanceServiceTest {
         point.id = 1
         val user = User("userTsid1", point)
         user.id = 1
-        val token = Token.newInstance(user)
         val rechargeCommand =
             RechargeCommand(
                 user.tsid,
@@ -62,7 +60,6 @@ class BalanceServiceTest {
         point.id = 1
         val user = User("userTsid1", point)
         user.id = 1
-        val token = Token.newInstance(user)
         val rechargeCommand =
             RechargeCommand(
                 user.tsid,

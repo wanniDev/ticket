@@ -4,11 +4,9 @@ import io.ticketaka.api.common.infrastructure.tsid.TsIdKeyGenerator
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
-import jakarta.persistence.FetchType
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
-import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 import java.time.LocalDateTime
 
@@ -19,8 +17,7 @@ class Token protected constructor(
     val issuedTime: LocalDateTime,
     @Enumerated(EnumType.STRING)
     val status: Status,
-    @ManyToOne(targetEntity = User::class, fetch = FetchType.LAZY)
-    val user: User,
+    val userId: Long,
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,12 +29,12 @@ class Token protected constructor(
     }
 
     companion object {
-        fun newInstance(user: User): Token {
+        fun newInstance(userId: Long): Token {
             return Token(
                 tsid = TsIdKeyGenerator.next("token"),
                 issuedTime = LocalDateTime.now(),
                 status = Status.ACTIVE,
-                user = user,
+                userId = userId,
             )
         }
     }

@@ -28,8 +28,8 @@ class TokenUserServiceTest {
         val point = Point.newInstance()
         val user =
             User("userTsid1", point)
-
-        val token = Token.newInstance(user)
+        user.id = 1
+        val token = Token.newInstance(user.getId())
         val mockTokenRepository =
             mock<TokenRepository> {
                 on { save(any()) } doReturn token
@@ -71,7 +71,8 @@ class TokenUserServiceTest {
     @Test
     fun `peekToken returns true when the order of the token queue matches`() {
         // given
-        val tokenPosition0 = Token.newInstance(User("userTsid0", Point.newInstance()))
+        val userId = 1L
+        val tokenPosition0 = Token.newInstance(userId)
         val mockTokenRepository =
             mock<TokenRepository> {
                 on { findFirstTokenOrderByIssuedTimeAscLimit1() } doReturn tokenPosition0
@@ -88,8 +89,10 @@ class TokenUserServiceTest {
     @Test
     fun `peekToken returns false when the order of the token queue does not match`() {
         // given
-        val tokenPosition0 = Token.newInstance(User("userTsid0", Point.newInstance()))
-        val tokenPosition1 = Token.newInstance(User("userTsid1", Point.newInstance()))
+        val userId1 = 1L
+        val userId2 = 2L
+        val tokenPosition0 = Token.newInstance(userId1)
+        val tokenPosition1 = Token.newInstance(userId2)
         val mockTokenRepository =
             mock<TokenRepository> {
                 on { findFirstTokenOrderByIssuedTimeAscLimit1() } doReturn tokenPosition0

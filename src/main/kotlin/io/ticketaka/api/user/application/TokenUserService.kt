@@ -20,7 +20,7 @@ class TokenUserService(
     fun createToken(userTsId: String): String {
         val user = userRepository.findByTsid(userTsId) ?: throw NotFoundException("사용자를 찾을 수 없습니다.")
 
-        val token = Token.newInstance(user)
+        val token = Token.newInstance(user.getId())
 //        val rawToken = jwtProvider.generate(user.tsid)
         tokenRepository.save(token)
         return token.tsid
