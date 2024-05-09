@@ -16,7 +16,7 @@ spring:
     properties:
       hibernate:
         show_sql: true
-
+        use_sql_comments: true
   sql:
     init:
       mode: always
