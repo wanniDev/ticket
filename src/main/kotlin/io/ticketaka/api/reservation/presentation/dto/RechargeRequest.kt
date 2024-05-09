@@ -5,13 +5,11 @@ import java.math.BigDecimal
 
 data class RechargeRequest(
     val userTsid: String,
-    val tokenTsid: String,
     val amount: BigDecimal,
 ) {
     fun toCommand() =
         RechargeCommand(
             userTsid = userTsid,
-            tokenTsid = tokenTsid,
             amount = amount,
         )
 }

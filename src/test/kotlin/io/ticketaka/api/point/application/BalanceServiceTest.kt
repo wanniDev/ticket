@@ -32,13 +32,12 @@ class BalanceServiceTest {
         val rechargeCommand =
             RechargeCommand(
                 user.tsid,
-                token.tsid,
                 20000.toBigDecimal(),
             )
         val paymentCommand =
             PaymentCommand(
-                userTsid = user.tsid,
-                pointTsid = point.tsid,
+                userId = user.getId(),
+                pointId = point.getId(),
                 amount = rechargeCommand.amount,
             )
 
@@ -67,7 +66,6 @@ class BalanceServiceTest {
         val rechargeCommand =
             RechargeCommand(
                 user.tsid,
-                token.tsid,
                 (-20000).toBigDecimal(),
             )
 

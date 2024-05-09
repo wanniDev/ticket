@@ -18,15 +18,15 @@ class BalanceService(
     @Transactional
     fun recharge(rechargeCommand: RechargeCommand) {
         val user = userRepository.findByTsid(rechargeCommand.userTsid) ?: throw NotFoundException("사용자를 찾을 수 없습니다.")
-        val userTsid = user.tsid
+        val userId = user.getId()
         val userPoint = user.point ?: throw NotFoundException("포인트를 찾을 수 없습니다.")
 
         // 실제로는 PG 승인 요청을 수행하는 로직이 들어가야 함
         val amount = rechargeCommand.amount
         paymentService.paymentApproval(
             PaymentCommand(
-                userTsid = userTsid,
-                pointTsid = userPoint.tsid,
+                userId = userId,
+                pointId = userPoint.getId(),
                 amount = amount,
             ),
         )

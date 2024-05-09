@@ -75,7 +75,7 @@ CREATE TABLE `payments` (
 CREATE TABLE point_histories (
     `id` bigint auto_increment primary key,
     `tsid` varchar(255) not null unique,
-    `transaction_type` enum('CHARGE','USE') null,
+    `transaction_type` enum('CHARGE','RECHARGE') null,
     `user_id`	bigint not null,
     `point_id`	bigint not null,
     `amount`	DECIMAL(19, 4)	null,

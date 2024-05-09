@@ -1,12 +1,10 @@
 package io.ticketaka.api.payment.application
 
 import io.ticketaka.api.reservation.application.PaymentService
-import io.ticketaka.api.reservation.application.PointService
 import io.ticketaka.api.reservation.application.dto.PaymentCommand
 import io.ticketaka.api.reservation.domain.payment.Payment
 import io.ticketaka.api.reservation.domain.payment.PaymentRepository
 import io.ticketaka.api.reservation.domain.point.Point
-import io.ticketaka.api.user.application.TokenUserService
 import io.ticketaka.api.user.domain.User
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -23,27 +21,22 @@ class PaymentServiceTest {
     fun `when payment approval api invoked verify payment information before approval`() {
         // given
         val point = Point.newInstance()
+        point.id = 1
         val user =
             User("userTsid1", point)
-        val userTsid = user.tsid
-        val pointTsid = point.tsid
+        user.id = 1
+        val userId = user.getId()
+        val pointId = point.getId()
         val mockPaymentRepository =
             mock<PaymentRepository> {
-                on { save(any()) } doReturn Payment.newInstance(1000.toBigDecimal(), user, point)
+                on { save(any()) } doReturn Payment.newInstance(1000.toBigDecimal(), userId, pointId)
             }
-        val mockPointService =
-            mock<PointService> {
-                on { getPoint(pointTsid) } doReturn point
-            }
-        val mockTokenUserService =
-            mock<TokenUserService> {
-                on { getUser(userTsid) } doReturn user
-            }
-        val paymentService = PaymentService(mockPaymentRepository, mockPointService, mockTokenUserService)
+
+        val paymentService = PaymentService(mockPaymentRepository)
         val paymentCommand =
             PaymentCommand(
-                userTsid = userTsid,
-                pointTsid = pointTsid,
+                userId = userId,
+                pointId = pointId,
                 amount = 1000.toBigDecimal(),
             )
 

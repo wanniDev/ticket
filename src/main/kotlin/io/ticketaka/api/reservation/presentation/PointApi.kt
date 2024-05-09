@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController
 import java.math.BigDecimal
 
 @RestController
-@RequestMapping("/api/balance")
+@RequestMapping("/api/point")
 class PointApi(
     private val balanceService: BalanceService,
 ) : PointApiSpecification {
