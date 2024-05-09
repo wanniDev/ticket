@@ -13,7 +13,7 @@ CREATE TABLE `users` (
      `id` bigint auto_increment primary key,
     `tsid` varchar(255) NOT NULL UNIQUE,
     `point_id`	bigint not null,
-    INDEX user_tsid_idx (tsid)
+    INDEX user_idx (tsid, point_id)
 );
 
 CREATE TABLE `points` (
@@ -22,7 +22,7 @@ CREATE TABLE `points` (
 	`balance`   decimal(19, 4)	null,
     `create_time`	datetime not null ,
     `update_time`	datetime null,
-    INDEX point_tsid_idx (tsid)
+    INDEX point_idx (tsid)
 );
 
 CREATE TABLE `tokens` (
@@ -31,14 +31,14 @@ CREATE TABLE `tokens` (
 	`issued_time`	datetime null,
 	`status`	enum('ACTIVE', 'EXPIRED') null,
 	`user_id`	bigint not null,
-    INDEX token_tsid_idx (tsid)
+    INDEX token_idx (tsid, user_id, issued_time)
 );
 
 CREATE TABLE `concerts` (
     `id` bigint auto_increment primary key,
     `tsid` varchar(255) not null unique,
 	`date`	date null,
-    INDEX concert_tsid_idx (tsid)
+    INDEX concert_idx (tsid, date)
 );
 
 CREATE TABLE `seats` (
@@ -48,7 +48,7 @@ CREATE TABLE `seats` (
     `price`	DECIMAL(19, 4)	null,
 	`status`	enum('AVAILABLE', 'RESERVED', 'OCCUPIED') null ,
 	`concert_id`    bigint not null,
-    INDEX seat_tsid_idx (tsid)
+    INDEX seat_idx (tsid, concert_id)
 );
 
 CREATE TABLE `reservations` (
@@ -59,7 +59,7 @@ CREATE TABLE `reservations` (
 	`expiration_time`	datetime null,
 	`user_id`	bigint not null,
     `concert_id`	bigint not null,
-    INDEX reservation_tsid_idx (tsid)
+    INDEX reservation_idx (tsid, user_id, concert_id)
 );
 
 CREATE TABLE `payments` (
@@ -69,7 +69,7 @@ CREATE TABLE `payments` (
 	`payment_time`	datetime null,
     `user_id`	bigint not null,
 	`point_id`	bigint not null,
-    INDEX payment_tsid_idx (tsid)
+    INDEX payment_idx (tsid, user_id, point_id)
 );
 
 CREATE TABLE point_histories (
@@ -80,7 +80,7 @@ CREATE TABLE point_histories (
     `point_id`	bigint not null,
     `amount`	DECIMAL(19, 4)	null,
     `create_time`	datetime not null,
-    INDEX point_history_tsid_idx (tsid)
+    INDEX point_history_idx (tsid, user_id, point_id)
 );
 CREATE TABLE `reservations_seats` (
     `id` bigint auto_increment primary key,
