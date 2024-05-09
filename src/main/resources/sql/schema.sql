@@ -91,8 +91,3 @@ CREATE TABLE `idempotent` (
     `id` bigint auto_increment primary key,
     `key` varchar(255) not null unique
 );
-
-insert into `points` (`id`, `tsid`, `balance`, `create_time`, `update_time`) values (1, 'point1', 1000, '2024-01-01 00:00:00', '2024-01-01 00:00:00');
-insert into `users` (`id`, `tsid`, `point_id`) values (1, 'user1', 1);
-insert into `concerts` (`id`, `tsid`, `date`) values (1, 'concert1', '2024-05-03');
-insert into `seats` (`id`, `tsid`, `number`, `price`, `status`, `concert_id`) values (1, 'seat1', 'A1', 100, 'AVAILABLE', 1);

@@ -21,7 +21,7 @@ class Concert(
     companion object {
         fun newInstance(date: LocalDate): Concert {
             return Concert(
-                tsid = TsIdKeyGenerator.next("cd"),
+                tsid = TsIdKeyGenerator.next("ct"),
                 date = date,
             )
         }

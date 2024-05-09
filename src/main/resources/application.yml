@@ -19,8 +19,9 @@ spring:
         use_sql_comments: true
   sql:
     init:
-      schema-locations: classpath*:sql/schema.sql
       mode: always
+      schema-locations: classpath*:sql/schema.sql
+      data-locations: classpath*:sql/data.sql
 
 springdoc:
   swagger-ui:
