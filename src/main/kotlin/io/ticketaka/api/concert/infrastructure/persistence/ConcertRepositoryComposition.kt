@@ -18,6 +18,10 @@ class ConcertRepositoryComposition(
         return jpaConcertRepository.findByDate(date)
     }
 
+    override fun findIdByDate(date: LocalDate): Long? {
+        return jpaConcertRepository.findIdByDate(date)
+    }
+
     override fun findAll(): List<Concert> {
         return jpaConcertRepository.findAll()
     }

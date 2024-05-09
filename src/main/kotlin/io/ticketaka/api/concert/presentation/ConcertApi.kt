@@ -3,6 +3,7 @@ package io.ticketaka.api.concert.presentation
 import io.ticketaka.api.concert.application.ConcertSeatService
 import io.ticketaka.api.concert.presentation.dto.ConcertDateResponse
 import io.ticketaka.api.concert.presentation.dto.ConcertSeatResponse
+import io.ticketaka.api.concert.presentation.dto.SeatResponse
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -26,10 +27,17 @@ class ConcertApi(private val concertSeatService: ConcertSeatService) : ConcertAp
     override fun getConcertSeat(
         @RequestParam date: LocalDate,
     ): ResponseEntity<ConcertSeatResponse> {
+        val seatResponse =
+            concertSeatService.getSeatNumbers(date).map { seatResult ->
+                SeatResponse(
+                    seatResult.number,
+                    seatResult.status,
+                )
+            }
         return ResponseEntity.ok(
             ConcertSeatResponse(
                 date,
-                concertSeatService.getSeatNumbers(date),
+                seatResponse,
             ),
         )
     }

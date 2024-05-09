@@ -7,5 +7,7 @@ interface ConcertRepository {
 
     fun findByDate(date: LocalDate): Concert?
 
+    fun findIdByDate(date: LocalDate): Long?
+
     fun findAll(): List<Concert>
 }

@@ -69,7 +69,7 @@ class ConcertSeatServiceTest {
             }
         val mockConcertRepository =
             mock<ConcertRepository> {
-                on { findByDate(date) } doReturn concert
+                on { findIdByDate(date) } doReturn concert.id
             }
         val concertSeatService = ConcertSeatService(mockSeatRepository, mockConcertRepository)
 
@@ -77,7 +77,7 @@ class ConcertSeatServiceTest {
         val result = concertSeatService.getSeatNumbers(date)
 
         // then
-        assertEquals(listOf(seatNumber), result)
+        assertEquals(listOf(SeatResult(seatNumber, Seat.Status.AVAILABLE)), result)
     }
 
     @Test
@@ -92,7 +92,7 @@ class ConcertSeatServiceTest {
             }
         val mockConcertRepository =
             mock<ConcertRepository> {
-                on { findByDate(date) } doReturn concert
+                on { findIdByDate(date) } doReturn concert.id
             }
         val concertSeatService = ConcertSeatService(mockSeatRepository, mockConcertRepository)
 
