@@ -83,6 +83,12 @@
 - 만약 테이블 하나에 여러 컬럼이 인덱스로 지정되어 있다면, 카디널리티가 높은 순으로 배치해야합니다.
   - reservation 테이블을 예로들자면, `tsid`, `user_id`, `concert_id` 순으로 인덱스를 지정할 수 있습니다.
 
+## api 주요 데이터베이스 조회 성능 개선
+- 비즈니스 로직 수행 중 단건 쿼리 여러개로 의존하는 루트 도메인 엔티티을 조회하는 쿼리는 join을 활용하여 사용하는 쿼리의 횟수를 줄였습니다.
+- 연관관계에 속한 도메인의 식별자(fk)는 인덱스로 구성하였습니다.
+- 도메인 엔티티 구성시, 연관관계로 지정된 jpa 엔티티를 지우고 해당 엔티티의 식별자로 대체하여 특정 엔티티 조회시, 다른 엔티티를 추가로 조회하는 현상을 방지하였습니다.
+
+
 ## 데이터베이스 스키마
 
 ```mermaid
@@ -345,11 +351,17 @@ sequenceDiagram
     participant DB as Database
     C->>A: api 요청(POST /api/token/peek)
     A->>A: api 요청 바디 구성(토큰ID)
+    A->>DB: 토큰 용량 확인 쿼리 요청
+    DB->>DB: 토큰 용량 확인 쿼리 수행
+    DB-->>A: 토큰 용량 확인 결과 return
+    opt 토큰 용량이 500이 넘을 경우
+        A-->>C: 대기열이 가득 찼습니다.
+    end
     A->>DB: 제일 최근의 Token 조회 쿼리 요청
     DB->>DB: 제일 최근의 Token 조회 쿼리 수행
     DB-->>A: 제일 최근의 Token 조회 결과 return
     opt 존재 하지 않는 토큰
-        A-->>C: NOT_FOUND 오류
+        A-->>C: 오류 리턴
     end
     A-->>A: 요청한 토큰ID와 제일 최근의 토큰ID 비교
     A-->>C: 제일 최근의 토큰ID 일치여부 응답 메시지 리턴
@@ -382,7 +394,7 @@ sequenceDiagram
 ```mermaid
 sequenceDiagram
     participant C as Client
-    participant F as Filter
+    participant F as AOP
     participant A as API
     participant DB as Database
     C->>A: api 요청(GET /api/concert/seat/{date})
@@ -414,7 +426,7 @@ sequenceDiagram
 ```mermaid
 sequenceDiagram
   participant C as Client
-  participant F as Filter
+  participant F as AOP
   participant A as API
   participant DB as Database
   C->>A: api 요청(GET /api/concert/seat/{date})
@@ -449,7 +461,7 @@ sequenceDiagram
 ```mermaid
 sequenceDiagram
   participant C as Client
-  participant F as Filter
+  participant F as AOP
   participant A as API
   participant DB as Database
   C->>A: api 요청
@@ -481,7 +493,7 @@ sequenceDiagram
 ```mermaid
 sequenceDiagram
   participant C as Client
-  participant F as Filter
+  participant F as AOP
   participant A as API
   participant DB as Database
   C->>A: api 요청
@@ -507,8 +519,7 @@ sequenceDiagram
 ```mermaid
 sequenceDiagram
   participant C as Client
-  participant F as Filter
-  participant AO as AOP
+  participant F as AOP
   participant Q as 대기열
   participant A as API
   participant PG as PaymentGateway
@@ -516,13 +527,8 @@ sequenceDiagram
 
   C->>F: api 요청
   F->>DB: 토큰 검증
-  opt 잘못된 토큰
-    F-->>C: 401 Unauthorized
-  end
-  alt 대기열 사용가능
-    AO->>A: api 요청 처리 위임
-  else 대기열 사용불가
-    AO-->>C: 429 Too Many Requests
+  opt 토큰 소유자와 요청한 사용자가 다를 경우
+    F-->>C: 잘못된 토큰 오류
   end
   A->>DB: 결제 정보 검증
   opt 결제 정보 불일치
