@@ -2,6 +2,7 @@ package io.ticketaka.api.common.infrastructure.aop
 
 import io.ticketaka.api.common.domain.queue.TokenWaitingQueue
 import io.ticketaka.api.common.infrastructure.jwt.JwtTokenParser
+import io.ticketaka.api.user.domain.Token
 import org.aspectj.lang.ProceedingJoinPoint
 import org.aspectj.lang.annotation.Around
 import org.aspectj.lang.annotation.Aspect
@@ -10,6 +11,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.springframework.web.context.request.RequestContextHolder
 import org.springframework.web.context.request.ServletRequestAttributes
+import java.time.LocalDateTime
 
 @Aspect
 @Component
@@ -33,16 +35,35 @@ class RequestQueueAspect(
                 "tokenTsid",
             ) ?: throw IllegalArgumentException("요청 헤더에 토큰이 존재하지 않습니다.")
 
-        val firstToken = tokenWaitingQueue.peek()
+        val tokenFromQueue = tokenWaitingQueue.peek() ?: throw IllegalArgumentException("대기 중인 토큰이 존재하지 않습니다.")
 
-        if (firstToken == null || firstToken.tsid != authorizationHeader) {
-            val errorMessage = "현재 대기 중인 토큰과 요청한 토큰이 일치하지 않습니다."
-            logger.error(errorMessage)
-            throw IllegalArgumentException(errorMessage)
-        }
+        validateTokenIdentifier(tokenFromQueue, authorizationHeader)
+
+        validateTokenExpiration(tokenFromQueue)
 
         joinPoint.proceed()
 
         tokenWaitingQueue.poll()
+    }
+
+    private fun validateTokenExpiration(firstToken: Token) {
+        val expiredTime = firstToken.issuedTime.plusMinutes(30)
+        val now = LocalDateTime.now()
+        if (expiredTime.isBefore(now)) {
+            val errorMessage = "토큰이 만료되었습니다."
+            logger.error(errorMessage)
+            throw IllegalArgumentException(errorMessage)
+        }
+    }
+
+    private fun validateTokenIdentifier(
+        firstToken: Token,
+        authorizationHeader: String,
+    ) {
+        if (firstToken.tsid != authorizationHeader) {
+            val errorMessage = "현재 대기 중인 토큰과 요청한 토큰이 일치하지 않습니다."
+            logger.error(errorMessage)
+            throw IllegalArgumentException(errorMessage)
+        }
     }
 }
