@@ -27,11 +27,6 @@ class RequestQueueAspect(
 
     @Around("onQueuePointcut()")
     fun beforeOnQueueAdvice(joinPoint: ProceedingJoinPoint) {
-        val queueSize = tokenWaitingQueue.size()
-        if (queueSize > 500L) {
-            throw IllegalArgumentException("대기 중인 토큰이 500개를 초과하였습니다.")
-        }
-
         val requestAttributes = RequestContextHolder.getRequestAttributes() as ServletRequestAttributes?
         val authorizationHeader =
             requestAttributes?.request?.getHeader(
