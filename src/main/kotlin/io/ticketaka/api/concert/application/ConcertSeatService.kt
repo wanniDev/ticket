@@ -24,7 +24,6 @@ class ConcertSeatService(
             concertRepository.findByDate(date)
                 ?: throw BadClientRequestException("해당 날짜의 콘서트가 없습니다.")
         return seatRepository.findByConcertId(concert.id!!)
-            .filter { it.status == Seat.Status.AVAILABLE }
             .sortedBy { it.number }
             .map { it.number }
     }

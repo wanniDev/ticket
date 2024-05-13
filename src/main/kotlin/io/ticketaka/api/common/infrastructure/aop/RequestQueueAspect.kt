@@ -28,7 +28,7 @@ class RequestQueueAspect(
     }
 
     @Around("onQueuePointcut()")
-    fun beforeOnQueueAdvice(joinPoint: ProceedingJoinPoint) {
+    fun beforeOnQueueAdvice(joinPoint: ProceedingJoinPoint): Any? {
         val requestAttributes = RequestContextHolder.getRequestAttributes() as ServletRequestAttributes?
         val authorizationHeader =
             requestAttributes?.request?.getHeader(
@@ -41,9 +41,11 @@ class RequestQueueAspect(
 
         validateTokenExpiration(tokenFromQueue)
 
-        joinPoint.proceed()
-
-        tokenWaitingQueue.poll()
+        try {
+            return joinPoint.proceed()
+        } finally {
+            tokenWaitingQueue.poll()
+        }
     }
 
     private fun validateTokenExpiration(firstToken: Token) {
