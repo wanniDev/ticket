@@ -3,9 +3,8 @@ package io.ticketaka.api.reservation.presentation
 import io.ticketaka.api.common.infrastructure.aop.OnQueue
 import io.ticketaka.api.reservation.application.ReservationService
 import io.ticketaka.api.reservation.presentation.dto.ConfirmReservationRequest
-import io.ticketaka.api.reservation.presentation.dto.ConfirmReservationResponse
 import io.ticketaka.api.reservation.presentation.dto.CreateReservationRequest
-import io.ticketaka.api.reservation.presentation.dto.CreateReservationResponse
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -20,24 +19,16 @@ class ReservationApi(
     @PostMapping
     override fun createReservation(
         @RequestBody request: CreateReservationRequest,
-    ): CreateReservationResponse {
-        val result = reservationService.createReservation(request.toCommand())
-        return CreateReservationResponse(
-            result.reservationTsid,
-            result.status,
-            result.expiration,
-        )
+    ): ResponseEntity<Void> {
+        reservationService.createReservation(request.toCommand())
+        return ResponseEntity.ok().build()
     }
 
-    @OnQueue
     @PostMapping("/confirm")
     override fun confirmReservation(
         @RequestBody request: ConfirmReservationRequest,
-    ): ConfirmReservationResponse {
-        val result = reservationService.confirmReservation(request.userTsid, request.reservationTsid)
-        return ConfirmReservationResponse(
-            result.reservationTsid,
-            result.status,
-        )
+    ): ResponseEntity<Void> {
+        reservationService.confirmReservation(request.userTsid, request.reservationTsid)
+        return ResponseEntity.ok().build()
     }
 }

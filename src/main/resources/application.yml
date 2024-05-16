@@ -17,11 +17,19 @@ spring:
       hibernate:
         show_sql: true
         use_sql_comments: true
+        format_sql: true
   sql:
     init:
       mode: always
       schema-locations: classpath*:sql/schema.sql
       data-locations: classpath*:sql/data.sql
+logging:
+  level:
+    org:
+      hibernate:
+        type:
+          descriptor:
+            sql: trace
 
 springdoc:
   swagger-ui:

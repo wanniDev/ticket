@@ -60,4 +60,10 @@ class User(
         result = 31 * result + (id?.hashCode() ?: 0)
         return result
     }
+
+    fun validatePoint() {
+        if (this.point == null) {
+            throw IllegalStateException("User의 포인트가 없습니다.")
+        }
+    }
 }

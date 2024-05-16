@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
 import io.ticketaka.api.reservation.presentation.dto.ConfirmReservationRequest
 import io.ticketaka.api.reservation.presentation.dto.CreateReservationRequest
-import io.ticketaka.api.reservation.presentation.dto.CreateReservationResponse
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 
 @Tag(name = "Reservation", description = "예약 도메인 API")
@@ -16,7 +16,7 @@ interface ReservationApiSpecification {
     )
     @ApiResponse(responseCode = "200", description = "예약 생성 성공")
     @ApiResponse(responseCode = "400", description = "예약 생성 실패")
-    fun createReservation(request: CreateReservationRequest): CreateReservationResponse
+    fun createReservation(request: CreateReservationRequest): ResponseEntity<Void>
 
     @Operation(
         summary = "예약 확정 API",
@@ -25,5 +25,5 @@ interface ReservationApiSpecification {
     @ApiResponse(responseCode = "200", description = "예약 확정 성공")
     @ApiResponse(responseCode = "400", description = "예약 확정 실패")
     @PostMapping("/confirm")
-    fun confirmReservation(request: ConfirmReservationRequest): Any
+    fun confirmReservation(request: ConfirmReservationRequest): ResponseEntity<Void>
 }
