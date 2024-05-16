@@ -12,4 +12,8 @@ class PaymentRepositoryComposition(
     override fun save(payment: Payment): Payment {
         return jpaPaymentRepository.save(payment)
     }
+
+    override fun delete(payment: Payment) {
+        jpaPaymentRepository.delete(payment)
+    }
 }

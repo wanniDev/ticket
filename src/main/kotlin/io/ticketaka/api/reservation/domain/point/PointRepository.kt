@@ -4,4 +4,6 @@ interface PointRepository {
     fun save(point: Point): Point
 
     fun findByTsid(tsid: String): Point?
+
+    fun findById(pointId: Long): Point?
 }

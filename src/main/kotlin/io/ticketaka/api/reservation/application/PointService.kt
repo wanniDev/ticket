@@ -48,4 +48,13 @@ class PointService(
     fun getPoint(pointTsid: String): Point {
         return pointRepository.findByTsid(pointTsid) ?: throw IllegalArgumentException("포인트를 찾을 수 없습니다.")
     }
+
+    fun rollbackPoint(
+        userId: Long,
+        pointId: Long,
+        amount: BigDecimal,
+    ) {
+        val point = pointRepository.findById(pointId) ?: throw IllegalArgumentException("포인트를 찾을 수 없습니다.")
+        point.rollback(amount)
+    }
 }

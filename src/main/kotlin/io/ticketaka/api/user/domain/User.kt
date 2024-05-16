@@ -16,7 +16,7 @@ import java.math.BigDecimal
 class User(
     val tsid: String,
     @ManyToOne(targetEntity = Point::class, optional = false, fetch = FetchType.LAZY)
-    val point: Point?,
+    var point: Point?,
 ) {
     fun rechargePoint(amount: BigDecimal) {
         this.point?.recharge(amount)

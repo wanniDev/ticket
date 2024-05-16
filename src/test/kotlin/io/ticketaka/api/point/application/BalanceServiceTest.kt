@@ -15,7 +15,6 @@ import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
-import org.mockito.kotlin.verify
 import kotlin.test.assertFailsWith
 
 @ExtendWith(MockitoExtension::class)
@@ -27,6 +26,7 @@ class BalanceServiceTest {
         point.id = 1
         val user = User("userTsid1", point)
         user.id = 1
+        user.point = point
         val rechargeCommand =
             RechargeCommand(
                 user.tsid,
@@ -50,7 +50,7 @@ class BalanceServiceTest {
         balanceService.recharge(rechargeCommand)
 
         // then
-        verify(mockPaymentService).paymentApproval(paymentCommand)
+        assertEquals(20000.toBigDecimal(), user.point?.balance)
     }
 
     @Test

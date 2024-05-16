@@ -34,6 +34,10 @@ class Point protected constructor(
         return id ?: throw IllegalStateException("point Id가 없습니다.")
     }
 
+    fun rollback(balance: BigDecimal) {
+        this.balance = balance
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
