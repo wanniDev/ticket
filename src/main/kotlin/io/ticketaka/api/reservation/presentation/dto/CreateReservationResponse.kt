@@ -4,7 +4,7 @@ import io.ticketaka.api.reservation.domain.reservation.Reservation
 import java.time.LocalDateTime
 
 data class CreateReservationResponse(
-    val reservationId: String,
+    val reservationTsid: String,
     val status: Reservation.Status,
     val expirationTime: LocalDateTime,
 )
