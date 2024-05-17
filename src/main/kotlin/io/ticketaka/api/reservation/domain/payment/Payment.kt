@@ -1,5 +1,6 @@
 package io.ticketaka.api.reservation.domain.payment
 
+import io.ticketaka.api.common.domain.AbstractAggregateRoot
 import io.ticketaka.api.common.infrastructure.tsid.TsIdKeyGenerator
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
@@ -17,10 +18,14 @@ class Payment(
     val paymentTime: LocalDateTime,
     val userId: Long,
     val pointId: Long,
-) {
+) : AbstractAggregateRoot() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
+
+    init {
+        registerEvent(PaymentApprovalEvent(this, userId, pointId, amount))
+    }
 
     companion object {
         fun newInstance(
