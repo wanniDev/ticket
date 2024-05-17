@@ -29,7 +29,6 @@ class PointBalanceService(
                 pointId = userPoint.getId(),
                 amount = amount,
             ),
-            userPoint.balance,
         )
 
         user.rechargePoint(amount)
