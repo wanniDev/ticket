@@ -23,7 +23,7 @@ class User(
     }
 
     fun chargePoint(price: BigDecimal) {
-        this.point?.charge(price)
+        this.point?.charge(this, price)
     }
 
     fun getId(): Long {
