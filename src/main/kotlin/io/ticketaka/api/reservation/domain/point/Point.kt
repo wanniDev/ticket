@@ -30,10 +30,14 @@ class Point protected constructor(
         this.registerEvent(PointRechargeEvent(user, this, amount))
     }
 
-    fun charge(price: BigDecimal) {
+    fun charge(
+        user: User,
+        price: BigDecimal,
+    ) {
         if (price <= BigDecimal.ZERO) throw BadClientRequestException("결제 금액은 0보다 커야 합니다.")
         if (this.balance < price) throw BadClientRequestException("잔액이 부족합니다.")
         this.balance = this.balance.minus(price)
+        this.registerEvent(PointChargeEvent(user, this, this.balance, price))
     }
 
     fun getId(): Long {
