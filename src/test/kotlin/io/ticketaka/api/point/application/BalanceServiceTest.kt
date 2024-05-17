@@ -44,7 +44,7 @@ class BalanceServiceTest {
                 on { findByTsid(any()) } doReturn user
             }
         val mockPaymentService = mock<PaymentService>()
-        val balanceService = BalanceService(mockUserRepository, mockPaymentService, mock(), mock())
+        val balanceService = BalanceService(mockUserRepository, mockPaymentService, mock())
 
         // when
         balanceService.recharge(rechargeCommand)
@@ -70,7 +70,7 @@ class BalanceServiceTest {
             mock<UserRepository> {
                 on { findByTsid(any()) } doReturn user
             }
-        val balanceService = BalanceService(mockUserRepository, mock(), mock(), mock())
+        val balanceService = BalanceService(mockUserRepository, mock(), mock())
 
         // when
         val exception =
@@ -91,7 +91,7 @@ class BalanceServiceTest {
             mock<UserRepository> {
                 on { findByTsid(any()) } doReturn user
             }
-        val balanceService = BalanceService(mockUserRepository, mock(), mock(), mock())
+        val balanceService = BalanceService(mockUserRepository, mock(), mock())
 
         // when
         val balanceQueryModel = balanceService.getBalance(user.tsid)

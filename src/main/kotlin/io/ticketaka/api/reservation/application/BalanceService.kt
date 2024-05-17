@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional
 class BalanceService(
     private val userRepository: UserRepository,
     private val paymentService: PaymentService,
-    private val pointService: PointService,
     private val applicationEventPublisher: ApplicationEventPublisher,
 ) {
     @Transactional
