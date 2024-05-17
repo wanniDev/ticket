@@ -4,6 +4,7 @@ import io.ticketaka.api.concert.domain.Seat
 import io.ticketaka.api.reservation.domain.reservation.Reservation
 import io.ticketaka.api.reservation.domain.reservation.ReservationRepository
 import io.ticketaka.api.user.domain.User
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Propagation
@@ -13,6 +14,7 @@ import java.math.BigDecimal
 @Service
 class AsyncReservationService(
     private val reservationRepository: ReservationRepository,
+    private val applicationEventPublisher: ApplicationEventPublisher,
     private val pointService: PointService,
 ) {
     @Async
@@ -34,7 +36,7 @@ class AsyncReservationService(
     }
 
     @Async
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Transactional(propagation = Propagation.NESTED)
     fun confirmReservationAsync(
         reservation: Reservation,
         user: User,
@@ -45,9 +47,11 @@ class AsyncReservationService(
             val seat = reservationSeat.seat
             totalAmount = totalAmount.add(seat.price)
         }
-        user.chargePoint(totalAmount)
         reservation.confirm()
+        reservationRepository.save(reservation)
 
-        pointService.recordReservationPointHistory(user.getId(), user.point!!.getId(), totalAmount)
+        user.chargePoint(totalAmount)
+        val userPoint = user.point ?: throw IllegalArgumentException("포인트를 찾을 수 없습니다.")
+        userPoint.pollAllEvents().forEach { applicationEventPublisher.publishEvent(it) }
     }
 }
