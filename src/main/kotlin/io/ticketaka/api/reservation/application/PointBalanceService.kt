@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 @Transactional(readOnly = true)
-class BalanceService(
+class PointBalanceService(
     private val userRepository: UserRepository,
     private val paymentService: PaymentService,
     private val applicationEventPublisher: ApplicationEventPublisher,
