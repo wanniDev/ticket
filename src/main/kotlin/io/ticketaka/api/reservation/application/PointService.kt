@@ -14,22 +14,6 @@ class PointService(
     private val pointRepository: PointRepository,
     private val pointHistoryRepository: PointHistoryRepository,
 ) {
-    @Transactional
-    fun recordRechargePointHistory(
-        userId: Long,
-        userPointId: Long,
-        amount: BigDecimal,
-    ) {
-        val pointHistory =
-            PointHistory.newInstance(
-                userId = userId,
-                pointId = userPointId,
-                amount = amount,
-                transactionType = PointHistory.TransactionType.RECHARGE,
-            )
-        pointHistoryRepository.save(pointHistory)
-    }
-
     fun recordReservationPointHistory(
         userId: Long,
         userPointId: Long,

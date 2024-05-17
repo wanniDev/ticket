@@ -19,7 +19,7 @@ class User(
     var point: Point?,
 ) {
     fun rechargePoint(amount: BigDecimal) {
-        this.point?.recharge(amount)
+        this.point?.recharge(this, amount)
     }
 
     fun chargePoint(price: BigDecimal) {
