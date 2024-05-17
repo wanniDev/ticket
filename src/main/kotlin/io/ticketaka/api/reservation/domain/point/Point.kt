@@ -1,7 +1,9 @@
 package io.ticketaka.api.reservation.domain.point
 
+import io.ticketaka.api.common.domain.AbstractAggregateRoot
 import io.ticketaka.api.common.exception.BadClientRequestException
 import io.ticketaka.api.common.infrastructure.tsid.TsIdKeyGenerator
+import io.ticketaka.api.user.domain.User
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
@@ -17,11 +19,15 @@ class Point protected constructor(
     var balance: BigDecimal,
     val createTime: LocalDateTime,
     var updateTime: LocalDateTime,
-) {
-    fun recharge(amount: BigDecimal) {
+) : AbstractAggregateRoot() {
+    fun recharge(
+        user: User,
+        amount: BigDecimal,
+    ) {
         if (amount < BigDecimal.ZERO) throw BadClientRequestException("충전 금액은 0보다 커야 합니다.")
         this.balance = this.balance.plus(amount)
         this.updateTime = LocalDateTime.now()
+        this.registerEvent(PointRechargeEvent(user, this, amount))
     }
 
     fun charge(price: BigDecimal) {
