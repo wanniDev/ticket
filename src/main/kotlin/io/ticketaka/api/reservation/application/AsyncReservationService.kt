@@ -15,7 +15,6 @@ import java.math.BigDecimal
 class AsyncReservationService(
     private val reservationRepository: ReservationRepository,
     private val applicationEventPublisher: ApplicationEventPublisher,
-    private val pointService: PointService,
 ) {
     @Async
     @Transactional(propagation = Propagation.NESTED)
