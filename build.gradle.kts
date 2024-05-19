@@ -51,6 +51,7 @@ extra["snippetsDir"] = file("build/generated-snippets")
 dependencies {
     // spring boot
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-aop")
 
     // spring data jpa
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")

@@ -16,14 +16,14 @@ import java.math.BigDecimal
 class User(
     val tsid: String,
     @ManyToOne(targetEntity = Point::class, optional = false, fetch = FetchType.LAZY)
-    val point: Point?,
+    var point: Point?,
 ) {
     fun rechargePoint(amount: BigDecimal) {
-        this.point?.recharge(amount)
+        this.point?.recharge(this, amount)
     }
 
     fun chargePoint(price: BigDecimal) {
-        this.point?.charge(price)
+        this.point?.charge(this, price)
     }
 
     fun getId(): Long {
@@ -59,5 +59,11 @@ class User(
         var result = tsid.hashCode()
         result = 31 * result + (id?.hashCode() ?: 0)
         return result
+    }
+
+    fun validatePoint() {
+        if (this.point == null) {
+            throw IllegalStateException("User의 포인트가 없습니다.")
+        }
     }
 }

@@ -2,17 +2,20 @@ package io.ticketaka.api.reservation.application
 
 import io.ticketaka.api.common.exception.BadClientRequestException
 import io.ticketaka.api.reservation.application.dto.CreateReservationCommand
+import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
 import org.testcontainers.containers.MySQLContainer
+import org.testcontainers.junit.jupiter.Testcontainers
 import java.time.LocalDate
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
 
-// @Testcontainers
-// @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Testcontainers
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class ReservationConcurrencyTest
     @Autowired
     constructor(
@@ -35,15 +38,13 @@ class ReservationConcurrencyTest
             }
         }
 
-//        @Test
-//        @Disabled
-        @Suppress("ktlint:standard:function-naming")
+        @Test
         fun `only first reservation will success`() {
             val len = 10
             val createReservationCommand =
                 CreateReservationCommand(
-                    userTsid = "user1",
-                    date = LocalDate.of(2024, 5, 3),
+                    userTsid = "usr-576023809841191373",
+                    date = LocalDate.of(2024, 5, 4),
                     seatNumbers = listOf("A1"),
                 )
             val executor = Executors.newFixedThreadPool(10)
