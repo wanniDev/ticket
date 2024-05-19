@@ -23,5 +23,7 @@ file_env() {
 }
 
 file_env 'JAVA_OPTS'
+file_env 'SPRING_PROFILES_ACTIVE'
 
-exec java ${JAVA_OPTS} -noverify -XX:+AlwaysPreTouch -Djava.security.egd=file:/dev/./urandom -cp /app/resources/:/app/classes/:/app/libs/* "io.ticketaka.api.TicketApplication"  "$@"
+
+exec java ${JAVA_OPTS} -noverify -XX:+AlwaysPreTouch -Djava.security.egd=file:/dev/./urandom -cp /app/resources/:/app/classes/:/app/libs/* "io.ticketaka.api.TicketApplication" --spring.profiles.active=${SPRING_PROFILES_ACTIVE} "$@"
