@@ -18,6 +18,10 @@ class Concert(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
 
+    fun getId(): Long {
+        return this.id ?: throw IllegalStateException("Concert Id가 없습니다.")
+    }
+
     companion object {
         fun newInstance(date: LocalDate): Concert {
             return Concert(

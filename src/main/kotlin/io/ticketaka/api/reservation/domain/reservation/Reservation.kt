@@ -1,18 +1,15 @@
 package io.ticketaka.api.reservation.domain.reservation
 
 import io.ticketaka.api.common.infrastructure.tsid.TsIdKeyGenerator
-import io.ticketaka.api.concert.domain.Concert
 import io.ticketaka.api.concert.domain.Seat
 import io.ticketaka.api.user.domain.User
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
-import jakarta.persistence.FetchType
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
-import jakarta.persistence.ManyToOne
 import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
 import java.time.LocalDateTime
@@ -25,10 +22,8 @@ class Reservation(
     var status: Status,
     val reservationTime: LocalDateTime,
     val expirationTime: LocalDateTime,
-    @ManyToOne(targetEntity = User::class, optional = false, fetch = FetchType.LAZY)
-    val user: User,
-    @ManyToOne(targetEntity = Concert::class, optional = false, fetch = FetchType.LAZY)
-    val concert: Concert,
+    val userId: Long,
+    val concertId: Long,
     @OneToMany(mappedBy = "reservation", cascade = [CascadeType.ALL])
     var seats: Set<ReservationSeat> = emptySet(),
 ) {
@@ -43,7 +38,7 @@ class Reservation(
     }
 
     fun validateUser(user: User) {
-        if (this.user != user) {
+        if (this.userId != user.getId()) {
             throw IllegalStateException("User is not matched")
         }
     }
@@ -66,16 +61,16 @@ class Reservation(
 
     companion object {
         fun createPendingReservation(
-            user: User,
-            concert: Concert,
+            userId: Long,
+            concertId: Long,
         ): Reservation {
             return Reservation(
                 TsIdKeyGenerator.next("rev"),
                 Status.PENDING,
                 LocalDateTime.now(),
                 LocalDateTime.now().plusMinutes(5L),
-                user,
-                concert,
+                userId,
+                concertId,
             )
         }
     }

@@ -14,7 +14,6 @@ import io.ticketaka.api.reservation.domain.reservation.ReservationRepository
 import io.ticketaka.api.user.application.TokenUserService
 import io.ticketaka.api.user.domain.User
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.junit.jupiter.MockitoExtension
@@ -22,6 +21,7 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.doThrow
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
 import java.time.LocalDate
 import kotlin.test.assertFailsWith
 
@@ -37,6 +37,7 @@ class ReservationServiceTest {
         val user = User.newInstance(point)
         user.id = 1
         val concert = Concert.newInstance(date)
+        concert.id = 1
         val seats = setOf(Seat.newInstance(seatNumber, 1000.toBigDecimal(), concert))
 
         val mockConcertRepository =
@@ -47,34 +48,29 @@ class ReservationServiceTest {
             mock<SeatRepository> {
                 on { findSeatsByConcertDateAndNumberInOrderByNumber(any(), any()) } doReturn seats
             }
-        val mockReservationRepository =
-            mock<ReservationRepository> {
-                on { save(any()) } doReturn Reservation.createPendingReservation(user, concert)
-            }
 
         val mockUserService =
             mock<TokenUserService> {
                 on { getUser(any()) } doReturn user
             }
 
+        val mockAsyncReservationService = mock<AsyncReservationService>()
+
         val reservationService =
             ReservationService(
                 mockUserService,
                 ConcertSeatService(mockSeatRepository, mockConcertRepository),
-                mockReservationRepository,
+                mockAsyncReservationService,
                 mock(),
             )
 
         // when
-        val result =
-            reservationService.createReservation(
-                CreateReservationCommand("concertDateTsid", date, seats.map { it.number }.toList()),
-            )
+        reservationService.createReservation(
+            CreateReservationCommand("concertDateTsid", date, seats.map { it.number }.toList()),
+        )
 
         // then
-        assertNotNull(result.reservationTsid)
-        assertEquals(Reservation.Status.PENDING, result.status)
-        assertNotNull(result.expiration)
+        verify(mockAsyncReservationService).createReservationAsync(user.getId(), concert.getId(), seats)
     }
 
     @Test
@@ -103,8 +99,8 @@ class ReservationServiceTest {
             ReservationService(
                 mockUserService,
                 ConcertSeatService(mockSeatRepository, mockConcertRepository),
-                mockReservationRepository,
                 mock(),
+                mockReservationRepository,
             )
 
         // when
@@ -142,8 +138,8 @@ class ReservationServiceTest {
             ReservationService(
                 mockUserService,
                 ConcertSeatService(mockSeatRepository, mockConcertRepository),
-                mockReservationRepository,
                 mock(),
+                mockReservationRepository,
             )
 
         // when
@@ -165,9 +161,11 @@ class ReservationServiceTest {
         point.id = 1
         val user = User.newInstance(point)
         user.id = 1
-        val reservation = Reservation.createPendingReservation(user, Concert.newInstance(LocalDate.now()))
+        val concert = Concert.newInstance(LocalDate.now())
+        concert.id = 1
+        val reservation = Reservation.createPendingReservation(user.getId(), concert.getId())
         reservation.id = 1
-        val seat = Seat.newInstance("A24", 1000.toBigDecimal(), Concert.newInstance(LocalDate.now()))
+        val seat = Seat.newInstance("A24", 1000.toBigDecimal(), concert)
         seat.id = 1
         seat.reserve()
         reservation.allocate(setOf(seat))
@@ -186,41 +184,45 @@ class ReservationServiceTest {
             ReservationService(
                 mockUserService,
                 mock(),
-                mockReservationRepository,
                 mock(),
+                mockReservationRepository,
             )
 
         // when
-        val result = reservationService.confirmReservation(user.tsid, reservation.tsid)
+        reservationService.confirmReservation(user.tsid, reservation.tsid)
 
         // then
-        assertEquals(reservation.tsid, result.reservationTsid)
-        assertEquals(Reservation.Status.CONFIRMED, result.status)
     }
 
     @Test
     fun `when user try to confirm reservation with not exist reservation then throw exception`() {
         // given
+        val point = Point.newInstance(10000.toBigDecimal())
+        point.id = 1
+        val user = User.newInstance(point)
+        user.id = 1
         val notFoundReservationErrorMessage = "예약을 찾을 수 없습니다."
         val mockReservationRepository =
             mock<ReservationRepository> {
                 on { findByTsid(any()) } doThrow NotFoundException(notFoundReservationErrorMessage)
             }
-
-        val mockUserService = mock<TokenUserService>()
+        val mockUserService =
+            mock<TokenUserService> {
+                on { getUser(user.tsid) } doReturn user
+            }
 
         val reservationService =
             ReservationService(
                 mockUserService,
                 mock(),
-                mockReservationRepository,
                 mock(),
+                mockReservationRepository,
             )
 
         // when
         val exception =
             assertFailsWith<NotFoundException> {
-                reservationService.confirmReservation("userTsid", "reservationTsid")
+                reservationService.confirmReservation(user.tsid, "reservationTsid")
             }
 
         // then
@@ -234,7 +236,9 @@ class ReservationServiceTest {
         point.id = 1
         val user = User.newInstance(point)
         user.id = 1
-        val reservation = Reservation.createPendingReservation(user, Concert.newInstance(LocalDate.now()))
+        val concert = Concert.newInstance(LocalDate.now())
+        concert.id = 1
+        val reservation = Reservation.createPendingReservation(user.getId(), concert.getId())
         reservation.id = 1
         val seat = Seat.newInstance("A24", 1000.toBigDecimal(), Concert.newInstance(LocalDate.now()))
         seat.id = 1
@@ -254,8 +258,8 @@ class ReservationServiceTest {
             ReservationService(
                 mockUserService,
                 mock(),
-                mockReservationRepository,
                 mock(),
+                mockReservationRepository,
             )
 
         // when
@@ -275,9 +279,11 @@ class ReservationServiceTest {
         point.id = 1
         val user = User.newInstance(point)
         user.id = 1
-        val reservation = Reservation.createPendingReservation(user, Concert.newInstance(LocalDate.now()))
+        val concert = Concert.newInstance(LocalDate.now())
+        concert.id = 1
+        val reservation = Reservation.createPendingReservation(user.getId(), concert.getId())
         reservation.id = 1
-        val seat = Seat.newInstance("A24", 1000.toBigDecimal(), Concert.newInstance(LocalDate.now()))
+        val seat = Seat.newInstance("A24", 1000.toBigDecimal(), concert)
         seat.id = 1
         seat.reserve()
         reservation.allocate(setOf(seat))
@@ -297,8 +303,8 @@ class ReservationServiceTest {
             ReservationService(
                 mockUserService,
                 mock(),
-                mockReservationRepository,
                 mock(),
+                mockReservationRepository,
             )
 
         // when

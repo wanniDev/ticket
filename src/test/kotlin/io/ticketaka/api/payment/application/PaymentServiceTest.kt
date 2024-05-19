@@ -32,7 +32,7 @@ class PaymentServiceTest {
                 on { save(any()) } doReturn Payment.newInstance(1000.toBigDecimal(), userId, pointId)
             }
 
-        val paymentService = PaymentService(mockPaymentRepository)
+        val paymentService = PaymentService(mockPaymentRepository, mock(), mock())
         val paymentCommand =
             PaymentCommand(
                 userId = userId,

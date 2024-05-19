@@ -27,6 +27,10 @@ class Seat(
         return this.status == Status.AVAILABLE
     }
 
+    fun available() {
+        this.status = Status.AVAILABLE
+    }
+
     fun occupy() {
         this.status = Status.OCCUPIED
     }

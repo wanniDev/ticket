@@ -1,6 +1,6 @@
 package io.ticketaka.api.reservation.presentation
 
-import io.ticketaka.api.reservation.application.BalanceService
+import io.ticketaka.api.reservation.application.PointBalanceService
 import io.ticketaka.api.reservation.presentation.dto.BalanceResponse
 import io.ticketaka.api.reservation.presentation.dto.RechargeRequest
 import org.springframework.http.ResponseEntity
@@ -15,13 +15,13 @@ import java.math.BigDecimal
 @RestController
 @RequestMapping("/api/point")
 class PointApi(
-    private val balanceService: BalanceService,
+    private val pointBalanceService: PointBalanceService,
 ) : PointApiSpecification {
     @PostMapping("/recharge")
     override fun recharge(
         @RequestBody request: RechargeRequest,
     ): ResponseEntity<Void> {
-        balanceService.recharge(request.toCommand())
+        pointBalanceService.recharge(request.toCommand())
         return ResponseEntity.noContent().build()
     }
 
@@ -29,7 +29,7 @@ class PointApi(
     override fun getBalance(
         @RequestParam userTsid: String,
     ): ResponseEntity<BalanceResponse> {
-        balanceService.getBalance(userTsid)
+        pointBalanceService.getBalance(userTsid)
         return ResponseEntity.ok(BalanceResponse("userId", BigDecimal(10000)))
     }
 }
