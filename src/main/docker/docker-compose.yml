@@ -9,15 +9,4 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/ticketaka?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false&allowPublicKeyRetrieval=true
     ports:
       - 8080:8080
-  app-db:
-    container_name: db
-    image: mysql:8.0
-    volumes:
-      - ./config/mysql:/etc/mysql/conf.d
-    environment:
-      - MYSQL_ROOT_PASSWORD=rootpassword
-      - MYSQL_DATABASE=ticketaka
-    ports:
-      - 3306:3306
-    command: --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
 
