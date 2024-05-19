@@ -22,6 +22,6 @@ file_env() {
     unset "$fileVar"
 }
 
-file_env 'SPRING_DATASOURCE_URL'
+file_env 'JAVA_OPTS'
 
 exec java ${JAVA_OPTS} -noverify -XX:+AlwaysPreTouch -Djava.security.egd=file:/dev/./urandom -cp /app/resources/:/app/classes/:/app/libs/* "io.ticketaka.api.TicketApplication"  "$@"
