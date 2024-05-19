@@ -5,6 +5,7 @@ import io.ticketaka.api.concert.domain.Concert
 import io.ticketaka.api.concert.domain.ConcertRepository
 import io.ticketaka.api.concert.domain.Seat
 import io.ticketaka.api.concert.domain.SeatRepository
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
@@ -19,6 +20,7 @@ class ConcertSeatService(
         return seatRepository.findConcertDateByStatus(Seat.Status.AVAILABLE).sorted()
     }
 
+    @Cacheable(value = ["seatNumbers"], key = "#date")
     fun getSeatNumbers(date: LocalDate): List<String> {
         val concert =
             concertRepository.findByDate(date)

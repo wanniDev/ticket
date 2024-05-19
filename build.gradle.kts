@@ -82,6 +82,10 @@ dependencies {
     // tsid
     implementation("com.github.f4b6a3:tsid-creator:5.2.6")
 
+    // local cache
+    implementation("org.springframework.boot:spring-boot-starter-cache")
+    implementation("com.github.ben-manes.caffeine:caffeine")
+
     // test
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
