@@ -1,5 +1,6 @@
 package io.ticketaka.api.user.domain
 
+import io.ticketaka.api.common.domain.AbstractAggregateRoot
 import io.ticketaka.api.common.infrastructure.tsid.TsIdKeyGenerator
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
@@ -18,7 +19,7 @@ class Token protected constructor(
     @Enumerated(EnumType.STRING)
     val status: Status,
     val userId: Long,
-) {
+) : AbstractAggregateRoot() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
@@ -26,6 +27,10 @@ class Token protected constructor(
     enum class Status {
         ACTIVE,
         EXPIRED,
+    }
+
+    init {
+        registerEvent(TokenCreatedEvent(this))
     }
 
     companion object {
