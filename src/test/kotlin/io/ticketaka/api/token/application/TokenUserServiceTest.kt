@@ -29,17 +29,12 @@ class TokenUserServiceTest {
         val user =
             User("userTsid1", point)
         user.id = 1
-        val token = Token.newInstance(user.getId())
-        val mockTokenRepository =
-            mock<TokenRepository> {
-                on { save(any()) } doReturn token
-            }
 
         val mockUserRepository =
             mock<UserRepository> {
                 on { findByTsid(any()) } doReturn user
             }
-        val tokenUserService = TokenUserService(mock(), mockTokenRepository, mockUserRepository)
+        val tokenUserService = TokenUserService(mock(), mock(), mockUserRepository, mock())
 
         // when
         val createToken = tokenUserService.createToken("userTsid1")
@@ -57,7 +52,7 @@ class TokenUserServiceTest {
             mock<UserRepository> {
                 on { findByTsid(any()) } doThrow NotFoundException("사용자를 찾을 수 없습니다.")
             }
-        val tokenUserService = TokenUserService(mockJwtProvider, mockTokenRepository, mockUserRepository)
+        val tokenUserService = TokenUserService(mockJwtProvider, mockTokenRepository, mockUserRepository, mock())
 
         // when
         assertThrows<NotFoundException> {
@@ -77,7 +72,7 @@ class TokenUserServiceTest {
             mock<TokenRepository> {
                 on { findFirstTokenOrderByIssuedTimeAscLimit1() } doReturn tokenPosition0
             }
-        val tokenUserService = TokenUserService(mock(), mockTokenRepository, mock())
+        val tokenUserService = TokenUserService(mock(), mockTokenRepository, mock(), mock())
 
         // when
         val peekToken = tokenUserService.peekToken(tokenPosition0.tsid!!)
@@ -97,7 +92,7 @@ class TokenUserServiceTest {
             mock<TokenRepository> {
                 on { findFirstTokenOrderByIssuedTimeAscLimit1() } doReturn tokenPosition0
             }
-        val tokenUserService = TokenUserService(mock(), mockTokenRepository, mock())
+        val tokenUserService = TokenUserService(mock(), mockTokenRepository, mock(), mock())
 
         // when
         val peekToken = tokenUserService.peekToken(tokenPosition1.tsid!!)
