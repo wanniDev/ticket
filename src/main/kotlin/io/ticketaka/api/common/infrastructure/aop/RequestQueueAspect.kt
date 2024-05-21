@@ -1,7 +1,6 @@
 package io.ticketaka.api.common.infrastructure.aop
 
 import io.ticketaka.api.common.domain.queue.TokenWaitingQueue
-import io.ticketaka.api.common.infrastructure.jwt.JwtTokenParser
 import io.ticketaka.api.user.domain.Token
 import org.aspectj.lang.ProceedingJoinPoint
 import org.aspectj.lang.annotation.Around
@@ -16,7 +15,6 @@ import java.time.LocalDateTime
 @Aspect
 @Component
 class RequestQueueAspect(
-    private val jwtTokenParser: JwtTokenParser,
     private val tokenWaitingQueue: TokenWaitingQueue,
 ) {
     private val logger = LoggerFactory.getLogger(this::class.java)
