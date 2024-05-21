@@ -1,9 +1,8 @@
 package io.ticketaka.api.user.application
 
+import io.ticketaka.api.common.domain.queue.TokenWaitingQueue
 import io.ticketaka.api.common.exception.NotFoundException
-import io.ticketaka.api.common.infrastructure.jwt.JwtProvider
 import io.ticketaka.api.user.domain.Token
-import io.ticketaka.api.user.domain.TokenRepository
 import io.ticketaka.api.user.domain.User
 import io.ticketaka.api.user.domain.UserRepository
 import org.springframework.context.ApplicationEventPublisher
@@ -11,14 +10,11 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-@Transactional(readOnly = true)
 class TokenUserService(
-    private val jwtProvider: JwtProvider,
-    private val tokenRepository: TokenRepository,
+    private val tokenWaitingQueue: TokenWaitingQueue,
     private val userRepository: UserRepository,
     private val applicationEventPublisher: ApplicationEventPublisher,
 ) {
-    @Transactional
     fun createToken(userTsId: String): String {
         val user = userRepository.findByTsid(userTsId) ?: throw NotFoundException("사용자를 찾을 수 없습니다.")
 
@@ -33,11 +29,11 @@ class TokenUserService(
     }
 
     fun peekToken(tokenId: String): Boolean {
-        val queueSize = tokenRepository.count()
+        val queueSize = tokenWaitingQueue.size()
         if (queueSize > 500L) {
             throw IllegalArgumentException("대기 중인 토큰이 500개를 초과하였습니다.")
         }
-        tokenRepository.findFirstTokenOrderByIssuedTimeAscLimit1().let { token ->
+        tokenWaitingQueue.peek().let { token ->
             if (token == null) {
                 throw NotFoundException("토큰을 찾을 수 없습니다.")
             }

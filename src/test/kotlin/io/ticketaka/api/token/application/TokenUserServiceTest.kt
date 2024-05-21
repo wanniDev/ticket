@@ -1,11 +1,10 @@
 package io.ticketaka.api.token.application
 
+import io.ticketaka.api.common.domain.queue.TokenWaitingQueue
 import io.ticketaka.api.common.exception.NotFoundException
-import io.ticketaka.api.common.infrastructure.jwt.JwtProvider
 import io.ticketaka.api.reservation.domain.point.Point
 import io.ticketaka.api.user.application.TokenUserService
 import io.ticketaka.api.user.domain.Token
-import io.ticketaka.api.user.domain.TokenRepository
 import io.ticketaka.api.user.domain.User
 import io.ticketaka.api.user.domain.UserRepository
 import org.assertj.core.api.Assertions.assertThat
@@ -34,7 +33,7 @@ class TokenUserServiceTest {
             mock<UserRepository> {
                 on { findByTsid(any()) } doReturn user
             }
-        val tokenUserService = TokenUserService(mock(), mock(), mockUserRepository, mock())
+        val tokenUserService = TokenUserService(mock(), mockUserRepository, mock())
 
         // when
         val createToken = tokenUserService.createToken("userTsid1")
@@ -46,13 +45,12 @@ class TokenUserServiceTest {
     @Test
     fun `when user not found then throw exception`() {
         // given
-        val mockJwtProvider = mock<JwtProvider>()
-        val mockTokenRepository = mock<TokenRepository>()
+        val mockTokenWaitingQueue = mock<TokenWaitingQueue>()
         val mockUserRepository =
             mock<UserRepository> {
                 on { findByTsid(any()) } doThrow NotFoundException("사용자를 찾을 수 없습니다.")
             }
-        val tokenUserService = TokenUserService(mockJwtProvider, mockTokenRepository, mockUserRepository, mock())
+        val tokenUserService = TokenUserService(mockTokenWaitingQueue, mockUserRepository, mock())
 
         // when
         assertThrows<NotFoundException> {
@@ -69,15 +67,15 @@ class TokenUserServiceTest {
         val userId = 1L
         val tokenPosition0 = Token.newInstance(userId)
         val mockTokenRepository =
-            mock<TokenRepository> {
-                on { findFirstTokenOrderByIssuedTimeAscLimit1() } doReturn tokenPosition0
+            mock<TokenWaitingQueue> {
+                on { peek() } doReturn tokenPosition0
             }
-        val tokenUserService = TokenUserService(mock(), mockTokenRepository, mock(), mock())
+        val tokenUserService = TokenUserService(mockTokenRepository, mock(), mock())
 
         // when
-        val peekToken = tokenUserService.peekToken(tokenPosition0.tsid!!)
+        val peekToken = tokenUserService.peekToken(tokenPosition0.tsid)
         // then
-        verify(mockTokenRepository).findFirstTokenOrderByIssuedTimeAscLimit1()
+        verify(mockTokenRepository).peek()
         assert(peekToken)
     }
 
@@ -88,17 +86,17 @@ class TokenUserServiceTest {
         val userId2 = 2L
         val tokenPosition0 = Token.newInstance(userId1)
         val tokenPosition1 = Token.newInstance(userId2)
-        val mockTokenRepository =
-            mock<TokenRepository> {
-                on { findFirstTokenOrderByIssuedTimeAscLimit1() } doReturn tokenPosition0
+        val tokenWaitingQueue =
+            mock<TokenWaitingQueue> {
+                on { peek() } doReturn tokenPosition0
             }
-        val tokenUserService = TokenUserService(mock(), mockTokenRepository, mock(), mock())
+        val tokenUserService = TokenUserService(tokenWaitingQueue, mock(), mock())
 
         // when
-        val peekToken = tokenUserService.peekToken(tokenPosition1.tsid!!)
+        val peekToken = tokenUserService.peekToken(tokenPosition1.tsid)
 
         // then
-        verify(mockTokenRepository).findFirstTokenOrderByIssuedTimeAscLimit1()
+        verify(tokenWaitingQueue).peek()
         assertFalse(peekToken)
     }
 }

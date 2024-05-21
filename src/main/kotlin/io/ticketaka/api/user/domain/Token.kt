@@ -42,5 +42,14 @@ class Token protected constructor(
                 userId = userId,
             )
         }
+
+        fun newInstance(
+            tsid: String,
+            issuedTime: LocalDateTime,
+            status: Status,
+            userId: Long,
+        ): Token {
+            return Token(tsid, issuedTime, status, userId)
+        }
     }
 }
