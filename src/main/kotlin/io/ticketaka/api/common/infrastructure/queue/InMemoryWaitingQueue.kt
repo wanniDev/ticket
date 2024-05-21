@@ -10,9 +10,6 @@ class InMemoryWaitingQueue(
     private val tokenCache: Cache<String, Token>,
 ) : TokenWaitingQueue {
     override fun offer(element: Token): Boolean {
-        if (size() < 500L) {
-            throw IllegalArgumentException("대기 중인 토큰이 500개를 초과하였습니다.")
-        }
         tokenCache.put(element.tsid, element)
         return true
     }
