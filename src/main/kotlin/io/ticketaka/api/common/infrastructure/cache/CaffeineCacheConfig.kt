@@ -13,6 +13,11 @@ class CaffeineCacheConfig {
     @Bean
     fun caffeineConfig(): Caffeine<Any, Any> {
         return Caffeine.newBuilder()
+            .initialCapacity(100)
+            .weakKeys()
+            .weakValues()
+            .recordStats()
+            .expireAfterAccess(5, TimeUnit.MINUTES)
             .expireAfterWrite(5, TimeUnit.MINUTES)
             .maximumSize(100)
     }
