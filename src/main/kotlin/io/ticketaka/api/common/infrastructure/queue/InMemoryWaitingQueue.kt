@@ -3,9 +3,8 @@ package io.ticketaka.api.common.infrastructure.queue
 import com.github.benmanes.caffeine.cache.Cache
 import io.ticketaka.api.common.domain.queue.TokenWaitingQueue
 import io.ticketaka.api.user.domain.Token
-import org.springframework.stereotype.Component
 
-@Component
+// @Component
 class InMemoryWaitingQueue(
     private val tokenCache: Cache<String, Token>,
 ) : TokenWaitingQueue {

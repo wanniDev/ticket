@@ -59,7 +59,7 @@ class ReservationServiceTest {
         val reservationService =
             ReservationService(
                 mockUserService,
-                ConcertSeatService(mockSeatRepository, mockConcertRepository),
+                ConcertSeatService(mock(), mockSeatRepository, mockConcertRepository),
                 mockAsyncReservationService,
                 mock(),
             )
@@ -98,7 +98,7 @@ class ReservationServiceTest {
         val reservationService =
             ReservationService(
                 mockUserService,
-                ConcertSeatService(mockSeatRepository, mockConcertRepository),
+                ConcertSeatService(mock(), mockSeatRepository, mockConcertRepository),
                 mock(),
                 mockReservationRepository,
             )
@@ -137,7 +137,7 @@ class ReservationServiceTest {
         val reservationService =
             ReservationService(
                 mockUserService,
-                ConcertSeatService(mockSeatRepository, mockConcertRepository),
+                ConcertSeatService(mock(), mockSeatRepository, mockConcertRepository),
                 mock(),
                 mockReservationRepository,
             )

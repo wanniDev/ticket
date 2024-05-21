@@ -2,7 +2,6 @@ package io.ticketaka.api.common.infrastructure.cache
 
 import com.github.benmanes.caffeine.cache.Cache
 import com.github.benmanes.caffeine.cache.Caffeine
-import io.ticketaka.api.user.domain.Token
 import org.springframework.cache.annotation.EnableCaching
 import org.springframework.cache.caffeine.CaffeineCacheManager
 import org.springframework.context.annotation.Bean
@@ -13,32 +12,31 @@ import java.util.concurrent.TimeUnit
 @EnableCaching
 class CaffeineCacheConfig {
     @Bean
-    fun tokenCache(): Cache<String, Token> {
+    fun seatNumberCache(): Cache<Any, Any> {
         return Caffeine.newBuilder()
-            .initialCapacity(500)
-            .weakKeys()
-            .weakValues()
+            .initialCapacity(100)
             .recordStats()
             .expireAfterWrite(5, TimeUnit.MINUTES)
-            .maximumSize(500)
+            .expireAfterAccess(5, TimeUnit.MINUTES)
+            .maximumSize(100)
             .build()
     }
 
     @Bean
-    fun caffeineConfig(): Caffeine<Any, Any> {
+    fun concertCache(): Cache<Any, Any> {
         return Caffeine.newBuilder()
-            .initialCapacity(100)
-            .weakKeys()
-            .weakValues()
+            .initialCapacity(10)
             .recordStats()
             .expireAfterAccess(5, TimeUnit.MINUTES)
-            .maximumSize(100)
+            .maximumSize(10)
+            .build()
     }
 
     @Bean
-    fun cacheManager(caffeine: Caffeine<Any, Any>): CaffeineCacheManager {
+    fun cacheManager(): CaffeineCacheManager {
         val caffeineCacheManager = CaffeineCacheManager()
-        caffeineCacheManager.setCaffeine(caffeine)
+        caffeineCacheManager.registerCustomCache("seatNumbers", seatNumberCache())
+        caffeineCacheManager.registerCustomCache("concert", concertCache())
         return caffeineCacheManager
     }
 }

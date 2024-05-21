@@ -5,7 +5,6 @@ import io.ticketaka.api.concert.domain.Concert
 import io.ticketaka.api.concert.domain.ConcertRepository
 import io.ticketaka.api.concert.domain.Seat
 import io.ticketaka.api.concert.domain.SeatRepository
-import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
@@ -13,6 +12,7 @@ import java.time.LocalDate
 @Service
 @Transactional(readOnly = true)
 class ConcertSeatService(
+    private val concertQueryService: ConcertQueryService,
     private val seatRepository: SeatRepository,
     private val concertRepository: ConcertRepository,
 ) {
@@ -20,14 +20,9 @@ class ConcertSeatService(
         return seatRepository.findConcertDateByStatus(Seat.Status.AVAILABLE).sorted()
     }
 
-    @Cacheable(value = ["seatNumbers"], key = "#date")
     fun getSeatNumbers(date: LocalDate): List<String> {
-        val concert =
-            concertRepository.findByDate(date)
-                ?: throw BadClientRequestException("해당 날짜의 콘서트가 없습니다.")
-        return seatRepository.findByConcertId(concert.id!!)
-            .sortedBy { it.number }
-            .map { it.number }
+        val concert = concertQueryService.getConcert(date)
+        return concertQueryService.getConcertSeatNumbers(concert.getId())
     }
 
     fun getAvailableConcert(date: LocalDate): Concert {

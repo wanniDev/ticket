@@ -3,7 +3,9 @@ package io.ticketaka.api.common.infrastructure.queue
 import io.ticketaka.api.common.domain.queue.TokenWaitingQueue
 import io.ticketaka.api.user.domain.Token
 import io.ticketaka.api.user.domain.TokenRepository
+import org.springframework.stereotype.Component
 
+@Component
 class DBTokenWaitingQueue(
     private val tokenRepository: TokenRepository,
 ) : TokenWaitingQueue {
