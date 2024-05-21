@@ -10,12 +10,12 @@ import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
 
 @Service
-@Transactional(readOnly = true)
 class ConcertSeatService(
     private val concertQueryService: ConcertQueryService,
     private val seatRepository: SeatRepository,
     private val concertRepository: ConcertRepository,
 ) {
+    @Transactional(readOnly = true)
     fun getDates(): List<LocalDate> {
         return seatRepository.findConcertDateByStatus(Seat.Status.AVAILABLE).sorted()
     }
@@ -25,6 +25,7 @@ class ConcertSeatService(
         return concertQueryService.getConcertSeatNumbers(concert.getId())
     }
 
+    @Transactional(readOnly = true)
     fun getAvailableConcert(date: LocalDate): Concert {
         val concert =
             concertRepository.findByDate(date)
@@ -32,6 +33,7 @@ class ConcertSeatService(
         return concert
     }
 
+    @Transactional(readOnly = true)
     fun getAvailableSeats(
         date: LocalDate,
         seatNumbers: List<String>,
