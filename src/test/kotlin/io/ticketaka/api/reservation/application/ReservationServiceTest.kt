@@ -11,7 +11,7 @@ import io.ticketaka.api.reservation.application.dto.CreateReservationCommand
 import io.ticketaka.api.reservation.domain.point.Point
 import io.ticketaka.api.reservation.domain.reservation.Reservation
 import io.ticketaka.api.reservation.domain.reservation.ReservationRepository
-import io.ticketaka.api.user.application.TokenUserService
+import io.ticketaka.api.user.application.TokenUserQueryService
 import io.ticketaka.api.user.domain.User
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -49,8 +49,8 @@ class ReservationServiceTest {
                 on { findSeatsByConcertDateAndNumberInOrderByNumber(any(), any()) } doReturn seats
             }
 
-        val mockUserService =
-            mock<TokenUserService> {
+        val mockTokenUserQueryService =
+            mock<TokenUserQueryService> {
                 on { getUser(any()) } doReturn user
             }
 
@@ -58,7 +58,7 @@ class ReservationServiceTest {
 
         val reservationService =
             ReservationService(
-                mockUserService,
+                mockTokenUserQueryService,
                 ConcertSeatService(mock(), mockSeatRepository, mockConcertRepository),
                 mockAsyncReservationService,
                 mock(),
@@ -93,11 +93,11 @@ class ReservationServiceTest {
             }
         val mockReservationRepository = mock<ReservationRepository>()
 
-        val mockUserService = mock<TokenUserService>()
+        val mockTokenUserQueryService = mock<TokenUserQueryService>()
 
         val reservationService =
             ReservationService(
-                mockUserService,
+                mockTokenUserQueryService,
                 ConcertSeatService(mock(), mockSeatRepository, mockConcertRepository),
                 mock(),
                 mockReservationRepository,
@@ -132,11 +132,11 @@ class ReservationServiceTest {
         val mockSeatRepository = mock<SeatRepository>()
         val mockReservationRepository = mock<ReservationRepository>()
 
-        val mockUserService = mock<TokenUserService>()
+        val mockTokenUserQueryService = mock<TokenUserQueryService>()
 
         val reservationService =
             ReservationService(
-                mockUserService,
+                mockTokenUserQueryService,
                 ConcertSeatService(mock(), mockSeatRepository, mockConcertRepository),
                 mock(),
                 mockReservationRepository,
@@ -175,14 +175,14 @@ class ReservationServiceTest {
                 on { findByTsid(reservation.tsid) } doReturn reservation
             }
 
-        val mockUserService =
-            mock<TokenUserService> {
+        val mockTokenUserQueryService =
+            mock<TokenUserQueryService> {
                 on { getUser(user.tsid) } doReturn user
             }
 
         val reservationService =
             ReservationService(
-                mockUserService,
+                mockTokenUserQueryService,
                 mock(),
                 mock(),
                 mockReservationRepository,
@@ -206,14 +206,14 @@ class ReservationServiceTest {
             mock<ReservationRepository> {
                 on { findByTsid(any()) } doThrow NotFoundException(notFoundReservationErrorMessage)
             }
-        val mockUserService =
-            mock<TokenUserService> {
+        val mockTokenUserQueryService =
+            mock<TokenUserQueryService> {
                 on { getUser(user.tsid) } doReturn user
             }
 
         val reservationService =
             ReservationService(
-                mockUserService,
+                mockTokenUserQueryService,
                 mock(),
                 mock(),
                 mockReservationRepository,
@@ -249,14 +249,14 @@ class ReservationServiceTest {
                 on { findByTsid(reservation.tsid) } doReturn reservation
             }
 
-        val mockUserService =
-            mock<TokenUserService> {
+        val mockTokenUserQueryService =
+            mock<TokenUserQueryService> {
                 on { getUser(user.tsid) } doReturn user
             }
 
         val reservationService =
             ReservationService(
-                mockUserService,
+                mockTokenUserQueryService,
                 mock(),
                 mock(),
                 mockReservationRepository,
@@ -294,14 +294,14 @@ class ReservationServiceTest {
                 on { findByTsid(reservation.tsid) } doReturn reservation
             }
 
-        val mockUserService =
-            mock<TokenUserService> {
+        val mockTokenUserQueryService =
+            mock<TokenUserQueryService> {
                 on { getUser(user.tsid) } doReturn user
             }
 
         val reservationService =
             ReservationService(
-                mockUserService,
+                mockTokenUserQueryService,
                 mock(),
                 mock(),
                 mockReservationRepository,

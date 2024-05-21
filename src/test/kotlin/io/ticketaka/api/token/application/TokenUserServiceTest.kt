@@ -3,10 +3,10 @@ package io.ticketaka.api.token.application
 import io.ticketaka.api.common.domain.queue.TokenWaitingQueue
 import io.ticketaka.api.common.exception.NotFoundException
 import io.ticketaka.api.reservation.domain.point.Point
+import io.ticketaka.api.user.application.TokenUserQueryService
 import io.ticketaka.api.user.application.TokenUserService
 import io.ticketaka.api.user.domain.Token
 import io.ticketaka.api.user.domain.User
-import io.ticketaka.api.user.domain.UserRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -29,11 +29,11 @@ class TokenUserServiceTest {
             User("userTsid1", point)
         user.id = 1
 
-        val mockUserRepository =
-            mock<UserRepository> {
-                on { findByTsid(any()) } doReturn user
+        val mockTokenUserQueryService =
+            mock<TokenUserQueryService> {
+                on { getUser(any()) } doReturn user
             }
-        val tokenUserService = TokenUserService(mock(), mockUserRepository, mock())
+        val tokenUserService = TokenUserService(mock(), mockTokenUserQueryService, mock())
 
         // when
         val createToken = tokenUserService.createToken("userTsid1")
@@ -46,11 +46,11 @@ class TokenUserServiceTest {
     fun `when user not found then throw exception`() {
         // given
         val mockTokenWaitingQueue = mock<TokenWaitingQueue>()
-        val mockUserRepository =
-            mock<UserRepository> {
-                on { findByTsid(any()) } doThrow NotFoundException("사용자를 찾을 수 없습니다.")
+        val mockTokenUserQueryService =
+            mock<TokenUserQueryService> {
+                on { getUser(any()) } doThrow NotFoundException("사용자를 찾을 수 없습니다.")
             }
-        val tokenUserService = TokenUserService(mockTokenWaitingQueue, mockUserRepository, mock())
+        val tokenUserService = TokenUserService(mockTokenWaitingQueue, mockTokenUserQueryService, mock())
 
         // when
         assertThrows<NotFoundException> {
@@ -58,7 +58,7 @@ class TokenUserServiceTest {
         }
 
         // then
-        verify(mockUserRepository).findByTsid("userTsid1")
+        verify(mockTokenUserQueryService).getUser("userTsid1")
     }
 
     @Test
