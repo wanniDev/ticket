@@ -30,7 +30,6 @@ class InMemoryWaitingQueue(
     }
 
     override fun peek(): Token? {
-        println(tokenCache.asMap().values)
         return tokenCache.asMap().values.minByOrNull { it.issuedTime }
     }
 
