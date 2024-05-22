@@ -3,11 +3,10 @@ package io.ticketaka.api.point.application
 import io.ticketaka.api.common.exception.BadClientRequestException
 import io.ticketaka.api.reservation.application.PaymentService
 import io.ticketaka.api.reservation.application.PointBalanceService
-import io.ticketaka.api.reservation.application.dto.PaymentCommand
 import io.ticketaka.api.reservation.application.dto.RechargeCommand
 import io.ticketaka.api.reservation.domain.point.Point
+import io.ticketaka.api.user.application.TokenUserQueryService
 import io.ticketaka.api.user.domain.User
-import io.ticketaka.api.user.domain.UserRepository
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -32,19 +31,13 @@ class PointBalanceServiceTest {
                 user.tsid,
                 20000.toBigDecimal(),
             )
-        val paymentCommand =
-            PaymentCommand(
-                userId = user.getId(),
-                pointId = point.getId(),
-                amount = rechargeCommand.amount,
-            )
 
-        val mockUserRepository =
-            mock<UserRepository> {
-                on { findByTsid(any()) } doReturn user
+        val tokenUserQueryService =
+            mock<TokenUserQueryService> {
+                on { getUser(any()) } doReturn user
             }
         val mockPaymentService = mock<PaymentService>()
-        val pointBalanceService = PointBalanceService(mockUserRepository, mockPaymentService, mock())
+        val pointBalanceService = PointBalanceService(tokenUserQueryService, mockPaymentService, mock())
 
         // when
         pointBalanceService.recharge(rechargeCommand)
@@ -66,11 +59,11 @@ class PointBalanceServiceTest {
                 (-20000).toBigDecimal(),
             )
 
-        val mockUserRepository =
-            mock<UserRepository> {
-                on { findByTsid(any()) } doReturn user
+        val tokenUserQueryService =
+            mock<TokenUserQueryService> {
+                on { getUser(any()) } doReturn user
             }
-        val pointBalanceService = PointBalanceService(mockUserRepository, mock(), mock())
+        val pointBalanceService = PointBalanceService(tokenUserQueryService, mock(), mock())
 
         // when
         val exception =
@@ -87,11 +80,11 @@ class PointBalanceServiceTest {
         // given
         val point = Point.newInstance()
         val user = User("userTsid1", point)
-        val mockUserRepository =
-            mock<UserRepository> {
-                on { findByTsid(any()) } doReturn user
+        val tokenUserQueryService =
+            mock<TokenUserQueryService> {
+                on { getUser(any()) } doReturn user
             }
-        val pointBalanceService = PointBalanceService(mockUserRepository, mock(), mock())
+        val pointBalanceService = PointBalanceService(tokenUserQueryService, mock(), mock())
 
         // when
         val balanceQueryModel = pointBalanceService.getBalance(user.tsid)
