@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component
 import java.util.concurrent.TimeUnit
 
 @Component
-class InMemoryWaitingQueue(
+class InMemoryWaitingQueue : TokenWaitingQueue {
     private val tokenCache: Cache<String, Token> =
         Caffeine.newBuilder()
             .initialCapacity(500)
@@ -16,8 +16,8 @@ class InMemoryWaitingQueue(
             .expireAfterWrite(5, TimeUnit.MINUTES)
             .expireAfterAccess(5, TimeUnit.MINUTES)
             .maximumSize(500)
-            .build(),
-) : TokenWaitingQueue {
+            .build()
+
     override fun offer(element: Token): Boolean {
         tokenCache.put(element.tsid, element)
         return true
