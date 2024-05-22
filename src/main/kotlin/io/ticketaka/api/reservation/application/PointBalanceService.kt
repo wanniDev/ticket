@@ -14,13 +14,14 @@ import org.springframework.transaction.annotation.Transactional
 class PointBalanceService(
     private val tokenUserQueryService: TokenUserQueryService,
     private val paymentService: PaymentService,
+    private val pointService: PointService,
     private val applicationEventPublisher: ApplicationEventPublisher,
 ) {
     @Transactional
     fun recharge(rechargeCommand: RechargeCommand) {
         val user = tokenUserQueryService.getUser(rechargeCommand.userTsid)
         val userId = user.getId()
-        val userPoint = user.point ?: throw NotFoundException("포인트를 찾을 수 없습니다.")
+        val userPoint = pointService.getPointForUpdate(rechargeCommand.pointTsid)
         // 실제로는 PG 승인 요청을 수행하는 로직이 들어가야 함
         val amount = rechargeCommand.amount
         paymentService.paymentApprovalAsync(
@@ -31,7 +32,7 @@ class PointBalanceService(
             ),
         )
 
-        user.rechargePoint(amount)
+        userPoint.recharge(user, amount)
         userPoint.pollAllEvents().forEach { applicationEventPublisher.publishEvent(it) }
     }
 

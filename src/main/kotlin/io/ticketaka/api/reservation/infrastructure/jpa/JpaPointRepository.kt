@@ -1,7 +1,9 @@
 package io.ticketaka.api.reservation.infrastructure.jpa
 
 import io.ticketaka.api.reservation.domain.point.Point
+import jakarta.persistence.LockModeType
 import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.jpa.repository.Lock
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
 import java.math.BigDecimal
@@ -15,4 +17,7 @@ interface JpaPointRepository : JpaRepository<Point, Long> {
         pointId: Long,
         balance: BigDecimal,
     )
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    fun findPointByTsid(tsid: String): Point?
 }

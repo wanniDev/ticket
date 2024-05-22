@@ -28,4 +28,8 @@ class PointRepositoryComposition(
     ) {
         jpaPointRepository.updateBalanceById(pointId, balance)
     }
+
+    override fun findByTsidForUpdate(tsid: String): Point? {
+        return jpaPointRepository.findPointByTsid(tsid)
+    }
 }

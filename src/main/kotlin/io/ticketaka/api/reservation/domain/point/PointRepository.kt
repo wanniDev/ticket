@@ -13,4 +13,6 @@ interface PointRepository {
         pointId: Long,
         balance: BigDecimal,
     )
+
+    fun findByTsidForUpdate(tsid: String): Point?
 }
