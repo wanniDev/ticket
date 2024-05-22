@@ -20,4 +20,7 @@ interface JpaPointRepository : JpaRepository<Point, Long> {
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     fun findPointByTsid(tsid: String): Point?
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    fun findPointById(pointId: Long): Point?
 }

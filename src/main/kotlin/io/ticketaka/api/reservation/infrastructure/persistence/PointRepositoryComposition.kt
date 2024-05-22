@@ -32,4 +32,8 @@ class PointRepositoryComposition(
     override fun findByTsidForUpdate(tsid: String): Point? {
         return jpaPointRepository.findPointByTsid(tsid)
     }
+
+    override fun findByIdForUpdate(pointId: Long): Point? {
+        return jpaPointRepository.findPointById(pointId)
+    }
 }
