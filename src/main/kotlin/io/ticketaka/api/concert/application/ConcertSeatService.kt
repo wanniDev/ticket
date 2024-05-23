@@ -20,9 +20,9 @@ class ConcertSeatService(
         return seatRepository.findConcertDateByStatus(Seat.Status.AVAILABLE).sorted()
     }
 
-    fun getSeatNumbers(date: LocalDate): List<String> {
+    fun getSeatNumbers(date: LocalDate): List<SeatResult> {
         val concert = concertQueryService.getConcert(date)
-        return concertQueryService.getConcertSeatNumbers(concert.getId())
+        return concertQueryService.getConcertSeatNumbers(concert.getId()).map { SeatResult(it.number, it.status) }
     }
 
     @Transactional(readOnly = true)
@@ -46,6 +46,22 @@ class ConcertSeatService(
             if (seat.status != Seat.Status.AVAILABLE) {
                 throw BadClientRequestException("이미 예약된 좌석입니다.")
             }
+        }
+        return seats
+    }
+
+    @Transactional
+    fun reserveSeat(
+        concertId: Long,
+        seatNumbers: List<String>,
+    ): Set<Seat> {
+        val seats =
+            seatRepository.findSeatsByConcertIdAndNumberInOrderByNumberForUpdate(concertId, seatNumbers)
+        seats.forEach { seat ->
+            if (seat.status != Seat.Status.AVAILABLE) {
+                throw BadClientRequestException("이미 예약된 좌석입니다.")
+            }
+            seat.reserve()
         }
         return seats
     }

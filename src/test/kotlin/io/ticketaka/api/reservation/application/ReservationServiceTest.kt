@@ -40,15 +40,6 @@ class ReservationServiceTest {
         concert.id = 1
         val seats = setOf(Seat.newInstance(seatNumber, 1000.toBigDecimal(), concert))
 
-        val mockConcertRepository =
-            mock<ConcertRepository> {
-                on { findByDate(date) } doReturn concert
-            }
-        val mockSeatRepository =
-            mock<SeatRepository> {
-                on { findSeatsByConcertDateAndNumberInOrderByNumber(any(), any()) } doReturn seats
-            }
-
         val mockTokenUserQueryService =
             mock<TokenUserQueryService> {
                 on { getUser(any()) } doReturn user
@@ -56,10 +47,16 @@ class ReservationServiceTest {
 
         val mockAsyncReservationService = mock<AsyncReservationService>()
 
+        val concertSeatService =
+            mock<ConcertSeatService> {
+                on { getAvailableConcert(date) } doReturn concert
+                on { reserveSeat(concert.getId(), seats.map { it.number }.toList()) } doReturn seats
+            }
+
         val reservationService =
             ReservationService(
                 mockTokenUserQueryService,
-                ConcertSeatService(mock(), mockSeatRepository, mockConcertRepository),
+                concertSeatService,
                 mockAsyncReservationService,
                 mock(),
             )
@@ -79,26 +76,28 @@ class ReservationServiceTest {
         val date = LocalDate.of(2024, 4, 10)
         val seatNumber = "A24"
         val concert = Concert.newInstance(date)
+        concert.id = 1
         val seat = Seat.newInstance(seatNumber, 1000.toBigDecimal(), concert)
         seat.occupy()
         val seats = setOf(seat)
-
-        val mockConcertRepository =
-            mock<ConcertRepository> {
-                on { findByDate(date) } doReturn concert
-            }
-        val mockSeatRepository =
-            mock<SeatRepository> {
-                on { findSeatsByConcertDateAndNumberInOrderByNumber(any(), any()) } doReturn seats
-            }
         val mockReservationRepository = mock<ReservationRepository>()
 
-        val mockTokenUserQueryService = mock<TokenUserQueryService>()
+        val user = User.newInstance(Point.newInstance(10000.toBigDecimal()))
+        user.id = 1
+        val mockTokenUserQueryService =
+            mock<TokenUserQueryService> {
+                on { getUser(any()) } doReturn user
+            }
+        val concertSeatService =
+            mock<ConcertSeatService> {
+                on { getAvailableConcert(date) } doReturn concert
+                on { reserveSeat(concert.getId(), seats.map { it.number }.toList()) } doThrow BadClientRequestException("이미 예약된 좌석입니다.")
+            }
 
         val reservationService =
             ReservationService(
                 mockTokenUserQueryService,
-                ConcertSeatService(mock(), mockSeatRepository, mockConcertRepository),
+                concertSeatService,
                 mock(),
                 mockReservationRepository,
             )

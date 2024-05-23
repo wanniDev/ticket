@@ -10,6 +10,7 @@ import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
+import java.math.BigDecimal
 import java.time.LocalDate
 
 @ExtendWith(MockitoExtension::class)
@@ -53,10 +54,11 @@ class ConcertSeatServiceTest {
         val concert = Concert("concertDateTsid", date)
         concert.id = 1L
         val seatNumber = "1"
+        val seat = Seat.newInstance(seatNumber, BigDecimal(1), concert)
         val mockConcertQueryService =
             mock<ConcertQueryService> {
                 on { getConcert(any()) } doReturn concert
-                on { getConcertSeatNumbers(any()) } doReturn listOf(seatNumber)
+                on { getConcertSeatNumbers(any()) } doReturn setOf(seat)
             }
         val concertSeatService = ConcertSeatService(mockConcertQueryService, mock(), mock())
 
@@ -64,7 +66,7 @@ class ConcertSeatServiceTest {
         val result = concertSeatService.getSeatNumbers(date)
 
         // then
-        assertEquals(listOf(seatNumber), result)
+        assertEquals(listOf(SeatResult(seat.number, seat.status)), result)
     }
 
     @Test
@@ -76,7 +78,7 @@ class ConcertSeatServiceTest {
         val mockConcertQueryService =
             mock<ConcertQueryService> {
                 on { getConcert(any()) } doReturn concert
-                on { getConcertSeatNumbers(any()) } doReturn emptyList()
+                on { getConcertSeatNumbers(any()) } doReturn emptySet()
             }
         val concertSeatService = ConcertSeatService(mockConcertQueryService, mock(), mock())
 

@@ -20,10 +20,7 @@ class ReservationService(
     fun createReservation(command: CreateReservationCommand) {
         val user = tokenQueryUserService.getUser(command.userTsid)
         val concert = concertSeatService.getAvailableConcert(command.date)
-        val seats = concertSeatService.getAvailableSeats(command.date, command.seatNumbers)
-        seats.forEach { seat ->
-            seat.reserve()
-        }
+        val seats = concertSeatService.reserveSeat(concert.getId(), command.seatNumbers)
         asyncReservationService.createReservationAsync(user.getId(), concert.getId(), seats)
     }
 

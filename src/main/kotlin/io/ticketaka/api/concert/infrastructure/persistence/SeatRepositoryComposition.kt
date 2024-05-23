@@ -14,7 +14,7 @@ class SeatRepositoryComposition(
         return jpaSeatRepository.findByTsid(tsid)
     }
 
-    override fun findByConcertId(concertDateId: Long): List<Seat> {
+    override fun findByConcertId(concertDateId: Long): Set<Seat> {
         return jpaSeatRepository.findByConcertId(concertDateId)
     }
 
@@ -30,6 +30,13 @@ class SeatRepositoryComposition(
         numbers: List<String>,
     ): Set<Seat> {
         return jpaSeatRepository.findSeatsByConcertDateAndNumberInOrderByNumber(date, numbers).toSet()
+    }
+
+    override fun findSeatsByConcertIdAndNumberInOrderByNumberForUpdate(
+        concertId: Long,
+        numbers: List<String>,
+    ): Set<Seat> {
+        return jpaSeatRepository.findSeatsByConcertIdAndNumberInOrderByNumber(concertId, numbers).toSet()
     }
 
     override fun findConcertDateByStatus(status: Seat.Status): Set<LocalDate> {

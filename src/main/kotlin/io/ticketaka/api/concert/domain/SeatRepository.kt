@@ -5,7 +5,7 @@ import java.time.LocalDate
 interface SeatRepository {
     fun findByTsid(tsid: String): Seat?
 
-    fun findByConcertId(concertId: Long): List<Seat>
+    fun findByConcertId(concertId: Long): Set<Seat>
 
     fun findSeatsByConcertDateAndNumberIn(
         date: LocalDate,
@@ -14,6 +14,11 @@ interface SeatRepository {
 
     fun findSeatsByConcertDateAndNumberInOrderByNumber(
         date: LocalDate,
+        numbers: List<String>,
+    ): Set<Seat>
+
+    fun findSeatsByConcertIdAndNumberInOrderByNumberForUpdate(
+        concertId: Long,
         numbers: List<String>,
     ): Set<Seat>
 
