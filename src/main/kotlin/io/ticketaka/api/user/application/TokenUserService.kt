@@ -1,7 +1,6 @@
 package io.ticketaka.api.user.application
 
 import io.ticketaka.api.common.domain.map.TokenWaitingMap
-import io.ticketaka.api.common.exception.NotFoundException
 import io.ticketaka.api.user.domain.Token
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
@@ -24,16 +23,8 @@ class TokenUserService(
         return token.tsid
     }
 
-    fun peekToken(tokenTsid: String): Boolean {
+    fun peekToken(): Boolean {
         val queueSize = tokenWaitingMap.size()
-        if (queueSize > 500L) {
-            throw IllegalArgumentException("대기 중인 토큰이 500개를 초과하였습니다.")
-        }
-        tokenWaitingMap.get(tokenTsid).let { token ->
-            if (token == null) {
-                throw NotFoundException("토큰을 찾을 수 없습니다.")
-            }
-            return token.tsid == tokenTsid
-        }
+        return queueSize < 500L
     }
 }

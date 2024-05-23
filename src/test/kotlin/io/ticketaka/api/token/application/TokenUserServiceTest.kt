@@ -5,7 +5,6 @@ import io.ticketaka.api.common.exception.NotFoundException
 import io.ticketaka.api.reservation.domain.point.Point
 import io.ticketaka.api.user.application.TokenUserQueryService
 import io.ticketaka.api.user.application.TokenUserService
-import io.ticketaka.api.user.domain.Token
 import io.ticketaka.api.user.domain.User
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -63,19 +62,16 @@ class TokenUserServiceTest {
     @Test
     fun `peekToken returns true when the order of the token queue matches`() {
         // given
-        val userId = 1L
-        val tokenPosition0 = Token.newInstance(userId)
-        val mockTokenRepository =
+        val mockTokenWaitingMap =
             mock<TokenWaitingMap> {
-                on { get(tokenPosition0.tsid) } doReturn tokenPosition0
+                on { size() } doReturn 1
             }
-        val tokenUserService = TokenUserService(mockTokenRepository, mock(), mock())
+        val tokenUserService = TokenUserService(mockTokenWaitingMap, mock(), mock())
 
         // when
-        val peekToken = tokenUserService.peekToken(tokenPosition0.tsid)
+        tokenUserService.peekToken()
         // then
-        verify(mockTokenRepository).get(tokenPosition0.tsid)
-        assert(peekToken)
+        verify(mockTokenWaitingMap).size()
     }
 
 //    @Test
