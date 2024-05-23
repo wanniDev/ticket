@@ -11,7 +11,7 @@ import java.time.LocalDate
 interface JpaSeatRepository : JpaRepository<Seat, String> {
     fun findByTsid(tsid: String): Seat?
 
-    fun findByConcertId(concertId: Long): List<Seat>
+    fun findByConcertId(concertId: Long): Set<Seat>
 
     fun findByTsidAndConcert(
         tsid: String,
@@ -29,6 +29,12 @@ interface JpaSeatRepository : JpaRepository<Seat, String> {
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     fun findSeatsByConcertDateAndNumberInOrderByNumber(
         date: LocalDate,
+        seatNumbers: List<String>,
+    ): List<Seat>
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    fun findSeatsByConcertIdAndNumberInOrderByNumber(
+        concertId: Long,
         seatNumbers: List<String>,
     ): List<Seat>
 }

@@ -3,14 +3,13 @@ package io.ticketaka.api.concert.application
 import io.ticketaka.api.common.exception.BadClientRequestException
 import io.ticketaka.api.concert.domain.Concert
 import io.ticketaka.api.concert.domain.ConcertRepository
+import io.ticketaka.api.concert.domain.Seat
 import io.ticketaka.api.concert.domain.SeatRepository
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
 
 @Service
-@Transactional(readOnly = true)
 class ConcertQueryService(
     private val concertRepository: ConcertRepository,
     private val seatRepository: SeatRepository,
@@ -22,9 +21,7 @@ class ConcertQueryService(
     }
 
     @Cacheable(value = ["seatNumbers"], key = "#concertId")
-    fun getConcertSeatNumbers(concertId: Long): List<String> {
+    fun getConcertSeatNumbers(concertId: Long): Set<Seat> {
         return seatRepository.findByConcertId(concertId)
-            .sortedBy { it.number }
-            .map { it.number }
     }
 }

@@ -17,7 +17,7 @@ class Token protected constructor(
     var tsid: String,
     val issuedTime: LocalDateTime,
     @Enumerated(EnumType.STRING)
-    val status: Status,
+    var status: Status,
     val userId: Long,
 ) : AbstractAggregateRoot() {
     @Id
@@ -26,7 +26,30 @@ class Token protected constructor(
 
     enum class Status {
         ACTIVE,
+        PENDING,
         EXPIRED,
+    }
+
+    fun activate() {
+        if (status == Status.ACTIVE) {
+            return
+        }
+        status = Status.ACTIVE
+    }
+
+    fun expired() {
+        if (status == Status.EXPIRED) {
+            return
+        }
+        status = Status.EXPIRED
+    }
+
+    fun isExpired(): Boolean {
+        return status == Status.EXPIRED || issuedTime.plusMinutes(5).isBefore(LocalDateTime.now())
+    }
+
+    fun isReady(): Boolean {
+        return status == Status.PENDING && issuedTime.plusMinutes(5).isAfter(LocalDateTime.now())
     }
 
     init {
@@ -38,7 +61,7 @@ class Token protected constructor(
             return Token(
                 tsid = TsIdKeyGenerator.next("token"),
                 issuedTime = LocalDateTime.now(),
-                status = Status.ACTIVE,
+                status = Status.PENDING,
                 userId = userId,
             )
         }

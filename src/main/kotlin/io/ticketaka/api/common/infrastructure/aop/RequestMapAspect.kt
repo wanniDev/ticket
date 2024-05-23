@@ -1,6 +1,6 @@
 package io.ticketaka.api.common.infrastructure.aop
 
-import io.ticketaka.api.common.domain.queue.TokenWaitingQueue
+import io.ticketaka.api.common.domain.map.TokenWaitingMap
 import io.ticketaka.api.user.domain.Token
 import org.aspectj.lang.ProceedingJoinPoint
 import org.aspectj.lang.annotation.Around
@@ -14,13 +14,13 @@ import java.time.LocalDateTime
 
 @Aspect
 @Component
-class RequestQueueAspect(
-    private val tokenWaitingMap: TokenWaitingQueue,
+class RequestMapAspect(
+    private val tokenWaitingMap: TokenWaitingMap,
 ) {
     private val logger = LoggerFactory.getLogger(this::class.java)
 
     @Pointcut(
-        "@annotation(io.ticketaka.api.common.infrastructure.aop.OnQueue) || @within(io.ticketaka.api.common.infrastructure.aop.OnQueue)",
+        "@annotation(io.ticketaka.api.common.infrastructure.aop.OnMap) || @within(io.ticketaka.api.common.infrastructure.aop.OnMap)",
     )
     fun onQueuePointcut() {
     }
@@ -33,7 +33,7 @@ class RequestQueueAspect(
                 "tokenTsid",
             ) ?: throw IllegalArgumentException("요청 헤더에 토큰이 존재하지 않습니다.")
 
-        val tokenFromQueue = tokenWaitingMap.peek() ?: throw IllegalArgumentException("대기 중인 토큰이 존재하지 않습니다.")
+        val tokenFromQueue = tokenWaitingMap.get(authorizationHeader) ?: throw IllegalArgumentException("대기 중인 토큰이 존재하지 않습니다.")
 
         validateTokenIdentifier(tokenFromQueue, authorizationHeader)
 
@@ -42,7 +42,7 @@ class RequestQueueAspect(
         try {
             return joinPoint.proceed()
         } finally {
-            tokenWaitingMap.poll()
+            tokenWaitingMap.remove(authorizationHeader)
         }
     }
 

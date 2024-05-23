@@ -12,9 +12,15 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 class GlobalExceptionHandler {
     private val log = LoggerFactory.getLogger(this.javaClass)
 
+    @ExceptionHandler(Exception::class)
+    fun handleException(e: Exception): ResponseEntity<ApiError> {
+        log.error("Internal Server Error: {}", e.message)
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiError(500, e.message ?: "500 에러 발생"))
+    }
+
     @ExceptionHandler(NotFoundException::class)
     fun handleNotFoundUserException(e: NotFoundException): ResponseEntity<ApiError> {
-        log.error("User Not Found: {}", e.message)
+        log.error("Not Found: {}", e.message)
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiError(404, e.message ?: "404 에러 발생"))
     }
 
