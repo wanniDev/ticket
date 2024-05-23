@@ -53,7 +53,7 @@ insert into `seats` (`id`, `tsid`, `number`, `price`, `status`, `concert_id`) va
 insert into `seats` (`id`, `tsid`, `number`, `price`, `status`, `concert_id`) values (33, 'st-576023809841191373', 'A3', 100, 'AVAILABLE', 2);
 insert into `seats` (`id`, `tsid`, `number`, `price`, `status`, `concert_id`) values (34, 'st-576023809841191374', 'A4', 100, 'AVAILABLE', 2);
 insert into `seats` (`id`, `tsid`, `number`, `price`, `status`, `concert_id`) values (35, 'st-576023809841191375', 'A5', 100, 'AVAILABLE', 2);
-insert into `seats` (`id`, `tsid`, `number`, `price`, `status`, `concert_id`) values (36, 'st-576023809841191376', 'A6', 100, 'RESERVED', 2);
+insert into `seats` (`id`, `tsid`, `number`, `price`, `status`, `concert_id`) values (36, 'st-576023809841191376', 'A6', 100, 'AVAILABLE', 2);
 insert into `seats` (`id`, `tsid`, `number`, `price`, `status`, `concert_id`) values (37, 'st-576023809841191377', 'A7', 100, 'AVAILABLE', 2);
 insert into `seats` (`id`, `tsid`, `number`, `price`, `status`, `concert_id`) values (38, 'st-576023809841191378', 'A8', 100, 'AVAILABLE', 2);
 insert into `seats` (`id`, `tsid`, `number`, `price`, `status`, `concert_id`) values (39, 'st-576023809841191379', 'A9', 100, 'AVAILABLE', 2);
@@ -65,13 +65,13 @@ insert into `seats` (`id`, `tsid`, `number`, `price`, `status`, `concert_id`) va
 insert into `seats` (`id`, `tsid`, `number`, `price`, `status`, `concert_id`) values (44, 'st-576023809841191384', 'B4', 100, 'AVAILABLE', 2);
 insert into `seats` (`id`, `tsid`, `number`, `price`, `status`, `concert_id`) values (45, 'st-576023809841191385', 'B5', 100, 'AVAILABLE', 2);
 insert into `seats` (`id`, `tsid`, `number`, `price`, `status`, `concert_id`) values (46, 'st-576023809841191386', 'B6', 100, 'AVAILABLE', 2);
-insert into `seats` (`id`, `tsid`, `number`, `price`, `status`, `concert_id`) values (47, 'st-576023809841191387', 'B7', 100, 'RESERVED', 2);
+insert into `seats` (`id`, `tsid`, `number`, `price`, `status`, `concert_id`) values (47, 'st-576023809841191387', 'B7', 100, 'AVAILABLE', 2);
 insert into `seats` (`id`, `tsid`, `number`, `price`, `status`, `concert_id`) values (48, 'st-576023809841191388', 'B8', 100, 'AVAILABLE', 2);
 insert into `seats` (`id`, `tsid`, `number`, `price`, `status`, `concert_id`) values (49, 'st-576023809841191389', 'B9', 100, 'AVAILABLE', 2);
 insert into `seats` (`id`, `tsid`, `number`, `price`, `status`, `concert_id`) values (50, 'st-576023809841191390', 'B10', 100, 'AVAILABLE', 2);
 
 insert into `seats` (`id`, `tsid`, `number`, `price`, `status`, `concert_id`) values (51, 'st-576023809841191391', 'C1', 100, 'AVAILABLE', 2);
-insert into `seats` (`id`, `tsid`, `number`, `price`, `status`, `concert_id`) values (52, 'st-576023809841191392', 'C2', 100, 'RESERVED', 2);
+insert into `seats` (`id`, `tsid`, `number`, `price`, `status`, `concert_id`) values (52, 'st-576023809841191392', 'C2', 100, 'AVAILABLE', 2);
 insert into `seats` (`id`, `tsid`, `number`, `price`, `status`, `concert_id`) values (53, 'st-576023809841191393', 'C3', 100, 'AVAILABLE', 2);
 insert into `seats` (`id`, `tsid`, `number`, `price`, `status`, `concert_id`) values (54, 'st-576023809841191394', 'C4', 100, 'AVAILABLE', 2);
 insert into `seats` (`id`, `tsid`, `number`, `price`, `status`, `concert_id`) values (55, 'st-576023809841191395', 'C5', 100, 'AVAILABLE', 2);
