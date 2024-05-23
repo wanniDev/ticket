@@ -26,8 +26,21 @@ class InMemoryWaitingMap : TokenWaitingMap {
         return true
     }
 
+    override fun putAll(tokens: List<Token>): Boolean {
+        tokenCache.putAll(tokens.associateBy { it.tsid })
+        return true
+    }
+
     override fun get(key: String): Token? {
         return tokenCache.getIfPresent(key)
+    }
+
+    override fun findAll(): List<Token> {
+        return tokenCache.asMap().values.toList()
+    }
+
+    override fun clear() {
+        tokenCache.invalidateAll()
     }
 
     override fun remove(key: String): Token? {

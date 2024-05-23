@@ -12,6 +12,6 @@ class PaymentEventHandler {
     @EventListener
     fun handle(event: PaymentApprovalEvent) {
         // pg 승인이후 후속처리 이벤트 발생. 실제로 pg 연동은 안하고 있으므로 로그 출력만 수행한다.
-        logger.info("PaymentApprovalEvent: $event")
+        logger.debug("PaymentApprovalEvent: {}", event)
     }
 }

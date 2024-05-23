@@ -8,9 +8,15 @@ interface TokenWaitingMap {
         token: Token,
     ): Boolean
 
+    fun putAll(tokens: List<Token>): Boolean
+
     fun get(key: String): Token?
 
     fun remove(key: String): Token?
 
     fun size(): Long
+
+    fun findAll(): List<Token>
+
+    fun clear()
 }
