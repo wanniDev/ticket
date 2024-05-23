@@ -23,7 +23,10 @@ class TokenUserService(
         return token.tsid
     }
 
-    fun peekToken(): Boolean {
+    fun peekToken(tokenTsid: String): Boolean {
+        if (tokenWaitingMap.get(tokenTsid) == null) {
+            return false
+        }
         val queueSize = tokenWaitingMap.size()
         return queueSize < 500L
     }

@@ -23,8 +23,10 @@ class TokenApi(
     }
 
     @PostMapping("/peek")
-    override fun peekToken(): ResponseEntity<PeekTokenResponse> {
-        val result = tokenUserService.peekToken()
+    override fun peekToken(
+        @RequestBody peekTokenRequest: PeekTokenRequest,
+    ): ResponseEntity<PeekTokenResponse> {
+        val result = tokenUserService.peekToken(peekTokenRequest.tokenTsid)
         return ResponseEntity
             .ok(PeekTokenResponse(result, LocalDateTime.now()))
     }
