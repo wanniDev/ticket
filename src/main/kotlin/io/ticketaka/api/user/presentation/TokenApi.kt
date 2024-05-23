@@ -24,9 +24,9 @@ class TokenApi(
 
     @PostMapping("/peek")
     override fun peekToken(
-        @RequestBody request: PeekTokenRequest,
+        @RequestBody peekTokenRequest: PeekTokenRequest,
     ): ResponseEntity<PeekTokenResponse> {
-        val result = tokenUserService.peekToken(request.tokenTsid)
+        val result = tokenUserService.peekToken(peekTokenRequest.tokenTsid)
         return ResponseEntity
             .ok(PeekTokenResponse(result, LocalDateTime.now()))
     }

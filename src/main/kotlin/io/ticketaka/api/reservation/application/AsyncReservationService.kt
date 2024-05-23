@@ -5,6 +5,8 @@ import io.ticketaka.api.reservation.domain.reservation.Reservation
 import io.ticketaka.api.reservation.domain.reservation.ReservationRepository
 import io.ticketaka.api.user.domain.User
 import org.springframework.context.ApplicationEventPublisher
+import org.springframework.retry.annotation.Backoff
+import org.springframework.retry.annotation.Retryable
 import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Propagation
@@ -18,6 +20,7 @@ class AsyncReservationService(
 ) {
     @Async
     @Transactional(propagation = Propagation.NESTED)
+    @Retryable(retryFor = [Exception::class], backoff = Backoff(delay = 1000, multiplier = 2.0, maxDelay = 10000))
     fun createReservationAsync(
         userId: Long,
         concertId: Long,
@@ -36,6 +39,7 @@ class AsyncReservationService(
 
     @Async
     @Transactional(propagation = Propagation.NESTED)
+    @Retryable(retryFor = [Exception::class], backoff = Backoff(delay = 1000, multiplier = 2.0, maxDelay = 10000))
     fun confirmReservationAsync(
         reservation: Reservation,
         user: User,

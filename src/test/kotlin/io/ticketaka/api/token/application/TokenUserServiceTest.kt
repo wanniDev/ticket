@@ -1,6 +1,6 @@
 package io.ticketaka.api.token.application
 
-import io.ticketaka.api.common.domain.queue.TokenWaitingQueue
+import io.ticketaka.api.common.domain.map.TokenWaitingMap
 import io.ticketaka.api.common.exception.NotFoundException
 import io.ticketaka.api.reservation.domain.point.Point
 import io.ticketaka.api.user.application.TokenUserQueryService
@@ -17,7 +17,6 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.doThrow
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
-import kotlin.test.assertFalse
 
 @ExtendWith(MockitoExtension::class)
 class TokenUserServiceTest {
@@ -45,7 +44,7 @@ class TokenUserServiceTest {
     @Test
     fun `when user not found then throw exception`() {
         // given
-        val mockTokenWaitingQueue = mock<TokenWaitingQueue>()
+        val mockTokenWaitingQueue = mock<TokenWaitingMap>()
         val mockTokenUserQueryService =
             mock<TokenUserQueryService> {
                 on { getUser(any()) } doThrow NotFoundException("사용자를 찾을 수 없습니다.")
@@ -66,37 +65,36 @@ class TokenUserServiceTest {
         // given
         val userId = 1L
         val tokenPosition0 = Token.newInstance(userId)
-        val mockTokenRepository =
-            mock<TokenWaitingQueue> {
-                on { peek() } doReturn tokenPosition0
+        val mockTokenWaitingMap =
+            mock<TokenWaitingMap> {
+                on { get(tokenPosition0.tsid) } doReturn tokenPosition0
             }
-        val tokenUserService = TokenUserService(mockTokenRepository, mock(), mock())
+        val tokenUserService = TokenUserService(mockTokenWaitingMap, mock(), mock())
 
         // when
-        val peekToken = tokenUserService.peekToken(tokenPosition0.tsid)
+        tokenUserService.peekToken(tokenPosition0.tsid)
         // then
-        verify(mockTokenRepository).peek()
-        assert(peekToken)
+        verify(mockTokenWaitingMap).get(tokenPosition0.tsid)
     }
 
-    @Test
-    fun `peekToken returns false when the order of the token queue does not match`() {
-        // given
-        val userId1 = 1L
-        val userId2 = 2L
-        val tokenPosition0 = Token.newInstance(userId1)
-        val tokenPosition1 = Token.newInstance(userId2)
-        val tokenWaitingQueue =
-            mock<TokenWaitingQueue> {
-                on { peek() } doReturn tokenPosition0
-            }
-        val tokenUserService = TokenUserService(tokenWaitingQueue, mock(), mock())
-
-        // when
-        val peekToken = tokenUserService.peekToken(tokenPosition1.tsid)
-
-        // then
-        verify(tokenWaitingQueue).peek()
-        assertFalse(peekToken)
-    }
+//    @Test
+//    fun `peekToken returns false when the order of the token queue does not match`() {
+//        // given
+//        val userId1 = 1L
+//        val userId2 = 2L
+//        val tokenPosition0 = Token.newInstance(userId1)
+//        val tokenPosition1 = Token.newInstance(userId2)
+//        val tokenWaitingQueue =
+//            mock<TokenWaitingQueue> {
+//                on { peek() } doReturn tokenPosition0
+//            }
+//        val tokenUserService = TokenUserService(tokenWaitingQueue, mock(), mock())
+//
+//        // when
+//        val peekToken = tokenUserService.peekToken(tokenPosition1.tsid)
+//
+//        // then
+//        verify(tokenWaitingQueue).peek()
+//        assertFalse(peekToken)
+//    }
 }

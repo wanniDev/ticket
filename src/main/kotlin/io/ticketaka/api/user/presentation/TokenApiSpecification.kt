@@ -10,7 +10,7 @@ interface TokenApiSpecification {
         summary = "토큰 대기열 조회 API",
         description = "토큰이 현재 사용자의 차례인지 확인하는 코드입니다.",
     )
-    fun peekToken(request: PeekTokenRequest): ResponseEntity<PeekTokenResponse>
+    fun peekToken(peekTokenRequest: PeekTokenRequest): ResponseEntity<PeekTokenResponse>
 
     @Operation(
         summary = "토큰 생성 API",

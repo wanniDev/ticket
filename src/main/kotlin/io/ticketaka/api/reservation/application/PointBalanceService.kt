@@ -6,6 +6,8 @@ import io.ticketaka.api.reservation.application.dto.PaymentCommand
 import io.ticketaka.api.reservation.application.dto.RechargeCommand
 import io.ticketaka.api.user.application.TokenUserQueryService
 import org.springframework.context.ApplicationEventPublisher
+import org.springframework.retry.annotation.Backoff
+import org.springframework.retry.annotation.Retryable
 import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -19,6 +21,7 @@ class PointBalanceService(
     private val applicationEventPublisher: ApplicationEventPublisher,
 ) {
     @Async
+    @Retryable(retryFor = [Exception::class], backoff = Backoff(delay = 1000, multiplier = 2.0, maxDelay = 10000))
     @Transactional
     fun recharge(rechargeCommand: RechargeCommand) {
         val userPoint = pointService.getPointForUpdate(rechargeCommand.pointTsid)
