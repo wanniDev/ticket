@@ -46,3 +46,5 @@ jwt:
   refreshExpirationSec: 604800
   tokenIssuer: tiketatka
   base64TokenSigningKey: l8rSsOP9c5VhhhT3Rg2WAOhXnN4reW9NMaYqUFj11rmtqOSUE9AS
+token:
+  capacity: 100
