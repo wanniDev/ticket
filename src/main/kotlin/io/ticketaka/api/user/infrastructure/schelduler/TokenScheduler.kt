@@ -2,6 +2,7 @@ package io.ticketaka.api.user.infrastructure.schelduler
 
 import io.ticketaka.api.common.domain.map.TokenWaitingMap
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 
@@ -10,6 +11,9 @@ class TokenScheduler(
     private val tokenWaitingMap: TokenWaitingMap,
 ) {
     private val logger = LoggerFactory.getLogger(TokenScheduler::class.java)
+
+    @Value("\${token.capacity}")
+    private lateinit var tokenCapacity: String
 
     @Scheduled(fixedDelay = 1000 * 60)
     fun checkExpiredToken() {
@@ -23,7 +27,7 @@ class TokenScheduler(
 
     @Scheduled(fixedDelay = 1000)
     fun activateToken() {
-        val tokens = tokenWaitingMap.findAll().sortedBy { it.issuedTime }.take(10)
+        val tokens = tokenWaitingMap.findAll().sortedBy { it.issuedTime }.take(tokenCapacity.toInt())
 
         tokens.forEach { token ->
             logger.debug("scan tokens for activate, {}:{}", token.tsid, token.status)
