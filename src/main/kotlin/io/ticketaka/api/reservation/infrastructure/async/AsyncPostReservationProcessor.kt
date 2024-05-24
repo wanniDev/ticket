@@ -1,6 +1,7 @@
-package io.ticketaka.api.reservation.application
+package io.ticketaka.api.reservation.infrastructure.async
 
 import io.ticketaka.api.concert.domain.Seat
+import io.ticketaka.api.concert.infrastructure.cache.ConcertSeatCacheRefresher
 import io.ticketaka.api.reservation.domain.reservation.Reservation
 import io.ticketaka.api.reservation.domain.reservation.ReservationRepository
 import io.ticketaka.api.user.domain.User
@@ -8,20 +9,21 @@ import org.springframework.context.ApplicationEventPublisher
 import org.springframework.retry.annotation.Backoff
 import org.springframework.retry.annotation.Retryable
 import org.springframework.scheduling.annotation.Async
-import org.springframework.stereotype.Service
+import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
 import java.math.BigDecimal
 
-@Service
-class AsyncReservationService(
+@Component
+class AsyncPostReservationProcessor(
     private val reservationRepository: ReservationRepository,
     private val applicationEventPublisher: ApplicationEventPublisher,
+    private val concertSeatCacheRefresher: ConcertSeatCacheRefresher,
 ) {
     @Async
     @Transactional(propagation = Propagation.NESTED)
     @Retryable(retryFor = [Exception::class], backoff = Backoff(delay = 1000, multiplier = 2.0, maxDelay = 10000))
-    fun createReservationAsync(
+    fun createReservation(
         userId: Long,
         concertId: Long,
         seats: Set<Seat>,
@@ -34,13 +36,15 @@ class AsyncReservationService(
                 seat.available()
             }
             e.printStackTrace()
+        } finally {
+            concertSeatCacheRefresher.refresh()
         }
     }
 
     @Async
     @Transactional(propagation = Propagation.NESTED)
     @Retryable(retryFor = [Exception::class], backoff = Backoff(delay = 1000, multiplier = 2.0, maxDelay = 10000))
-    fun confirmReservationAsync(
+    fun confirmResercation(
         reservation: Reservation,
         user: User,
     ) {

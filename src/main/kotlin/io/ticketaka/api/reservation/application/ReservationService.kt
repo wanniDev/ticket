@@ -4,6 +4,7 @@ import io.ticketaka.api.common.exception.NotFoundException
 import io.ticketaka.api.concert.application.ConcertSeatService
 import io.ticketaka.api.reservation.application.dto.CreateReservationCommand
 import io.ticketaka.api.reservation.domain.reservation.ReservationRepository
+import io.ticketaka.api.reservation.infrastructure.async.AsyncPostReservationProcessor
 import io.ticketaka.api.user.application.TokenUserQueryService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -13,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional
 class ReservationService(
     private val tokenQueryUserService: TokenUserQueryService,
     private val concertSeatService: ConcertSeatService,
-    private val asyncReservationService: AsyncReservationService,
+    private val asyncPostReservationProcessor: AsyncPostReservationProcessor,
     private val reservationRepository: ReservationRepository,
 ) {
     @Transactional
@@ -21,7 +22,7 @@ class ReservationService(
         val user = tokenQueryUserService.getUser(command.userTsid)
         val concert = concertSeatService.getAvailableConcert(command.date)
         val seats = concertSeatService.reserveSeat(concert.getId(), command.seatNumbers)
-        asyncReservationService.createReservationAsync(user.getId(), concert.getId(), seats)
+        asyncPostReservationProcessor.createReservation(user.getId(), concert.getId(), seats)
     }
 
     @Transactional
@@ -41,6 +42,6 @@ class ReservationService(
             val seat = reservationSeat.seat
             seat.validateReserved()
         }
-        asyncReservationService.confirmReservationAsync(reservation, user)
+        asyncPostReservationProcessor.confirmResercation(reservation, user)
     }
 }

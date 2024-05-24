@@ -11,6 +11,7 @@ import io.ticketaka.api.reservation.application.dto.CreateReservationCommand
 import io.ticketaka.api.reservation.domain.point.Point
 import io.ticketaka.api.reservation.domain.reservation.Reservation
 import io.ticketaka.api.reservation.domain.reservation.ReservationRepository
+import io.ticketaka.api.reservation.infrastructure.async.AsyncPostReservationProcessor
 import io.ticketaka.api.user.application.TokenUserQueryService
 import io.ticketaka.api.user.domain.User
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -45,7 +46,7 @@ class ReservationServiceTest {
                 on { getUser(any()) } doReturn user
             }
 
-        val mockAsyncReservationService = mock<AsyncReservationService>()
+        val mockAsyncPostReservationProcessor = mock<AsyncPostReservationProcessor>()
 
         val concertSeatService =
             mock<ConcertSeatService> {
@@ -57,7 +58,7 @@ class ReservationServiceTest {
             ReservationService(
                 mockTokenUserQueryService,
                 concertSeatService,
-                mockAsyncReservationService,
+                mockAsyncPostReservationProcessor,
                 mock(),
             )
 
@@ -67,7 +68,7 @@ class ReservationServiceTest {
         )
 
         // then
-        verify(mockAsyncReservationService).createReservationAsync(user.getId(), concert.getId(), seats)
+        verify(mockAsyncPostReservationProcessor).createReservation(user.getId(), concert.getId(), seats)
     }
 
     @Test
