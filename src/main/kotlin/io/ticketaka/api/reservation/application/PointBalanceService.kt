@@ -2,7 +2,6 @@ package io.ticketaka.api.reservation.application
 
 import io.ticketaka.api.common.exception.NotFoundException
 import io.ticketaka.api.reservation.application.dto.BalanceQueryModel
-import io.ticketaka.api.reservation.application.dto.PaymentCommand
 import io.ticketaka.api.reservation.application.dto.RechargeCommand
 import io.ticketaka.api.user.application.TokenUserQueryService
 import org.springframework.context.ApplicationEventPublisher
@@ -29,13 +28,6 @@ class PointBalanceService(
         val userId = user.getId()
         // 실제로는 PG 승인 요청을 수행하는 로직이 들어가야 함
         val amount = rechargeCommand.amount
-        paymentService.paymentApprovalAsync(
-            PaymentCommand(
-                userId = userId,
-                pointId = userPoint.getId(),
-                amount = amount,
-            ),
-        )
 
         userPoint.recharge(user, amount)
         userPoint.pollAllEvents().forEach { applicationEventPublisher.publishEvent(it) }
