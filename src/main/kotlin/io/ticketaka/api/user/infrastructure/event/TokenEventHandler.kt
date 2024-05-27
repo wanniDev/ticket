@@ -13,7 +13,7 @@ class TokenEventHandler(
 ) {
     @EventListener
     fun handle(event: TokenCreatedEvent) {
-        if (tokenWaitingQueue.size() >= 1000) {
+        if (tokenWaitingQueue.size() >= 500) {
             throw TooManyRequestException("토큰 용량이 초과되었습니다.")
         }
         val token = Token.newInstance(event.tsid, event.issuedTime, event.status, event.userId)
