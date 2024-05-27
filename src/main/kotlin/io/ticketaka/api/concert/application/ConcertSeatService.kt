@@ -58,9 +58,6 @@ class ConcertSeatService(
         val seats =
             seatRepository.findSeatsByConcertIdAndNumberInOrderByNumberForUpdate(concertId, seatNumbers)
         seats.forEach { seat ->
-            if (seat.status != Seat.Status.AVAILABLE) {
-                throw BadClientRequestException("이미 예약된 좌석입니다.")
-            }
             seat.reserve()
         }
         return seats

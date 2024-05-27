@@ -1,5 +1,6 @@
 package io.ticketaka.api.concert.domain
 
+import io.ticketaka.api.common.exception.ReservationStateException
 import io.ticketaka.api.common.infrastructure.tsid.TsIdKeyGenerator
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
@@ -39,13 +40,13 @@ class Seat(
         if (this.isAvailable()) {
             this.status = Status.RESERVED
         } else {
-            throw IllegalStateException("Seat number: ${this.number} is not available")
+            throw ReservationStateException("Seat number: ${this.number} is not available")
         }
     }
 
     fun validateReserved() {
         if (this.status != Status.RESERVED) {
-            throw IllegalStateException("Seat number: ${this.number} is not reserved")
+            throw ReservationStateException("Seat number: ${this.number} is not reserved")
         }
     }
 

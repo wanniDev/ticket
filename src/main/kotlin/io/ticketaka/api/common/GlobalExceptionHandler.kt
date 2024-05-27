@@ -2,6 +2,7 @@ package io.ticketaka.api.common
 
 import io.ticketaka.api.common.exception.BadClientRequestException
 import io.ticketaka.api.common.exception.NotFoundException
+import io.ticketaka.api.common.exception.ReservationStateException
 import io.ticketaka.api.common.exception.TooManyRequestException
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
@@ -35,5 +36,11 @@ class GlobalExceptionHandler {
     fun handleBadRequestException(e: BadClientRequestException): ResponseEntity<ApiError> {
         log.error("Bad Request: {}", e.message)
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiError(400, e.message ?: "400 에러 발생"))
+    }
+
+    @ExceptionHandler(ReservationStateException::class)
+    fun handleReservationStateException(e: ReservationStateException): ResponseEntity<ApiError> {
+        log.error("Reservation State Error: {}", e.message)
+        return ResponseEntity.status(HttpStatus.OK).body(ApiError(400, e.message ?: "400 에러 발생"))
     }
 }
