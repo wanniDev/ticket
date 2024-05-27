@@ -61,7 +61,7 @@ class Token protected constructor(
             return Token(
                 tsid = TsIdKeyGenerator.next("token"),
                 issuedTime = LocalDateTime.now(),
-                status = Status.PENDING,
+                status = Status.ACTIVE,
                 userId = userId,
             )
         }

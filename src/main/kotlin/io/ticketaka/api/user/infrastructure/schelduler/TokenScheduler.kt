@@ -25,7 +25,7 @@ class TokenScheduler(
         }
     }
 
-    @Scheduled(fixedDelay = 1000 * 10)
+    @Scheduled(fixedDelay = 1000 * 5)
     fun activateToken() {
         val tokens = tokenWaitingMap.findAll().sortedBy { it.issuedTime }.take(tokenCapacity.toInt())
 
@@ -33,9 +33,6 @@ class TokenScheduler(
             logger.debug("scan tokens for activate, {}:{}", token.tsid, token.status)
             if (token.isExpired()) {
                 tokenWaitingMap.remove(token.tsid)
-            } else {
-                token.activate()
-                tokenWaitingMap.put(token.tsid, token)
             }
         }
     }

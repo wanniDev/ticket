@@ -1,5 +1,6 @@
 package io.ticketaka.api.reservation.presentation
 
+import io.ticketaka.api.common.infrastructure.aop.OnMap
 import io.ticketaka.api.reservation.application.ReservationService
 import io.ticketaka.api.reservation.presentation.dto.ConfirmReservationRequest
 import io.ticketaka.api.reservation.presentation.dto.CreateReservationRequest
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController
 class ReservationApi(
     private val reservationService: ReservationService,
 ) : ReservationApiSpecification {
+    @OnMap
     @PostMapping
     override fun createReservation(
         @RequestBody request: CreateReservationRequest,

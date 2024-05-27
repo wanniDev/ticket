@@ -37,12 +37,23 @@ class RequestMapAspect(
 
         validateTokenIdentifier(tokenFromQueue, authorizationHeader)
 
+        validateTokenActive(tokenFromQueue)
+
         validateTokenExpiration(tokenFromQueue)
 
         try {
             return joinPoint.proceed()
         } finally {
-            tokenWaitingMap.remove(authorizationHeader)
+            tokenFromQueue.expired()
+            tokenWaitingMap.put(authorizationHeader, tokenFromQueue)
+        }
+    }
+
+    private fun validateTokenActive(firstToken: Token) {
+        if (firstToken.status != Token.Status.ACTIVE) {
+            val errorMessage = "토큰이 활성화되지 않았습니다."
+            logger.debug(errorMessage)
+            throw IllegalArgumentException(errorMessage)
         }
     }
 
@@ -51,7 +62,7 @@ class RequestMapAspect(
         val now = LocalDateTime.now()
         if (expiredTime.isBefore(now)) {
             val errorMessage = "토큰이 만료되었습니다."
-            logger.error(errorMessage)
+            logger.debug(errorMessage)
             throw IllegalArgumentException(errorMessage)
         }
     }
@@ -62,7 +73,7 @@ class RequestMapAspect(
     ) {
         if (firstToken.tsid != authorizationHeader) {
             val errorMessage = "현재 대기 중인 토큰과 요청한 토큰이 일치하지 않습니다."
-            logger.error(errorMessage)
+            logger.debug(errorMessage)
             throw IllegalArgumentException(errorMessage)
         }
     }

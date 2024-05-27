@@ -1,5 +1,6 @@
 package io.ticketaka.api.reservation.presentation
 
+import io.ticketaka.api.common.infrastructure.aop.OnMap
 import io.ticketaka.api.reservation.application.PointBalanceService
 import io.ticketaka.api.reservation.presentation.dto.BalanceResponse
 import io.ticketaka.api.reservation.presentation.dto.RechargeRequest
@@ -17,6 +18,7 @@ import java.math.BigDecimal
 class PointApi(
     private val pointBalanceService: PointBalanceService,
 ) : PointApiSpecification {
+    @OnMap
     @PostMapping("/recharge")
     override fun recharge(
         @RequestBody request: RechargeRequest,
