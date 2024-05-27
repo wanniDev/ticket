@@ -1,7 +1,7 @@
 package io.ticketaka.api.reservation.application
 
 import io.ticketaka.api.TestContainerRegistry
-import io.ticketaka.api.common.exception.BadClientRequestException
+import io.ticketaka.api.common.exception.ReservationStateException
 import io.ticketaka.api.reservation.application.dto.CreateReservationCommand
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -37,7 +37,7 @@ class ReservationConcurrencyTest
                         reservationService.createReservation(createReservationCommand)
                         reservationCnt.addAndGet(1)
                     } catch (e: Exception) {
-                        if (e is BadClientRequestException) {
+                        if (e is ReservationStateException) {
                             failedCnt.addAndGet(1)
                         }
                     }

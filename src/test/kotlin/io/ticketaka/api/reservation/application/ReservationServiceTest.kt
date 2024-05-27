@@ -2,6 +2,7 @@ package io.ticketaka.api.reservation.application
 
 import io.ticketaka.api.common.exception.BadClientRequestException
 import io.ticketaka.api.common.exception.NotFoundException
+import io.ticketaka.api.common.exception.ReservationStateException
 import io.ticketaka.api.concert.application.ConcertSeatService
 import io.ticketaka.api.concert.domain.Concert
 import io.ticketaka.api.concert.domain.ConcertRepository
@@ -264,7 +265,7 @@ class ReservationServiceTest {
 
         // when
         val exception =
-            assertFailsWith<IllegalStateException> {
+            assertFailsWith<ReservationStateException> {
                 reservationService.confirmReservation(user.tsid, reservation.tsid)
             }
 
