@@ -47,4 +47,5 @@ jwt:
   tokenIssuer: tiketatka
   base64TokenSigningKey: l8rSsOP9c5VhhhT3Rg2WAOhXnN4reW9NMaYqUFj11rmtqOSUE9AS
 token:
+  size: 500
   capacity: 200

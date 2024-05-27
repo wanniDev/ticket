@@ -11,11 +11,11 @@ import java.util.concurrent.TimeUnit
 class InMemoryWaitingQueue : TokenWaitingQueue {
     private val tokenCache: Cache<String, Token> =
         Caffeine.newBuilder()
-            .initialCapacity(1000)
+            .initialCapacity(500)
             .recordStats()
             .expireAfterWrite(5, TimeUnit.MINUTES)
             .expireAfterAccess(5, TimeUnit.MINUTES)
-            .maximumSize(1500)
+            .maximumSize(500)
             .build()
 
     override fun offer(element: Token): Boolean {
