@@ -1,6 +1,7 @@
 package io.ticketaka.api.user.infrastructure.event
 
 import io.ticketaka.api.common.domain.map.TokenWaitingMap
+import io.ticketaka.api.common.exception.TooManyRequestException
 import io.ticketaka.api.user.domain.Token
 import io.ticketaka.api.user.domain.TokenCreatedEvent
 import org.springframework.context.event.EventListener
@@ -13,7 +14,7 @@ class TokenEventHandler(
     @EventListener
     fun handle(event: TokenCreatedEvent) {
         if (tokenWaitingQueue.size() >= 1000) {
-            throw IllegalStateException("토큰 용량이 초과되었습니다.")
+            throw TooManyRequestException("토큰 용량이 초과되었습니다.")
         }
         val token = Token.newInstance(event.tsid, event.issuedTime, event.status, event.userId)
         tokenWaitingQueue.put(event.tsid, token)

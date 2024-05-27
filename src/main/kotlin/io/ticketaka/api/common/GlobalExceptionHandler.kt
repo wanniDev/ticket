@@ -2,6 +2,7 @@ package io.ticketaka.api.common
 
 import io.ticketaka.api.common.exception.BadClientRequestException
 import io.ticketaka.api.common.exception.NotFoundException
+import io.ticketaka.api.common.exception.TooManyRequestException
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -16,6 +17,12 @@ class GlobalExceptionHandler {
     fun handleException(e: Exception): ResponseEntity<ApiError> {
         log.error("Internal Server Error: {}", e.message)
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiError(500, e.message ?: "500 에러 발생"))
+    }
+
+    @ExceptionHandler(TooManyRequestException::class)
+    fun handleTooManyRequestException(e: TooManyRequestException): ResponseEntity<ApiError> {
+        log.error("Too Many Request: {}", e.message)
+        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(ApiError(429, e.message ?: "429 에러 발생"))
     }
 
     @ExceptionHandler(NotFoundException::class)
