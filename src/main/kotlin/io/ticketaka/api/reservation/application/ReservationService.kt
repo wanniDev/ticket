@@ -42,6 +42,5 @@ class ReservationService(
             val seat = reservationSeat.seat
             seat.validateReserved()
         }
-        asyncPostReservationProcessor.confirmResercation(reservation, user)
     }
 }

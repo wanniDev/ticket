@@ -29,6 +29,9 @@ class TokenUserService(
             throw IllegalStateException("만료된 토큰입니다.")
         }
         val queueSize = tokenWaitingMap.size()
-        return queueSize < 300L || tokenFromMap.status == Token.Status.ACTIVE
+        if (queueSize > 1000) {
+            return false
+        }
+        return tokenFromMap.status == Token.Status.ACTIVE
     }
 }

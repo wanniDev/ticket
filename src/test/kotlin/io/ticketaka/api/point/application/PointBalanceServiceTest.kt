@@ -1,7 +1,6 @@
 package io.ticketaka.api.point.application
 
 import io.ticketaka.api.common.exception.BadClientRequestException
-import io.ticketaka.api.reservation.application.PaymentService
 import io.ticketaka.api.reservation.application.PointBalanceService
 import io.ticketaka.api.reservation.application.PointService
 import io.ticketaka.api.reservation.application.dto.RechargeCommand
@@ -38,13 +37,13 @@ class PointBalanceServiceTest {
             mock<TokenUserQueryService> {
                 on { getUser(any()) } doReturn user
             }
-        val mockPaymentService = mock<PaymentService>()
+
         val pointService =
             mock<PointService> {
                 on { getPointForUpdate(any()) } doReturn point
             }
 
-        val pointBalanceService = PointBalanceService(tokenUserQueryService, mockPaymentService, pointService, mock())
+        val pointBalanceService = PointBalanceService(tokenUserQueryService, pointService, mock())
 
         // when
         pointBalanceService.recharge(rechargeCommand)
@@ -77,7 +76,7 @@ class PointBalanceServiceTest {
             mock<PointService> {
                 on { getPointForUpdate(any()) } doReturn point
             }
-        val pointBalanceService = PointBalanceService(tokenUserQueryService, mock(), pointService, mock())
+        val pointBalanceService = PointBalanceService(tokenUserQueryService, pointService, mock())
 
         // when
         val exception =
@@ -98,7 +97,7 @@ class PointBalanceServiceTest {
             mock<TokenUserQueryService> {
                 on { getUser(any()) } doReturn user
             }
-        val pointBalanceService = PointBalanceService(tokenUserQueryService, mock(), mock(), mock())
+        val pointBalanceService = PointBalanceService(tokenUserQueryService, mock(), mock())
 
         // when
         val balanceQueryModel = pointBalanceService.getBalance(user.tsid)

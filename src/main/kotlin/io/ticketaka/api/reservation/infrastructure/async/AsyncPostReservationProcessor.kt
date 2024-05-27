@@ -44,7 +44,7 @@ class AsyncPostReservationProcessor(
     @Async
     @Transactional(propagation = Propagation.NESTED)
     @Retryable(retryFor = [Exception::class], backoff = Backoff(delay = 1000, multiplier = 2.0, maxDelay = 10000))
-    fun confirmResercation(
+    fun confirmReservation(
         reservation: Reservation,
         user: User,
     ) {
