@@ -19,7 +19,7 @@ class ReservationApi(
         @RequestBody request: CreateReservationRequest,
     ): ResponseEntity<Void> {
         reservationService.createReservation(request.toCommand())
-        return ResponseEntity.ok().build()
+        return ResponseEntity.noContent().build()
     }
 
     @PostMapping("/confirm")
@@ -27,6 +27,6 @@ class ReservationApi(
         @RequestBody request: ConfirmReservationRequest,
     ): ResponseEntity<Void> {
         reservationService.confirmReservation(request.userTsid, request.reservationTsid)
-        return ResponseEntity.ok().build()
+        return ResponseEntity.noContent().build()
     }
 }
