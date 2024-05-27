@@ -25,7 +25,7 @@ class TokenScheduler(
         }
     }
 
-    @Scheduled(fixedDelay = 1000)
+    @Scheduled(fixedDelay = 1000 * 10)
     fun activateToken() {
         val tokens = tokenWaitingMap.findAll().sortedBy { it.issuedTime }.take(tokenCapacity.toInt())
 

@@ -12,7 +12,7 @@ class SchedulerConfig {
     @Bean
     fun taskScheduler(): TaskScheduler {
         return ThreadPoolTaskScheduler().apply {
-            poolSize = 5
+            poolSize = 10
             setThreadNamePrefix("scheduled-task-")
         }
     }
