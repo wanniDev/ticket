@@ -16,31 +16,31 @@ class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception::class)
     fun handleException(e: Exception): ResponseEntity<ApiError> {
-        log.error("Internal Server Error: {}", e.message)
+        log.debug("Internal Server Error: {}", e.message)
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiError(500, e.message ?: "500 에러 발생"))
     }
 
     @ExceptionHandler(TooManyRequestException::class)
     fun handleTooManyRequestException(e: TooManyRequestException): ResponseEntity<ApiError> {
-        log.error("Too Many Request: {}", e.message)
+        log.debug("Too Many Request: {}", e.message)
         return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(ApiError(429, e.message ?: "429 에러 발생"))
     }
 
     @ExceptionHandler(NotFoundException::class)
     fun handleNotFoundUserException(e: NotFoundException): ResponseEntity<ApiError> {
-        log.error("Not Found: {}", e.message)
+        log.debug("Not Found: {}", e.message)
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiError(404, e.message ?: "404 에러 발생"))
     }
 
     @ExceptionHandler(BadClientRequestException::class)
     fun handleBadRequestException(e: BadClientRequestException): ResponseEntity<ApiError> {
-        log.error("Bad Request: {}", e.message)
+        log.debug("Bad Request: {}", e.message)
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiError(400, e.message ?: "400 에러 발생"))
     }
 
     @ExceptionHandler(ReservationStateException::class)
     fun handleReservationStateException(e: ReservationStateException): ResponseEntity<ApiError> {
-        log.error("Reservation State Error: {}", e.message)
+        log.debug("Reservation State Error: {}", e.message)
         return ResponseEntity.status(HttpStatus.OK).body(ApiError(400, e.message ?: "400 에러 발생"))
     }
 }
