@@ -21,7 +21,11 @@ class DBEventBroker(
     }
 
     private fun startEventBroker() {
-        thread(start = true) {
+        thread(
+            start = true,
+            isDaemon = true,
+            name = "DBEventBroker",
+        ) {
             while (true) {
                 if (eventQueue.isNotEmpty()) {
                     val events = mutableListOf<DomainEvent>()
@@ -31,7 +35,6 @@ class DBEventBroker(
                     eventDispatcher.dispatch(events)
                 } else {
                     Thread.sleep(5000)
-                    continue
                 }
             }
         }

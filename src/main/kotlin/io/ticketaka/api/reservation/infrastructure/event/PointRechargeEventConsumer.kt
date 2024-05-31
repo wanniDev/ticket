@@ -35,7 +35,11 @@ class PointRechargeEventConsumer(
     }
 
     private fun startEventConsumer() {
-        thread(start = true) {
+        thread(
+            start = true,
+            isDaemon = true,
+            name = "PointRechargeEventConsumer",
+        ) {
             while (true) {
                 if (eventQueue.isNotEmpty()) {
                     val events = mutableListOf<PointRechargeEvent>()
