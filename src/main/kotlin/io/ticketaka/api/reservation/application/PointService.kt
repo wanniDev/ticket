@@ -2,6 +2,7 @@ package io.ticketaka.api.reservation.application
 
 import io.ticketaka.api.reservation.domain.point.Point
 import io.ticketaka.api.reservation.domain.point.PointRepository
+import io.ticketaka.api.user.domain.User
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.math.BigDecimal
@@ -22,5 +23,9 @@ class PointService(
     @Transactional
     fun getPointForUpdate(pointTsid: String): Point {
         return pointRepository.findByTsidForUpdate(pointTsid) ?: throw IllegalArgumentException("포인트를 찾을 수 없습니다.")
+    }
+
+    fun getPoint(user: User): Point {
+        return pointRepository.findById(user.point!!.getId()) ?: throw IllegalArgumentException("포인트를 찾을 수 없습니다.")
     }
 }
