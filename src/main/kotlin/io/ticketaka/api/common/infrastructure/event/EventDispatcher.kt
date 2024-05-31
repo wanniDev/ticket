@@ -25,4 +25,17 @@ class EventDispatcher(
             }
         }
     }
+
+    fun consume(events: MutableList<DomainEvent>) {
+        events.forEach { event ->
+            when (event) {
+                is PointRechargeEvent -> {
+                    pointRechargeEventConsumer.consume(mutableListOf(event))
+                }
+                is PointChargeEvent -> {
+                    pointChargeEventConsumer.consume(mutableListOf(event))
+                }
+            }
+        }
+    }
 }

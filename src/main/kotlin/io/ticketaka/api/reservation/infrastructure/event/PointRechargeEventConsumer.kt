@@ -5,7 +5,6 @@ import io.ticketaka.api.reservation.domain.point.PointHistoryRepository
 import io.ticketaka.api.reservation.domain.point.PointRechargeEvent
 import org.springframework.stereotype.Component
 import java.util.concurrent.ConcurrentLinkedQueue
-import kotlin.concurrent.thread
 
 @Component
 class PointRechargeEventConsumer(
@@ -13,11 +12,7 @@ class PointRechargeEventConsumer(
 ) {
     private val eventQueue = ConcurrentLinkedQueue<PointRechargeEvent>()
 
-    init {
-        startEventConsumer()
-    }
-
-    private fun consume(events: MutableList<PointRechargeEvent>) {
+    fun consume(events: MutableList<PointRechargeEvent>) {
         val pointHistories = mutableListOf<PointHistory>()
         events.forEach { event ->
             PointHistory.newInstance(
@@ -32,25 +27,5 @@ class PointRechargeEventConsumer(
 
     fun pile(event: PointRechargeEvent) {
         eventQueue.add(event)
-    }
-
-    private fun startEventConsumer() {
-        thread(
-            start = true,
-            isDaemon = true,
-            name = "PointRechargeEventConsumer",
-        ) {
-            while (true) {
-                if (eventQueue.isNotEmpty()) {
-                    val events = mutableListOf<PointRechargeEvent>()
-                    while (eventQueue.isNotEmpty()) {
-                        eventQueue.poll()?.let { events.add(it) }
-                    }
-                    consume(events)
-                } else {
-                    Thread.sleep(5000)
-                }
-            }
-        }
     }
 }

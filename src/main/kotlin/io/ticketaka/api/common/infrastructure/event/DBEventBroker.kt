@@ -33,6 +33,7 @@ class DBEventBroker(
                         eventQueue.poll()?.let { events.add(it) }
                     }
                     eventDispatcher.dispatch(events)
+                    eventDispatcher.consume(events)
                 } else {
                     Thread.sleep(5000)
                 }
