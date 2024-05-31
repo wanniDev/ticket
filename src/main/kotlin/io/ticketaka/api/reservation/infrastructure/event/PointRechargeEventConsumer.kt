@@ -13,7 +13,11 @@ class PointRechargeEventConsumer(
 ) {
     private val eventQueue = ConcurrentLinkedQueue<PointRechargeEvent>()
 
-    fun consume(events: MutableList<PointRechargeEvent>) {
+    init {
+        startEventConsumer()
+    }
+
+    private fun consume(events: MutableList<PointRechargeEvent>) {
         val pointHistories = mutableListOf<PointHistory>()
         events.forEach { event ->
             PointHistory.newInstance(
@@ -26,7 +30,7 @@ class PointRechargeEventConsumer(
         pointHistoryRepository.saveAll(pointHistories)
     }
 
-    fun pile(event: PointRechargeEvent) {
+    fun offer(event: PointRechargeEvent) {
         eventQueue.add(event)
     }
 
@@ -39,14 +43,15 @@ class PointRechargeEventConsumer(
             while (true) {
                 if (eventQueue.isNotEmpty()) {
                     val events = mutableListOf<PointRechargeEvent>()
-                    var quantity = 1000
+                    var quantity = 8
                     while (eventQueue.isNotEmpty().and(quantity > 0)) {
                         quantity--
                         eventQueue.poll()?.let { events.add(it) }
                     }
                     consume(events)
+                    Thread.sleep(1000)
                 } else {
-                    Thread.sleep(2000)
+                    Thread.sleep(5000)
                 }
             }
         }

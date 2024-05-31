@@ -30,7 +30,7 @@ class PointChargeEventConsumer(
         pointHistoryRepository.saveAll(pointHistories)
     }
 
-    fun pile(event: PointChargeEvent) {
+    fun offer(event: PointChargeEvent) {
         eventQueue.add(event)
     }
 
@@ -49,8 +49,9 @@ class PointChargeEventConsumer(
                         eventQueue.poll()?.let { events.add(it) }
                     }
                     consume(events)
+                    Thread.sleep(1000)
                 } else {
-                    Thread.sleep(2000)
+                    Thread.sleep(5000)
                 }
             }
         }

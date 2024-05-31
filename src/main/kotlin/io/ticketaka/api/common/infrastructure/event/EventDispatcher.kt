@@ -15,10 +15,10 @@ class EventDispatcher(
     fun dispatchAndConsume(event: DomainEvent) {
         when (event) {
             is PointRechargeEvent -> {
-                pointRechargeEventConsumer.consume(mutableListOf(event))
+                pointRechargeEventConsumer.offer(event)
             }
             is PointChargeEvent -> {
-                pointChargeEventConsumer.consume(mutableListOf(event))
+                pointChargeEventConsumer.offer(event)
             }
         }
     }
