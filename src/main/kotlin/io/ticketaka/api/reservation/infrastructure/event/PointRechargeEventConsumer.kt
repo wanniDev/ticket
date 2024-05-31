@@ -13,10 +13,6 @@ class PointRechargeEventConsumer(
 ) {
     private val eventQueue = ConcurrentLinkedQueue<PointRechargeEvent>()
 
-    init {
-        startEventConsumer()
-    }
-
     fun consume(events: MutableList<PointRechargeEvent>) {
         val pointHistories = mutableListOf<PointHistory>()
         events.forEach { event ->

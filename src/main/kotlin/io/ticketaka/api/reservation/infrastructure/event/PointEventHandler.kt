@@ -12,11 +12,11 @@ class PointEventHandler(
 ) {
     @EventListener
     fun handle(event: PointRechargeEvent) {
-        eventBroker.produce(event)
+        eventBroker.produceAndConsume(event)
     }
 
     @EventListener
     fun handle(event: PointChargeEvent) {
-        eventBroker.produce(event)
+        eventBroker.produceAndConsume(event)
     }
 }

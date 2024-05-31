@@ -12,29 +12,13 @@ class EventDispatcher(
     private val pointRechargeEventConsumer: PointRechargeEventConsumer,
     private val pointChargeEventConsumer: PointChargeEventConsumer,
 ) {
-    fun dispatch(events: MutableList<DomainEvent>) {
-        events.sortBy { it.occurredOn() }
-        events.forEach { event ->
-            when (event) {
-                is PointRechargeEvent -> {
-                    pointRechargeEventConsumer.pile(event)
-                }
-                is PointChargeEvent -> {
-                    pointChargeEventConsumer.pile(event)
-                }
+    fun dispatchAndConsume(event: DomainEvent) {
+        when (event) {
+            is PointRechargeEvent -> {
+                pointRechargeEventConsumer.consume(mutableListOf(event))
             }
-        }
-    }
-
-    fun consume(events: MutableList<DomainEvent>) {
-        events.forEach { event ->
-            when (event) {
-                is PointRechargeEvent -> {
-                    pointRechargeEventConsumer.consume(mutableListOf(event))
-                }
-                is PointChargeEvent -> {
-                    pointChargeEventConsumer.consume(mutableListOf(event))
-                }
+            is PointChargeEvent -> {
+                pointChargeEventConsumer.consume(mutableListOf(event))
             }
         }
     }
