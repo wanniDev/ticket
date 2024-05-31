@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
-import java.math.BigDecimal
 
 @RestController
 @RequestMapping("/api/point")
@@ -31,7 +30,7 @@ class PointApi(
     override fun getBalance(
         @RequestParam userTsid: String,
     ): ResponseEntity<BalanceResponse> {
-        pointBalanceService.getBalance(userTsid)
-        return ResponseEntity.ok(BalanceResponse("userId", BigDecimal(10000)))
+        val userPoint = pointBalanceService.getBalance(userTsid)
+        return ResponseEntity.ok(BalanceResponse(userPoint.userTsid, userPoint.balance))
     }
 }
