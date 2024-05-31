@@ -12,4 +12,8 @@ class PointHistoryRepositoryComposition(
     override fun save(pointHistory: PointHistory): PointHistory {
         return jpaPointHistoryRepository.save(pointHistory)
     }
+
+    override fun saveAll(pointHistories: List<PointHistory>) {
+        jpaPointHistoryRepository.saveAll(pointHistories)
+    }
 }
