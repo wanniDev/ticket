@@ -13,9 +13,9 @@ import java.util.concurrent.Executor
 class AsyncConfig : AsyncConfigurer {
     override fun getAsyncExecutor(): Executor {
         val executor = ThreadPoolTaskExecutor()
-        executor.corePoolSize = 10
-        executor.maxPoolSize = 20
-        executor.queueCapacity = 1000
+        executor.corePoolSize = 209
+        executor.maxPoolSize = 209
+        executor.queueCapacity = 418
         executor.setThreadNamePrefix("Ticketaka-")
         executor.initialize()
         return executor

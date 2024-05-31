@@ -15,17 +15,7 @@ class TokenScheduler(
     @Value("\${token.capacity}")
     private lateinit var tokenCapacity: String
 
-    @Scheduled(fixedDelay = 1000 * 60)
-    fun checkExpiredToken() {
-        val tokens = tokenWaitingMap.findAll()
-        tokens.forEach { token ->
-            if (token.isExpired()) {
-                tokenWaitingMap.remove(token.tsid)
-            }
-        }
-    }
-
-    @Scheduled(fixedDelay = 1000 * 5)
+    @Scheduled(fixedDelay = 1000 * 10)
     fun activateToken() {
         val tokens = tokenWaitingMap.findAll()
         if (tokens.isEmpty()) {
@@ -35,7 +25,7 @@ class TokenScheduler(
         tokens.sortedBy { it.issuedTime }.take(tokenCapacity.toInt())
         tokens.forEach { token ->
             logger.debug("scan tokens for activate, {}:{}", token.tsid, token.status)
-            if (token.isExpired()) {
+            if (token.isExpired() || token.isDeactivated()) {
                 tokenWaitingMap.remove(token.tsid)
             }
         }

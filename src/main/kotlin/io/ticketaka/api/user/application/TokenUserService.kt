@@ -22,7 +22,7 @@ class TokenUserService(
     fun peekToken(tokenTsid: String): Boolean {
         val tokenFromMap = tokenWaitingMap.get(tokenTsid)
 
-        if (tokenFromMap == null || tokenFromMap.status == Token.Status.PENDING) {
+        if (tokenFromMap == null || tokenFromMap.isExpired() || tokenFromMap.isDeactivated()) {
             return false
         }
         if (tokenFromMap.isExpired()) {

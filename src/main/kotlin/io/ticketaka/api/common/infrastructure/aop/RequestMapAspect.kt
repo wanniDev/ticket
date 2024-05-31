@@ -44,7 +44,7 @@ class RequestMapAspect(
         try {
             return joinPoint.proceed()
         } finally {
-            tokenFromQueue.expired()
+            tokenFromQueue.deactivate()
             tokenWaitingMap.put(authorizationHeader, tokenFromQueue)
         }
     }

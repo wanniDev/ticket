@@ -26,7 +26,7 @@ class Token protected constructor(
 
     enum class Status {
         ACTIVE,
-        PENDING,
+        DEACTIVATED,
         EXPIRED,
     }
 
@@ -35,6 +35,13 @@ class Token protected constructor(
             return
         }
         status = Status.ACTIVE
+    }
+
+    fun deactivate() {
+        if (status == Status.DEACTIVATED) {
+            return
+        }
+        status = Status.DEACTIVATED
     }
 
     fun expired() {
@@ -48,8 +55,8 @@ class Token protected constructor(
         return status == Status.EXPIRED || issuedTime.plusMinutes(5).isBefore(LocalDateTime.now())
     }
 
-    fun isReady(): Boolean {
-        return status == Status.PENDING && issuedTime.plusMinutes(5).isAfter(LocalDateTime.now())
+    fun isDeactivated(): Boolean {
+        return status == Status.DEACTIVATED
     }
 
     init {
