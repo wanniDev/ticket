@@ -92,12 +92,17 @@ class PointBalanceServiceTest {
     fun getBalance() {
         // given
         val point = Point.newInstance()
+        point.id = 1
         val user = User("userTsid1", point)
         val tokenUserQueryService =
             mock<TokenUserQueryService> {
                 on { getUser(any()) } doReturn user
             }
-        val pointBalanceService = PointBalanceService(tokenUserQueryService, mock(), mock())
+        val pointService =
+            mock<PointService> {
+                on { getPoint(any()) } doReturn point
+            }
+        val pointBalanceService = PointBalanceService(tokenUserQueryService, pointService, mock())
 
         // when
         val balanceQueryModel = pointBalanceService.getBalance(user.tsid)
