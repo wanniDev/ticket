@@ -49,6 +49,13 @@ class Reservation(
         }
     }
 
+    fun validateSeatsReserved() {
+        if (this.seats.isEmpty()) {
+            throw IllegalStateException("Seats are not reserved")
+        }
+        this.seats.forEach { it.seat.validateReserved() }
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null

@@ -12,7 +12,6 @@ import io.ticketaka.api.reservation.application.dto.CreateReservationCommand
 import io.ticketaka.api.reservation.domain.point.Point
 import io.ticketaka.api.reservation.domain.reservation.Reservation
 import io.ticketaka.api.reservation.domain.reservation.ReservationRepository
-import io.ticketaka.api.reservation.infrastructure.async.AsyncPostReservationProcessor
 import io.ticketaka.api.user.application.TokenUserQueryService
 import io.ticketaka.api.user.domain.User
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -23,7 +22,6 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.doThrow
 import org.mockito.kotlin.mock
-import org.mockito.kotlin.verify
 import java.time.LocalDate
 import kotlin.test.assertFailsWith
 
@@ -41,13 +39,18 @@ class ReservationServiceTest {
         val concert = Concert.newInstance(date)
         concert.id = 1
         val seats = setOf(Seat.newInstance(seatNumber, 1000.toBigDecimal(), concert))
+        val reservation = Reservation.createPendingReservation(user.getId(), concert.getId())
+        reservation.id = 1
 
         val mockTokenUserQueryService =
             mock<TokenUserQueryService> {
                 on { getUser(any()) } doReturn user
             }
 
-        val mockAsyncPostReservationProcessor = mock<AsyncPostReservationProcessor>()
+        val mockReservationRepository =
+            mock<ReservationRepository> {
+                on { save(any()) } doReturn reservation
+            }
 
         val concertSeatService =
             mock<ConcertSeatService> {
@@ -59,7 +62,7 @@ class ReservationServiceTest {
             ReservationService(
                 mockTokenUserQueryService,
                 concertSeatService,
-                mockAsyncPostReservationProcessor,
+                mockReservationRepository,
                 mock(),
             )
 
@@ -69,7 +72,7 @@ class ReservationServiceTest {
         )
 
         // then
-        verify(mockAsyncPostReservationProcessor).createReservation(user.getId(), concert.getId(), seats)
+        assertEquals(Reservation.Status.PENDING, reservation.status)
     }
 
     @Test
@@ -100,8 +103,8 @@ class ReservationServiceTest {
             ReservationService(
                 mockTokenUserQueryService,
                 concertSeatService,
-                mock(),
                 mockReservationRepository,
+                mock(),
             )
 
         // when
@@ -139,8 +142,8 @@ class ReservationServiceTest {
             ReservationService(
                 mockTokenUserQueryService,
                 ConcertSeatService(mock(), mockSeatRepository, mockConcertRepository),
-                mock(),
                 mockReservationRepository,
+                mock(),
             )
 
         // when
@@ -185,8 +188,8 @@ class ReservationServiceTest {
             ReservationService(
                 mockTokenUserQueryService,
                 mock(),
-                mock(),
                 mockReservationRepository,
+                mock(),
             )
 
         // when
@@ -216,8 +219,8 @@ class ReservationServiceTest {
             ReservationService(
                 mockTokenUserQueryService,
                 mock(),
-                mock(),
                 mockReservationRepository,
+                mock(),
             )
 
         // when
@@ -259,8 +262,8 @@ class ReservationServiceTest {
             ReservationService(
                 mockTokenUserQueryService,
                 mock(),
-                mock(),
                 mockReservationRepository,
+                mock(),
             )
 
         // when
@@ -304,8 +307,8 @@ class ReservationServiceTest {
             ReservationService(
                 mockTokenUserQueryService,
                 mock(),
-                mock(),
                 mockReservationRepository,
+                mock(),
             )
 
         // when

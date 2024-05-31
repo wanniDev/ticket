@@ -2,10 +2,12 @@ package io.ticketaka.api.reservation.application
 
 import io.ticketaka.api.common.exception.NotFoundException
 import io.ticketaka.api.concert.application.ConcertSeatService
+import io.ticketaka.api.concert.infrastructure.cache.ConcertSeatCacheRefresher
 import io.ticketaka.api.reservation.application.dto.CreateReservationCommand
+import io.ticketaka.api.reservation.domain.reservation.Reservation
 import io.ticketaka.api.reservation.domain.reservation.ReservationRepository
-import io.ticketaka.api.reservation.infrastructure.async.AsyncPostReservationProcessor
 import io.ticketaka.api.user.application.TokenUserQueryService
+import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -14,17 +16,21 @@ import org.springframework.transaction.annotation.Transactional
 class ReservationService(
     private val tokenQueryUserService: TokenUserQueryService,
     private val concertSeatService: ConcertSeatService,
-    private val asyncPostReservationProcessor: AsyncPostReservationProcessor,
     private val reservationRepository: ReservationRepository,
+    private val concertSeatCacheRefresher: ConcertSeatCacheRefresher,
 ) {
+    @Async
     @Transactional
     fun createReservation(command: CreateReservationCommand) {
         val user = tokenQueryUserService.getUser(command.userTsid)
         val concert = concertSeatService.getAvailableConcert(command.date)
         val seats = concertSeatService.reserveSeat(concert.getId(), command.seatNumbers)
-        asyncPostReservationProcessor.createReservation(user.getId(), concert.getId(), seats)
+        val reservation = reservationRepository.save(Reservation.createPendingReservation(user.getId(), concert.getId()))
+        reservation.allocate(seats)
+        concertSeatCacheRefresher.refresh(concert.getId())
     }
 
+    @Async
     @Transactional
     fun confirmReservation(
         userTsid: String,
@@ -37,10 +43,7 @@ class ReservationService(
                 ?: throw NotFoundException("예약을 찾을 수 없습니다.")
         reservation.validateUser(user)
         reservation.validatePending()
-        val reservationSeats = reservation.seats
-        reservationSeats.forEach { reservationSeat ->
-            val seat = reservationSeat.seat
-            seat.validateReserved()
-        }
+        reservation.validateSeatsReserved()
+        reservation.confirm()
     }
 }

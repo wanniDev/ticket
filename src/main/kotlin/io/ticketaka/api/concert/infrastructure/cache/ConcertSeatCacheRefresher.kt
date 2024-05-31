@@ -17,4 +17,9 @@ class ConcertSeatCacheRefresher(
             cacheManager.getCache("seatNumbers")?.put(concert.getId(), seats)
         }
     }
+
+    fun refresh(concertId: Long) {
+        val seats = seatRepository.findByConcertId(concertId)
+        cacheManager.getCache("seatNumbers")?.put(concertId, seats)
+    }
 }

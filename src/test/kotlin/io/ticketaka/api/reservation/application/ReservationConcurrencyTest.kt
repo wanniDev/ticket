@@ -3,6 +3,7 @@ package io.ticketaka.api.reservation.application
 import io.ticketaka.api.TestContainerRegistry
 import io.ticketaka.api.common.exception.ReservationStateException
 import io.ticketaka.api.reservation.application.dto.CreateReservationCommand
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -48,7 +49,7 @@ class ReservationConcurrencyTest
             executor.awaitTermination(1, TimeUnit.MINUTES)
 
             // then
-            assert(reservationCnt.get() == 1)
-            assert(failedCnt.get() == len - reservationCnt.get())
+            assertThat(reservationCnt.get() == 1)
+            assertThat(failedCnt.get() == len - reservationCnt.get())
         }
     }
