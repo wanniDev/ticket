@@ -22,8 +22,8 @@ class PointBalanceService(
     @Retryable(retryFor = [Exception::class], backoff = Backoff(delay = 1000, multiplier = 2.0, maxDelay = 10000))
     @Transactional
     fun recharge(rechargeCommand: RechargeCommand) {
-        val userPoint = pointService.getPointForUpdate(rechargeCommand.pointTsid)
         val user = tokenUserQueryService.getUser(rechargeCommand.userTsid)
+        val userPoint = user.point ?: throw IllegalArgumentException("포인트를 찾을 수 없습니다.")
         val amount = rechargeCommand.amount
         userPoint.recharge(user, amount)
         applicationEventPublisher.publishEvent(PointRechargeEvent(user, userPoint, amount))

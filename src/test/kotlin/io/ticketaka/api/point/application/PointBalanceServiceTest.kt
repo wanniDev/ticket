@@ -39,9 +39,7 @@ class PointBalanceServiceTest {
             }
 
         val pointService =
-            mock<PointService> {
-                on { getPointForUpdate(any()) } doReturn point
-            }
+            mock<PointService>()
 
         val pointBalanceService = PointBalanceService(tokenUserQueryService, pointService, mock())
 
@@ -72,10 +70,7 @@ class PointBalanceServiceTest {
                 on { getUser(any()) } doReturn user
             }
 
-        val pointService =
-            mock<PointService> {
-                on { getPointForUpdate(any()) } doReturn point
-            }
+        val pointService = mock<PointService>()
         val pointBalanceService = PointBalanceService(tokenUserQueryService, pointService, mock())
 
         // when
