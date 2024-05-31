@@ -27,8 +27,12 @@ class TokenScheduler(
 
     @Scheduled(fixedDelay = 1000 * 5)
     fun activateToken() {
-        val tokens = tokenWaitingMap.findAll().sortedBy { it.issuedTime }.take(tokenCapacity.toInt())
+        val tokens = tokenWaitingMap.findAll()
+        if (tokens.isEmpty()) {
+            return
+        }
 
+        tokens.sortedBy { it.issuedTime }.take(tokenCapacity.toInt())
         tokens.forEach { token ->
             logger.debug("scan tokens for activate, {}:{}", token.tsid, token.status)
             if (token.isExpired()) {
