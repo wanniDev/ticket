@@ -1,28 +1,38 @@
 package io.ticketaka.api.point.application
 
-import io.ticketaka.api.common.exception.NotFoundException
-import io.ticketaka.api.point.domain.Point
-import io.ticketaka.api.point.domain.PointRepository
-import io.ticketaka.api.user.domain.User
+import io.ticketaka.api.point.application.dto.BalanceQueryModel
+import io.ticketaka.api.point.application.dto.RechargeCommand
+import io.ticketaka.api.point.domain.PointBalanceUpdater
+import io.ticketaka.api.point.domain.PointRechargeEvent
+import io.ticketaka.api.user.application.TokenUserQueryService
+import org.springframework.context.ApplicationEventPublisher
+import org.springframework.retry.annotation.Backoff
+import org.springframework.retry.annotation.Retryable
+import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.math.BigDecimal
 
 @Service
 @Transactional(readOnly = true)
 class PointService(
-    private val pointRepository: PointRepository,
+    private val tokenUserQueryService: TokenUserQueryService,
+    private val pointQueryService: PointQueryService,
+    private val pointBalanceUpdater: PointBalanceUpdater,
+    private val applicationEventPublisher: ApplicationEventPublisher,
 ) {
-    fun rollbackPoint(
-        pointId: Long,
-        amount: BigDecimal,
-    ) {
-        val point = pointRepository.findById(pointId) ?: throw IllegalArgumentException("포인트를 찾을 수 없습니다.")
-        point.rollback(amount)
+    @Async
+    @Retryable(retryFor = [Exception::class], backoff = Backoff(delay = 1000, multiplier = 2.0, maxDelay = 10000))
+    @Transactional
+    fun recharge(rechargeCommand: RechargeCommand) {
+        val user = tokenUserQueryService.getUser(rechargeCommand.userId)
+        val userPoint = pointQueryService.getPoint(user.pointId)
+        pointBalanceUpdater.recharge(userPoint, rechargeCommand.amount)
+        applicationEventPublisher.publishEvent(PointRechargeEvent(user.id, userPoint.id, rechargeCommand.amount))
     }
 
-    fun getPoint(user: User): Point {
-        val userPoint = user.point ?: throw NotFoundException("포인트를 찾을 수 없습니다.")
-        return pointRepository.findById(userPoint.id) ?: throw IllegalArgumentException("포인트를 찾을 수 없습니다.")
+    fun getBalance(userId: Long): BalanceQueryModel {
+        val user = tokenUserQueryService.getUser(userId)
+        val point = pointQueryService.getPoint(user.pointId)
+        return BalanceQueryModel(user.id, point.balance)
     }
 }

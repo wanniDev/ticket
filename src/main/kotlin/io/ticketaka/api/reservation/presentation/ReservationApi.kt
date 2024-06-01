@@ -28,7 +28,7 @@ class ReservationApi(
     override fun confirmReservation(
         @RequestBody request: ConfirmReservationRequest,
     ): ResponseEntity<Void> {
-        reservationService.confirmReservation(request.userTsid, request.reservationId)
+        reservationService.confirmReservation(request.userId, request.reservationId)
         return ResponseEntity.noContent().build()
     }
 }
