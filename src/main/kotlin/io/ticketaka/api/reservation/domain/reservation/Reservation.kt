@@ -7,7 +7,11 @@ import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
 import jakarta.persistence.Id
+import jakarta.persistence.PostLoad
+import jakarta.persistence.PrePersist
 import jakarta.persistence.Table
+import jakarta.persistence.Transient
+import org.springframework.data.domain.Persistable
 import java.time.LocalDateTime
 
 @Entity
@@ -21,7 +25,24 @@ class Reservation(
     val expirationTime: LocalDateTime,
     val userId: Long,
     val concertId: Long,
-) {
+) : Persistable<Long> {
+    @Transient
+    private var isNew = true
+
+    override fun isNew(): Boolean {
+        return isNew
+    }
+
+    override fun getId(): Long {
+        return id
+    }
+
+    @PrePersist
+    @PostLoad
+    fun markNotNew() {
+        isNew = false
+    }
+
     fun confirm() {
         validatePending()
         status = Status.CONFIRMED

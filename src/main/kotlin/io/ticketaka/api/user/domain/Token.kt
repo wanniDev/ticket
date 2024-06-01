@@ -6,7 +6,11 @@ import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
 import jakarta.persistence.Id
+import jakarta.persistence.PostLoad
+import jakarta.persistence.PrePersist
 import jakarta.persistence.Table
+import jakarta.persistence.Transient
+import org.springframework.data.domain.Persistable
 import java.time.LocalDateTime
 
 @Entity
@@ -18,7 +22,24 @@ class Token protected constructor(
     @Enumerated(EnumType.STRING)
     var status: Status,
     val userId: Long,
-) : AbstractAggregateRoot() {
+) : AbstractAggregateRoot(), Persistable<Long> {
+    @Transient
+    private var isNew = true
+
+    override fun isNew(): Boolean {
+        return isNew
+    }
+
+    override fun getId(): Long {
+        return id
+    }
+
+    @PrePersist
+    @PostLoad
+    fun markNotNew() {
+        isNew = false
+    }
+
     enum class Status {
         ACTIVE,
         DEACTIVATED,

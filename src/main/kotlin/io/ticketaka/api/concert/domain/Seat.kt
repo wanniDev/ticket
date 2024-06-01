@@ -6,7 +6,11 @@ import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
 import jakarta.persistence.Id
+import jakarta.persistence.PostLoad
+import jakarta.persistence.PrePersist
 import jakarta.persistence.Table
+import jakarta.persistence.Transient
+import org.springframework.data.domain.Persistable
 import java.math.BigDecimal
 import java.time.LocalDate
 
@@ -21,7 +25,24 @@ class Seat(
     val price: BigDecimal,
     val concertId: Long,
     val concertDate: LocalDate,
-) {
+) : Persistable<Long> {
+    @Transient
+    private var isNew = true
+
+    override fun isNew(): Boolean {
+        return isNew
+    }
+
+    override fun getId(): Long {
+        return id
+    }
+
+    @PrePersist
+    @PostLoad
+    fun markNotNew() {
+        isNew = false
+    }
+
     fun isAvailable(): Boolean {
         return this.status == Status.AVAILABLE
     }
