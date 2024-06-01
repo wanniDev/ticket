@@ -5,8 +5,6 @@ import io.ticketaka.api.common.infrastructure.tsid.TsIdKeyGenerator
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Table
 import java.time.LocalDateTime
@@ -14,16 +12,13 @@ import java.time.LocalDateTime
 @Entity
 @Table(name = "tokens")
 class Token protected constructor(
-    var tsid: String,
+    @Id
+    val id: Long,
     val issuedTime: LocalDateTime,
     @Enumerated(EnumType.STRING)
     var status: Status,
     val userId: Long,
 ) : AbstractAggregateRoot() {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null
-
     enum class Status {
         ACTIVE,
         DEACTIVATED,
@@ -66,7 +61,7 @@ class Token protected constructor(
     companion object {
         fun newInstance(userId: Long): Token {
             return Token(
-                tsid = TsIdKeyGenerator.next("token"),
+                id = TsIdKeyGenerator.nextLong(),
                 issuedTime = LocalDateTime.now(),
                 status = Status.ACTIVE,
                 userId = userId,
@@ -74,12 +69,12 @@ class Token protected constructor(
         }
 
         fun newInstance(
-            tsid: String,
+            id: Long,
             issuedTime: LocalDateTime,
             status: Status,
             userId: Long,
         ): Token {
-            return Token(tsid, issuedTime, status, userId)
+            return Token(id, issuedTime, status, userId)
         }
     }
 }
