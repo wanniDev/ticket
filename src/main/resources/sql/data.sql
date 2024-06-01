@@ -6,11 +6,11 @@ insert into `points` (`id`, `balance`, `create_time`, `update_time`) values (4, 
 insert into `points` (`id`, `balance`, `create_time`, `update_time`) values (5, 3000, '2024-01-05 00:00:00', '2024-01-05 00:00:00');
 
 
-insert into `users` (`id`, `tsid`, `point_id`) values (1, 'usr-576023809841191373', 1);
-insert into `users` (`id`, `tsid`, `point_id`) values (2, 'usr-576023809841191374', 2);
-insert into `users` (`id`, `tsid`, `point_id`) values (3, 'usr-576023809841191375', 3);
-insert into `users` (`id`, `tsid`, `point_id`) values (4, 'usr-576023809841191376', 4);
-insert into `users` (`id`, `tsid`, `point_id`) values (5, 'usr-576023809841191377', 5);
+insert into `users` (`id`, `point_id`) values (1, 1);
+insert into `users` (`id`, `point_id`) values (2, 2);
+insert into `users` (`id`, `point_id`) values (3, 3);
+insert into `users` (`id`, `point_id`) values (4, 4);
+insert into `users` (`id`, `point_id`) values (5, 5);
 
 
 insert into `concerts` (`id`, `date`) values (1, '2024-05-05');
