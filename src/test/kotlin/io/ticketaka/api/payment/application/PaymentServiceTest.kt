@@ -1,10 +1,10 @@
 package io.ticketaka.api.payment.application
 
-import io.ticketaka.api.reservation.application.PaymentService
-import io.ticketaka.api.reservation.application.dto.PaymentCommand
-import io.ticketaka.api.reservation.domain.payment.Payment
-import io.ticketaka.api.reservation.domain.payment.PaymentRepository
-import io.ticketaka.api.reservation.domain.point.Point
+import io.ticketaka.api.point.application.PaymentService
+import io.ticketaka.api.point.application.dto.PaymentCommand
+import io.ticketaka.api.point.domain.Point
+import io.ticketaka.api.point.domain.payment.Payment
+import io.ticketaka.api.point.domain.payment.PaymentRepository
 import io.ticketaka.api.user.domain.User
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith

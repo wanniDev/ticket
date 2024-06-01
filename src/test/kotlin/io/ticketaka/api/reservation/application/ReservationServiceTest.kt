@@ -8,8 +8,8 @@ import io.ticketaka.api.concert.domain.Concert
 import io.ticketaka.api.concert.domain.ConcertRepository
 import io.ticketaka.api.concert.domain.Seat
 import io.ticketaka.api.concert.domain.SeatRepository
+import io.ticketaka.api.point.domain.Point
 import io.ticketaka.api.reservation.application.dto.CreateReservationCommand
-import io.ticketaka.api.reservation.domain.point.Point
 import io.ticketaka.api.reservation.domain.reservation.Reservation
 import io.ticketaka.api.reservation.domain.reservation.ReservationRepository
 import io.ticketaka.api.user.application.TokenUserQueryService
