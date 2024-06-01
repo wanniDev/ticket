@@ -1,32 +1,27 @@
 package io.ticketaka.api.reservation.domain.reservation
 
-import io.ticketaka.api.concert.domain.Seat
+import io.ticketaka.api.common.infrastructure.tsid.TsIdKeyGenerator
 import jakarta.persistence.Entity
-import jakarta.persistence.FetchType
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
-import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 
 @Entity
 @Table(name = "reservations_seats")
 class ReservationSeat(
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null,
-    @ManyToOne(targetEntity = Seat::class, fetch = FetchType.LAZY)
-    val seat: Seat,
-    @ManyToOne(targetEntity = Reservation::class, fetch = FetchType.LAZY)
-    val reservation: Reservation,
+    @Id
+    val id: Long,
+    val seatId: Long,
+    val reservationId: Long,
 ) {
     companion object {
         fun create(
-            seat: Seat,
-            reservation: Reservation,
+            seatId: Long,
+            reservationId: Long,
         ): ReservationSeat {
             return ReservationSeat(
-                seat = seat,
-                reservation = reservation,
+                id = TsIdKeyGenerator.nextLong(),
+                seatId = seatId,
+                reservationId = reservationId,
             )
         }
     }

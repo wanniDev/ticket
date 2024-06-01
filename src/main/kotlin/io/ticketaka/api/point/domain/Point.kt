@@ -5,8 +5,6 @@ import io.ticketaka.api.common.exception.BadClientRequestException
 import io.ticketaka.api.common.infrastructure.tsid.TsIdKeyGenerator
 import io.ticketaka.api.user.domain.User
 import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Table
 import java.math.BigDecimal
@@ -15,7 +13,8 @@ import java.time.LocalDateTime
 @Entity
 @Table(name = "points")
 class Point protected constructor(
-    val tsid: String,
+    @Id
+    val id: Long,
     var balance: BigDecimal,
     val createTime: LocalDateTime,
     var updateTime: LocalDateTime,
@@ -40,32 +39,24 @@ class Point protected constructor(
         this.registerEvent(PointChargeEvent(user, this, this.balance, price))
     }
 
-    fun getId(): Long {
-        return id ?: throw IllegalStateException("point Id가 없습니다.")
-    }
-
     fun rollback(balance: BigDecimal) {
         this.balance = balance
     }
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null
 
     companion object {
         fun newInstance(balance: BigDecimal = BigDecimal.ZERO): Point {
             val now = LocalDateTime.now()
             return Point(
-                tsid = TsIdKeyGenerator.next("pt"),
+                id = TsIdKeyGenerator.nextLong(),
                 balance = balance,
                 createTime = now,
                 updateTime = now,
             )
         }
 
-        fun newInstance(tsid: String): Point {
+        fun newInstance(id: Long): Point {
             return Point(
-                tsid = tsid,
+                id = id,
                 balance = BigDecimal.ZERO,
                 createTime = LocalDateTime.now(),
                 updateTime = LocalDateTime.now(),

@@ -1,5 +1,6 @@
 package io.ticketaka.api.reservation.infrastructure.persistence
 
+import io.ticketaka.api.common.exception.NotFoundException
 import io.ticketaka.api.reservation.domain.reservation.Reservation
 import io.ticketaka.api.reservation.domain.reservation.ReservationRepository
 import io.ticketaka.api.reservation.infrastructure.jpa.JpaReservationRepository
@@ -14,7 +15,7 @@ class ReservationRepositoryComposition(
         return saved
     }
 
-    override fun findByTsid(reservationTsid: String): Reservation? {
-        return jpaReservationRepository.findByTsid(reservationTsid)
+    override fun findById(id: Long): Reservation? {
+        return jpaReservationRepository.findById(id).orElseThrow { throw NotFoundException("해당 예약을 찾을 수 없습니다.") }
     }
 }

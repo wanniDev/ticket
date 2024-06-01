@@ -7,14 +7,14 @@ import java.util.Base64
 class IdempotentKeyGenerator {
     companion object {
         fun generate(
-            userTsid: String,
-            tokenTsid: String,
+            userId: Long,
+            tokenId: Long,
             amount: BigDecimal,
             transactionType: String,
         ): String {
             return String(
                 Base64.getEncoder()
-                    .encode("${userTsid}_${tokenTsid}_${amount}_$transactionType".toByteArray(StandardCharsets.ISO_8859_1)),
+                    .encode("${userId}_${tokenId}_${amount}_$transactionType".toByteArray(StandardCharsets.ISO_8859_1)),
             )
         }
     }

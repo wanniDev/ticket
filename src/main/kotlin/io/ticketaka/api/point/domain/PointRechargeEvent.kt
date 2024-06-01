@@ -12,7 +12,7 @@ data class PointRechargeEvent(
     val amount: BigDecimal,
     val occurredOn: LocalDateTime,
 ) : DomainEvent {
-    constructor(user: User, point: Point, amount: BigDecimal) : this(user.tsid, user.getId(), point.getId(), amount, LocalDateTime.now())
+    constructor(user: User, point: Point, amount: BigDecimal) : this(user.tsid, user.getId(), point.id, amount, LocalDateTime.now())
 
     override fun occurredOn(): LocalDateTime {
         return this.occurredOn

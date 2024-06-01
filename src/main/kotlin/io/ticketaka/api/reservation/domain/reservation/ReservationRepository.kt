@@ -1,7 +1,7 @@
 package io.ticketaka.api.reservation.domain.reservation
 
 interface ReservationRepository {
-    fun save(reservation: Reservation): Reservation
+    fun findById(id: Long): Reservation?
 
-    fun findByTsid(reservationTsid: String): Reservation?
+    fun save(reservation: Reservation): Reservation
 }

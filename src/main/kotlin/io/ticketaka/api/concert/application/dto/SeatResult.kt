@@ -1,4 +1,4 @@
-package io.ticketaka.api.concert.application
+package io.ticketaka.api.concert.application.dto
 
 import io.ticketaka.api.concert.domain.Seat
 

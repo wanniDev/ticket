@@ -1,6 +1,7 @@
 package io.ticketaka.api.concert.application
 
 import io.ticketaka.api.common.exception.BadClientRequestException
+import io.ticketaka.api.concert.application.dto.SeatResult
 import io.ticketaka.api.concert.domain.Concert
 import io.ticketaka.api.concert.domain.ConcertRepository
 import io.ticketaka.api.concert.domain.Seat
@@ -15,14 +16,9 @@ class ConcertSeatService(
     private val seatRepository: SeatRepository,
     private val concertRepository: ConcertRepository,
 ) {
-    @Transactional(readOnly = true)
-    fun getDates(): List<LocalDate> {
-        return seatRepository.findConcertDateByStatus(Seat.Status.AVAILABLE).sorted()
-    }
-
     fun getSeatNumbers(date: LocalDate): List<SeatResult> {
         val concert = concertQueryService.getConcert(date)
-        return concertQueryService.getConcertSeatNumbers(concert.getId()).map { SeatResult(it.number, it.status) }
+        return concertQueryService.getConcertSeatNumbers(concert.id).map { SeatResult(it.number, it.status) }
     }
 
     @Transactional(readOnly = true)
@@ -61,5 +57,9 @@ class ConcertSeatService(
             seat.reserve()
         }
         return seats
+    }
+
+    fun getDates(): List<LocalDate> {
+        return concertRepository.findAllDate().sorted()
     }
 }
