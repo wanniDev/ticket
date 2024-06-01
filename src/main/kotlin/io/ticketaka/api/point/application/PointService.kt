@@ -1,5 +1,6 @@
 package io.ticketaka.api.point.application
 
+import io.ticketaka.api.common.exception.NotFoundException
 import io.ticketaka.api.point.domain.Point
 import io.ticketaka.api.point.domain.PointRepository
 import io.ticketaka.api.user.domain.User
@@ -20,12 +21,8 @@ class PointService(
         point.rollback(amount)
     }
 
-    @Transactional
-    fun getPointForUpdate(pointTsid: String): Point {
-        return pointRepository.findByTsidForUpdate(pointTsid) ?: throw IllegalArgumentException("포인트를 찾을 수 없습니다.")
-    }
-
     fun getPoint(user: User): Point {
-        return pointRepository.findById(user.point!!.getId()) ?: throw IllegalArgumentException("포인트를 찾을 수 없습니다.")
+        val userPoint = user.point ?: throw NotFoundException("포인트를 찾을 수 없습니다.")
+        return pointRepository.findById(userPoint.id) ?: throw IllegalArgumentException("포인트를 찾을 수 없습니다.")
     }
 }

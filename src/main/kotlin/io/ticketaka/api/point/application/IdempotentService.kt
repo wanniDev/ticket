@@ -16,12 +16,12 @@ class IdempotentService(
     }
 
     fun findIdempotentKey(
-        userTsid: String,
-        tokenTsid: String,
+        userId: Long,
+        tokenId: Long,
         amount: BigDecimal,
         transactionType: PointHistory.TransactionType,
     ): Idempotent? {
-        val key = IdempotentKeyGenerator.generate(userTsid, tokenTsid, amount, transactionType.name)
+        val key = IdempotentKeyGenerator.generate(userId, tokenId, amount, transactionType.name)
         return idempotentRepository.findByKey(key)
     }
 }

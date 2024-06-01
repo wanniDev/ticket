@@ -20,14 +20,13 @@ class PointBalanceServiceTest {
     fun recharge() {
         // given
         val point = Point.newInstance()
-        point.id = 1
         val user = User("userTsid1", point)
         user.id = 1
         user.point = point
         val rechargeCommand =
             RechargeCommand(
                 user.tsid,
-                point.tsid,
+                point.id,
                 20000.toBigDecimal(),
             )
 
@@ -52,14 +51,13 @@ class PointBalanceServiceTest {
     fun `if user try to recharge with negative amount, then throw BadClientRequestException`() {
         // given
         val point = Point.newInstance()
-        point.id = 1
         val user = User("userTsid1", point)
         user.id = 1
         user.point = point
         val rechargeCommand =
             RechargeCommand(
                 user.tsid,
-                point.tsid,
+                point.id,
                 (-20000).toBigDecimal(),
             )
 
@@ -85,7 +83,6 @@ class PointBalanceServiceTest {
     fun getBalance() {
         // given
         val point = Point.newInstance()
-        point.id = 1
         val user = User("userTsid1", point)
         val tokenUserQueryService =
             mock<TokenUserQueryService> {

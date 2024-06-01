@@ -17,12 +17,10 @@ CREATE TABLE `users` (
 );
 
 CREATE TABLE `points` (
-     `id` bigint auto_increment primary key,
-    `tsid` varchar(255) not null unique ,
+    `id` bigint auto_increment primary key,
 	`balance`   decimal(19, 4)	null,
     `create_time`	datetime not null ,
-    `update_time`	datetime null,
-    INDEX point_idx (tsid)
+    `update_time`	datetime null
 );
 
 CREATE TABLE `tokens` (

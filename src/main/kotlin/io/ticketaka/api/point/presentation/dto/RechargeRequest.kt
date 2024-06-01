@@ -5,13 +5,13 @@ import java.math.BigDecimal
 
 data class RechargeRequest(
     val userTsid: String,
-    val pointTsid: String,
+    val pointId: Long,
     val amount: BigDecimal,
 ) {
     fun toCommand() =
         RechargeCommand(
             userTsid = userTsid,
-            pointTsid = pointTsid,
+            pointId = pointId,
             amount = amount,
         )
 }

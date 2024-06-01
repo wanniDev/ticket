@@ -14,10 +14,6 @@ class PointRepositoryComposition(
         return jpaPointRepository.save(point)
     }
 
-    override fun findByTsid(tsid: String): Point? {
-        return jpaPointRepository.findByTsid(tsid)
-    }
-
     override fun findById(pointId: Long): Point? {
         return jpaPointRepository.findById(pointId).orElse(null)
     }
@@ -27,10 +23,6 @@ class PointRepositoryComposition(
         balance: BigDecimal,
     ) {
         jpaPointRepository.updateBalanceById(pointId, balance)
-    }
-
-    override fun findByTsidForUpdate(tsid: String): Point? {
-        return jpaPointRepository.findPointByTsid(tsid)
     }
 
     override fun findByIdForUpdate(pointId: Long): Point? {

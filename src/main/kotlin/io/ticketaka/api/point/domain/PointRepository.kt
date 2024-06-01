@@ -5,8 +5,6 @@ import java.math.BigDecimal
 interface PointRepository {
     fun save(point: Point): Point
 
-    fun findByTsid(tsid: String): Point?
-
     fun findById(pointId: Long): Point?
 
     fun updateBalance(
@@ -15,6 +13,4 @@ interface PointRepository {
     )
 
     fun findByIdForUpdate(pointId: Long): Point?
-
-    fun findByTsidForUpdate(tsid: String): Point?
 }

@@ -14,7 +14,7 @@ data class PointChargeEvent(
 ) : DomainEvent {
     constructor(user: User, point: Point, balance: BigDecimal, amount: BigDecimal) : this(
         user.getId(),
-        point.getId(),
+        point.id,
         balance,
         amount,
         LocalDateTime.now(),

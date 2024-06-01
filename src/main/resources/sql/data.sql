@@ -1,9 +1,9 @@
 
-insert into `points` (`id`, `tsid`, `balance`, `create_time`, `update_time`) values (1, 'pt-576023809841191373', 5000, '2024-01-01 00:00:00', '2024-01-01 00:00:00');
-insert into `points` (`id`, `tsid`, `balance`, `create_time`, `update_time`) values (2, 'pt-576023809841191374', 2000, '2024-01-02 00:00:00', '2024-01-02 00:00:00');
-insert into `points` (`id`, `tsid`, `balance`, `create_time`, `update_time`) values (3, 'pt-576023809841191375', 1000, '2024-01-03 00:00:00', '2024-01-03 00:00:00');
-insert into `points` (`id`, `tsid`, `balance`, `create_time`, `update_time`) values (4, 'pt-576023809841191376', 90000, '2024-01-04 00:00:00', '2024-01-04 00:00:00');
-insert into `points` (`id`, `tsid`, `balance`, `create_time`, `update_time`) values (5, 'pt-576023809841191377', 3000, '2024-01-05 00:00:00', '2024-01-05 00:00:00');
+insert into `points` (`id`, `balance`, `create_time`, `update_time`) values (1, 5000, '2024-01-01 00:00:00', '2024-01-01 00:00:00');
+insert into `points` (`id`, `balance`, `create_time`, `update_time`) values (2, 2000, '2024-01-02 00:00:00', '2024-01-02 00:00:00');
+insert into `points` (`id`, `balance`, `create_time`, `update_time`) values (3, 1000, '2024-01-03 00:00:00', '2024-01-03 00:00:00');
+insert into `points` (`id`, `balance`, `create_time`, `update_time`) values (4, 90000, '2024-01-04 00:00:00', '2024-01-04 00:00:00');
+insert into `points` (`id`, `balance`, `create_time`, `update_time`) values (5, 3000, '2024-01-05 00:00:00', '2024-01-05 00:00:00');
 
 
 insert into `users` (`id`, `tsid`, `point_id`) values (1, 'usr-576023809841191373', 1);
