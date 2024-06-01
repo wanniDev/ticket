@@ -30,12 +30,13 @@ class RequestMapAspect(
         val requestAttributes = RequestContextHolder.getRequestAttributes() as ServletRequestAttributes?
         val authorizationHeader =
             requestAttributes?.request?.getHeader(
-                "tokenTsid",
+                "tokenId",
             ) ?: throw IllegalArgumentException("요청 헤더에 토큰이 존재하지 않습니다.")
+        val tokenId = authorizationHeader.toLongOrNull() ?: throw IllegalArgumentException("토큰 아이디가 올바르지 않습니다.")
 
-        val tokenFromQueue = tokenWaitingMap.get(authorizationHeader) ?: throw IllegalArgumentException("대기 중인 토큰이 존재하지 않습니다.")
+        val tokenFromQueue = tokenWaitingMap.get(tokenId) ?: throw IllegalArgumentException("대기 중인 토큰이 존재하지 않습니다.")
 
-        validateTokenIdentifier(tokenFromQueue, authorizationHeader)
+        validateTokenIdentifier(tokenFromQueue, tokenId)
 
         validateTokenActive(tokenFromQueue)
 
@@ -45,7 +46,7 @@ class RequestMapAspect(
             return joinPoint.proceed()
         } finally {
             tokenFromQueue.deactivate()
-            tokenWaitingMap.put(authorizationHeader, tokenFromQueue)
+            tokenWaitingMap.put(tokenId, tokenFromQueue)
         }
     }
 
@@ -69,9 +70,9 @@ class RequestMapAspect(
 
     private fun validateTokenIdentifier(
         firstToken: Token,
-        authorizationHeader: String,
+        authorizationHeader: Long,
     ) {
-        if (firstToken.tsid != authorizationHeader) {
+        if (firstToken.id != authorizationHeader) {
             val errorMessage = "현재 대기 중인 토큰과 요청한 토큰이 일치하지 않습니다."
             logger.debug(errorMessage)
             throw IllegalArgumentException(errorMessage)

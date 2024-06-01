@@ -11,16 +11,16 @@ class TokenUserService(
     private val tokenUserQueryService: TokenUserQueryService,
     private val applicationEventPublisher: ApplicationEventPublisher,
 ) {
-    fun createToken(userTsId: String): String {
-        val user = tokenUserQueryService.getUser(userTsId)
+    fun createToken(userId: Long): Long {
+        val user = tokenUserQueryService.getUser(userId)
 
-        val token = Token.newInstance(user.getId())
+        val token = Token.newInstance(user.id)
         token.pollAllEvents().forEach { applicationEventPublisher.publishEvent(it) }
-        return token.tsid
+        return token.id
     }
 
-    fun peekToken(tokenTsid: String): Boolean {
-        val tokenFromMap = tokenWaitingMap.get(tokenTsid)
+    fun peekToken(tokenId: Long): Boolean {
+        val tokenFromMap = tokenWaitingMap.get(tokenId)
 
         if (tokenFromMap == null || tokenFromMap.isExpired() || tokenFromMap.isDeactivated()) {
             return false

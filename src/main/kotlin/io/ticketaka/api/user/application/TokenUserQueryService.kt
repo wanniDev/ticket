@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service
 class TokenUserQueryService(
     private val userRepository: UserRepository,
 ) {
-    @Cacheable(value = ["user"], key = "#tsId")
-    fun getUser(tsId: String): User {
-        return userRepository.findByTsid(tsId) ?: throw NotFoundException("사용자를 찾을 수 없습니다.")
+    @Cacheable(value = ["user"], key = "#id")
+    fun getUser(id: Long): User {
+        return userRepository.findById(id) ?: throw NotFoundException("사용자를 찾을 수 없습니다.")
     }
 }

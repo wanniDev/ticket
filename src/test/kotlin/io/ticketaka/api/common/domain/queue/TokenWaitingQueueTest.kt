@@ -17,13 +17,12 @@ class TokenWaitingQueueTest {
     fun `test offer`() {
         // given
         val point = Point.newInstance()
-        val user = User("userTsid1", point)
-        user.id = 1
+        val user = User.newInstance(point.id)
         val mockTokenWaitingQueue =
             mock<TokenWaitingQueue> {
                 on { offer(any()) } doReturn true
             }
-        val token = Token.newInstance(user.getId())
+        val token = Token.newInstance(user.id)
 
         // when
         val result = mockTokenWaitingQueue.offer(token)
@@ -36,11 +35,10 @@ class TokenWaitingQueueTest {
     fun `test poll`() {
         // given
         val point = Point.newInstance()
-        val user = User("userTsid1", point)
-        user.id = 1
+        val user = User.newInstance(point.id)
         val mockTokenWaitingQueue =
             mock<TokenWaitingQueue> {
-                on { poll() } doReturn Token.newInstance(user.getId())
+                on { poll() } doReturn Token.newInstance(user.id)
             }
 
         // when

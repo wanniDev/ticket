@@ -12,9 +12,20 @@ import java.util.concurrent.TimeUnit
 @EnableCaching
 class CaffeineCacheConfig {
     @Bean
+    fun pointCache(): Cache<Any, Any> {
+        return Caffeine.newBuilder()
+            .initialCapacity(10)
+            .recordStats()
+            .expireAfterWrite(5, TimeUnit.MINUTES)
+            .expireAfterAccess(5, TimeUnit.MINUTES)
+            .maximumSize(100)
+            .build()
+    }
+
+    @Bean
     fun userCache(): Cache<Any, Any> {
         return Caffeine.newBuilder()
-            .initialCapacity(100)
+            .initialCapacity(10)
             .recordStats()
             .expireAfterWrite(5, TimeUnit.MINUTES)
             .expireAfterAccess(5, TimeUnit.MINUTES)
@@ -49,6 +60,7 @@ class CaffeineCacheConfig {
         caffeineCacheManager.registerCustomCache("seatNumbers", seatNumberCache())
         caffeineCacheManager.registerCustomCache("concert", concertCache())
         caffeineCacheManager.registerCustomCache("user", userCache())
+        caffeineCacheManager.registerCustomCache("point", pointCache())
         return caffeineCacheManager
     }
 }
