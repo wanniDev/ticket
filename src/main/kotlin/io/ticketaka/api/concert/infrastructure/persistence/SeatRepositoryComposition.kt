@@ -1,5 +1,6 @@
 package io.ticketaka.api.concert.infrastructure.persistence
 
+import io.ticketaka.api.common.exception.NotFoundException
 import io.ticketaka.api.concert.domain.Seat
 import io.ticketaka.api.concert.domain.SeatRepository
 import io.ticketaka.api.concert.infrastructure.jpa.JpaSeatRepository
@@ -10,8 +11,8 @@ import java.time.LocalDate
 class SeatRepositoryComposition(
     private val jpaSeatRepository: JpaSeatRepository,
 ) : SeatRepository {
-    override fun findByTsid(tsid: String): Seat? {
-        return jpaSeatRepository.findByTsid(tsid)
+    override fun findById(id: Long): Seat? {
+        return jpaSeatRepository.findById(id).orElseThrow { throw NotFoundException("좌석을 찾을 수 없습니다") }
     }
 
     override fun findByConcertId(concertId: Long): Set<Seat> {
@@ -37,9 +38,5 @@ class SeatRepositoryComposition(
         numbers: List<String>,
     ): Set<Seat> {
         return jpaSeatRepository.findSeatsByConcertIdAndNumberInOrderByNumber(concertId, numbers).toSet()
-    }
-
-    override fun findConcertDateByStatus(status: Seat.Status): Set<LocalDate> {
-        return jpaSeatRepository.findConcertDateByStatus(status)
     }
 }

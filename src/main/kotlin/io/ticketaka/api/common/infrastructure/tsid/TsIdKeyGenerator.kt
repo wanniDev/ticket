@@ -10,5 +10,9 @@ class TsIdKeyGenerator {
             }
             return "$prefix-${TsidCreator.getTsid().toLong()}"
         }
+
+        fun nextLong(): Long {
+            return TsidCreator.getTsid().toLong()
+        }
     }
 }

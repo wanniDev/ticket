@@ -5,24 +5,22 @@ import io.ticketaka.api.common.infrastructure.tsid.TsIdKeyGenerator
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
-import jakarta.persistence.FetchType
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
-import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 import java.math.BigDecimal
+import java.time.LocalDate
 
 @Entity
 @Table(name = "seats")
 class Seat(
-    val tsid: String,
+    @Id
+    val id: Long,
     val number: String,
     @Enumerated(EnumType.STRING)
     var status: Status,
     val price: BigDecimal,
-    @ManyToOne(targetEntity = Concert::class, optional = false, fetch = FetchType.LAZY)
-    val concert: Concert,
+    val concertId: Long,
+    val concertDate: LocalDate,
 ) {
     fun isAvailable(): Boolean {
         return this.status == Status.AVAILABLE
@@ -50,10 +48,6 @@ class Seat(
         }
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null
-
     enum class Status {
         AVAILABLE,
         RESERVED,
@@ -64,14 +58,15 @@ class Seat(
         fun newInstance(
             number: String,
             price: BigDecimal,
-            concert: Concert,
+            concertId: Long,
         ): Seat {
             return Seat(
-                tsid = TsIdKeyGenerator.next("st"),
+                id = TsIdKeyGenerator.nextLong(),
                 number = number,
                 status = Status.AVAILABLE,
                 price = price,
-                concert = concert,
+                concertId = concertId,
+                concertDate = LocalDate.now(),
             )
         }
     }

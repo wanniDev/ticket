@@ -3,7 +3,7 @@ package io.ticketaka.api.concert.domain
 import java.time.LocalDate
 
 interface SeatRepository {
-    fun findByTsid(tsid: String): Seat?
+    fun findById(id: Long): Seat?
 
     fun findByConcertId(concertId: Long): Set<Seat>
 
@@ -21,6 +21,4 @@ interface SeatRepository {
         concertId: Long,
         numbers: List<String>,
     ): Set<Seat>
-
-    fun findConcertDateByStatus(status: Seat.Status): Set<LocalDate>
 }

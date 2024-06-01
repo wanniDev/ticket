@@ -37,9 +37,8 @@ class ReservationServiceTest {
         val user = User.newInstance(point)
         user.id = 1
         val concert = Concert.newInstance(date)
-        concert.id = 1
-        val seats = setOf(Seat.newInstance(seatNumber, 1000.toBigDecimal(), concert))
-        val reservation = Reservation.createPendingReservation(user.getId(), concert.getId())
+        val seats = setOf(Seat.newInstance(seatNumber, 1000.toBigDecimal(), concert.id))
+        val reservation = Reservation.createPendingReservation(user.getId(), concert.id)
         reservation.id = 1
 
         val mockTokenUserQueryService =
@@ -55,7 +54,7 @@ class ReservationServiceTest {
         val concertSeatService =
             mock<ConcertSeatService> {
                 on { getAvailableConcert(date) } doReturn concert
-                on { reserveSeat(concert.getId(), seats.map { it.number }.toList()) } doReturn seats
+                on { reserveSeat(concert.id, seats.map { it.number }.toList()) } doReturn seats
             }
 
         val reservationService =
@@ -81,8 +80,7 @@ class ReservationServiceTest {
         val date = LocalDate.of(2024, 4, 10)
         val seatNumber = "A24"
         val concert = Concert.newInstance(date)
-        concert.id = 1
-        val seat = Seat.newInstance(seatNumber, 1000.toBigDecimal(), concert)
+        val seat = Seat.newInstance(seatNumber, 1000.toBigDecimal(), concert.id)
         seat.occupy()
         val seats = setOf(seat)
         val mockReservationRepository = mock<ReservationRepository>()
@@ -96,7 +94,7 @@ class ReservationServiceTest {
         val concertSeatService =
             mock<ConcertSeatService> {
                 on { getAvailableConcert(date) } doReturn concert
-                on { reserveSeat(concert.getId(), seats.map { it.number }.toList()) } doThrow BadClientRequestException("이미 예약된 좌석입니다.")
+                on { reserveSeat(concert.id, seats.map { it.number }.toList()) } doThrow BadClientRequestException("이미 예약된 좌석입니다.")
             }
 
         val reservationService =
@@ -125,7 +123,7 @@ class ReservationServiceTest {
         val date = LocalDate.of(2024, 4, 10)
         val seatNumber = "A24"
         val concert = Concert.newInstance(date)
-        val seat = Seat.newInstance(seatNumber, 1000.toBigDecimal(), concert)
+        val seat = Seat.newInstance(seatNumber, 1000.toBigDecimal(), concert.id)
         seat.occupy()
 
         val notFoundConcertErrorMessage = "콘서트를 찾을 수 없습니다."
@@ -166,11 +164,9 @@ class ReservationServiceTest {
         val user = User.newInstance(point)
         user.id = 1
         val concert = Concert.newInstance(LocalDate.now())
-        concert.id = 1
-        val reservation = Reservation.createPendingReservation(user.getId(), concert.getId())
+        val reservation = Reservation.createPendingReservation(user.getId(), concert.id)
         reservation.id = 1
-        val seat = Seat.newInstance("A24", 1000.toBigDecimal(), concert)
-        seat.id = 1
+        val seat = Seat.newInstance("A24", 1000.toBigDecimal(), concert.id)
         seat.reserve()
         reservation.allocate(setOf(seat))
 
@@ -241,11 +237,9 @@ class ReservationServiceTest {
         val user = User.newInstance(point)
         user.id = 1
         val concert = Concert.newInstance(LocalDate.now())
-        concert.id = 1
-        val reservation = Reservation.createPendingReservation(user.getId(), concert.getId())
+        val reservation = Reservation.createPendingReservation(user.getId(), concert.id)
         reservation.id = 1
-        val seat = Seat.newInstance("A24", 1000.toBigDecimal(), Concert.newInstance(LocalDate.now()))
-        seat.id = 1
+        val seat = Seat.newInstance("A24", 1000.toBigDecimal(), concert.id)
         reservation.allocate(setOf(seat))
 
         val mockReservationRepository =
@@ -284,11 +278,9 @@ class ReservationServiceTest {
         val user = User.newInstance(point)
         user.id = 1
         val concert = Concert.newInstance(LocalDate.now())
-        concert.id = 1
-        val reservation = Reservation.createPendingReservation(user.getId(), concert.getId())
+        val reservation = Reservation.createPendingReservation(user.getId(), concert.id)
         reservation.id = 1
-        val seat = Seat.newInstance("A24", 1000.toBigDecimal(), concert)
-        seat.id = 1
+        val seat = Seat.newInstance("A24", 1000.toBigDecimal(), concert.id)
         seat.reserve()
         reservation.allocate(setOf(seat))
         reservation.confirm()

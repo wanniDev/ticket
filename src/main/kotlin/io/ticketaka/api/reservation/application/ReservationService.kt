@@ -24,10 +24,10 @@ class ReservationService(
     fun createReservation(command: CreateReservationCommand) {
         val user = tokenQueryUserService.getUser(command.userTsid)
         val concert = concertSeatService.getAvailableConcert(command.date)
-        val seats = concertSeatService.reserveSeat(concert.getId(), command.seatNumbers)
-        val reservation = reservationRepository.save(Reservation.createPendingReservation(user.getId(), concert.getId()))
+        val seats = concertSeatService.reserveSeat(concert.id, command.seatNumbers)
+        val reservation = reservationRepository.save(Reservation.createPendingReservation(user.getId(), concert.id))
         reservation.allocate(seats)
-        concertSeatCacheRefresher.refresh(concert.getId())
+        concertSeatCacheRefresher.refresh(concert.id)
     }
 
     @Async

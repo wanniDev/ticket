@@ -13,8 +13,8 @@ class ConcertSeatCacheRefresher(
 ) {
     fun refresh() {
         concertRepository.findAll().forEach { concert ->
-            val seats = seatRepository.findByConcertId(concert.getId())
-            cacheManager.getCache("seatNumbers")?.put(concert.getId(), seats)
+            val seats = seatRepository.findByConcertId(concert.id)
+            cacheManager.getCache("seatNumbers")?.put(concert.id, seats)
         }
     }
 
