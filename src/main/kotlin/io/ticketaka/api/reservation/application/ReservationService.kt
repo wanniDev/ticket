@@ -26,7 +26,7 @@ class ReservationService(
         val concert = concertSeatService.getAvailableConcert(command.date)
         val seats = concertSeatService.reserveSeat(concert.id, command.seatNumbers)
         val reservation = reservationRepository.save(Reservation.createPendingReservation(user.getId(), concert.id))
-        reservation.allocate(seats)
+        reservation.allocate(seats) // TODO : ReservationSeatAllocator 라는 도메인 서비스로 분리
         concertSeatCacheRefresher.refresh(concert.id)
     }
 
@@ -34,16 +34,15 @@ class ReservationService(
     @Transactional
     fun confirmReservation(
         userTsid: String,
-        reservationTsid: String,
+        reservationId: Long,
     ) {
         val user = tokenQueryUserService.getUser(userTsid)
         user.validatePoint()
         val reservation =
-            reservationRepository.findByTsid(reservationTsid)
+            reservationRepository.findById(reservationId)
                 ?: throw NotFoundException("예약을 찾을 수 없습니다.")
         reservation.validateUser(user)
         reservation.validatePending()
-        reservation.validateSeatsReserved()
         reservation.confirm()
     }
 }

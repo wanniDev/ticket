@@ -50,13 +50,12 @@ CREATE TABLE `seats` (
 
 CREATE TABLE `reservations` (
     `id` bigint auto_increment primary key,
-    `tsid` varchar(255) not null unique,
     `status`	enum('PENDING', 'CONFIRMED', 'CANCELLED') null,
 	`reservation_time`	datetime null,
 	`expiration_time`	datetime null,
 	`user_id`	bigint not null,
     `concert_id`	bigint not null,
-    INDEX reservation_idx (tsid, user_id, concert_id)
+    INDEX reservation_idx (user_id, concert_id)
 );
 
 CREATE TABLE `payments` (
