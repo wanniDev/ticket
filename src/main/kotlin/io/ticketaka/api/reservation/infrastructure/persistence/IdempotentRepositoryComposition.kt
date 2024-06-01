@@ -1,7 +1,7 @@
 package io.ticketaka.api.reservation.infrastructure.persistence
 
-import io.ticketaka.api.reservation.domain.point.Idempotent
-import io.ticketaka.api.reservation.domain.point.IdempotentRepository
+import io.ticketaka.api.point.domain.Idempotent
+import io.ticketaka.api.point.domain.IdempotentRepository
 import io.ticketaka.api.reservation.infrastructure.jpa.JpaIdempotentRepository
 import org.springframework.stereotype.Repository
 

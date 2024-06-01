@@ -1,6 +1,6 @@
 package io.ticketaka.api.reservation.infrastructure.event
 
-import io.ticketaka.api.reservation.domain.payment.PaymentApprovalEvent
+import io.ticketaka.api.point.domain.payment.PaymentApprovalEvent
 import org.slf4j.LoggerFactory
 import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Component

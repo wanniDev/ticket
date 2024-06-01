@@ -1,4 +1,4 @@
-package io.ticketaka.api.reservation.domain.payment
+package io.ticketaka.api.point.domain.payment
 
 import io.ticketaka.api.common.domain.DomainEvent
 import java.math.BigDecimal

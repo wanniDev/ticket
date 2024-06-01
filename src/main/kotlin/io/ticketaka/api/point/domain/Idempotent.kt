@@ -1,4 +1,4 @@
-package io.ticketaka.api.reservation.domain.point
+package io.ticketaka.api.point.domain
 
 import io.ticketaka.api.common.infrastructure.IdempotentKeyGenerator
 import jakarta.persistence.Entity

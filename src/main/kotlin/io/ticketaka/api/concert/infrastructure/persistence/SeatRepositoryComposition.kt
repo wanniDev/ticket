@@ -14,8 +14,8 @@ class SeatRepositoryComposition(
         return jpaSeatRepository.findByTsid(tsid)
     }
 
-    override fun findByConcertId(concertDateId: Long): Set<Seat> {
-        return jpaSeatRepository.findByConcertId(concertDateId)
+    override fun findByConcertId(concertId: Long): Set<Seat> {
+        return jpaSeatRepository.findByConcertId(concertId)
     }
 
     override fun findSeatsByConcertDateAndNumberIn(

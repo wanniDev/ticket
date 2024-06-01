@@ -32,7 +32,7 @@ class ReservationConcurrencyTest
             val failedCnt = AtomicInteger(0)
 
             // when
-            (1..len).forEach { i ->
+            (1..len).forEach { _ ->
                 executor.submit {
                     try {
                         reservationService.createReservation(createReservationCommand)

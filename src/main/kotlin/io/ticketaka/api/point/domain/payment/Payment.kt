@@ -1,9 +1,8 @@
-package io.ticketaka.api.reservation.domain.point
+package io.ticketaka.api.point.domain.payment
 
+import io.ticketaka.api.common.domain.AbstractAggregateRoot
 import io.ticketaka.api.common.infrastructure.tsid.TsIdKeyGenerator
 import jakarta.persistence.Entity
-import jakarta.persistence.EnumType
-import jakarta.persistence.Enumerated
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
@@ -12,38 +11,34 @@ import java.math.BigDecimal
 import java.time.LocalDateTime
 
 @Entity
-@Table(name = "point_histories")
-class PointHistory(
+@Table(name = "payments")
+class Payment(
     val tsid: String,
-    @Enumerated(EnumType.STRING)
-    val transactionType: TransactionType,
+    val amount: BigDecimal,
+    val paymentTime: LocalDateTime,
     val userId: Long,
     val pointId: Long,
-    val amount: BigDecimal,
-    val createTime: LocalDateTime = LocalDateTime.now(),
-) {
+) : AbstractAggregateRoot() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
 
-    enum class TransactionType {
-        RECHARGE,
-        CHARGE,
+    init {
+        registerEvent(PaymentApprovalEvent(this, userId, pointId, amount))
     }
 
     companion object {
         fun newInstance(
+            amount: BigDecimal,
             userId: Long,
             pointId: Long,
-            amount: BigDecimal,
-            transactionType: TransactionType,
-        ): PointHistory {
-            return PointHistory(
-                tsid = TsIdKeyGenerator.next("ph"),
-                userId = userId,
-                pointId = pointId,
+        ): Payment {
+            return Payment(
+                tsid = TsIdKeyGenerator.next("pm"),
                 amount = amount,
-                transactionType = transactionType,
+                userId = userId,
+                paymentTime = LocalDateTime.now(),
+                pointId = pointId,
             )
         }
     }

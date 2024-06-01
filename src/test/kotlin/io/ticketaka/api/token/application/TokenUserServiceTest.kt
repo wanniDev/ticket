@@ -2,7 +2,7 @@ package io.ticketaka.api.token.application
 
 import io.ticketaka.api.common.domain.map.TokenWaitingMap
 import io.ticketaka.api.common.exception.NotFoundException
-import io.ticketaka.api.reservation.domain.point.Point
+import io.ticketaka.api.point.domain.Point
 import io.ticketaka.api.user.application.TokenUserQueryService
 import io.ticketaka.api.user.application.TokenUserService
 import io.ticketaka.api.user.domain.Token

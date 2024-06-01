@@ -1,8 +1,8 @@
 package io.ticketaka.api.reservation.infrastructure.event
 
-import io.ticketaka.api.reservation.domain.point.PointHistory
-import io.ticketaka.api.reservation.domain.point.PointHistoryRepository
-import io.ticketaka.api.reservation.domain.point.PointRechargeEvent
+import io.ticketaka.api.point.domain.PointHistory
+import io.ticketaka.api.point.domain.PointHistoryRepository
+import io.ticketaka.api.point.domain.PointRechargeEvent
 import org.springframework.stereotype.Component
 import java.util.concurrent.ConcurrentLinkedQueue
 import kotlin.concurrent.thread

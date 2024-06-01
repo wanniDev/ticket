@@ -1,6 +1,6 @@
 package io.ticketaka.api.reservation.infrastructure.jpa
 
-import io.ticketaka.api.reservation.domain.point.Point
+import io.ticketaka.api.point.domain.Point
 import jakarta.persistence.LockModeType
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Lock

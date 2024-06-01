@@ -1,4 +1,4 @@
-package io.ticketaka.api.reservation.domain.point
+package io.ticketaka.api.point.domain
 
 interface PointHistoryRepository {
     fun save(pointHistory: PointHistory): PointHistory
