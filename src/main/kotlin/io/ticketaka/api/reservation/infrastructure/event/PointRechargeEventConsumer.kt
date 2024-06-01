@@ -43,7 +43,7 @@ class PointRechargeEventConsumer(
             while (true) {
                 if (eventQueue.isNotEmpty()) {
                     val events = mutableListOf<PointRechargeEvent>()
-                    var quantity = 8
+                    var quantity = 5
                     while (eventQueue.isNotEmpty().and(quantity > 0)) {
                         quantity--
                         eventQueue.poll()?.let { events.add(it) }
