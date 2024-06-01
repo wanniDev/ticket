@@ -28,7 +28,7 @@ class ReservationService(
         val concert = concertSeatService.getAvailableConcert(command.date)
         val seats = concertSeatService.reserveSeat(concert.id, command.seatNumbers)
         val reservation = reservationRepository.save(Reservation.createPendingReservation(user.id, concert.id))
-        reservationSeatAllocator.allocate(reservation.concertId, seats.map { it.id })
+        reservationSeatAllocator.allocate(reservation.id, seats.map { it.id })
         concertSeatCacheRefresher.refresh(concert.id)
     }
 
