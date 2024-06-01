@@ -1,4 +1,4 @@
-package io.ticketaka.api.reservation.infrastructure.jpa
+package io.ticketaka.api.point.infrastructure.jpa
 
 import io.ticketaka.api.point.domain.Point
 import jakarta.persistence.LockModeType

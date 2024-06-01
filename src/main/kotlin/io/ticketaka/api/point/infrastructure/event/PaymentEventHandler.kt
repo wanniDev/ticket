@@ -1,4 +1,4 @@
-package io.ticketaka.api.reservation.infrastructure.event
+package io.ticketaka.api.point.infrastructure.event
 
 import io.ticketaka.api.point.domain.payment.PaymentApprovalEvent
 import org.slf4j.LoggerFactory

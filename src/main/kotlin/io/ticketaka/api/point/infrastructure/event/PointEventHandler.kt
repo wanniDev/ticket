@@ -1,4 +1,4 @@
-package io.ticketaka.api.reservation.infrastructure.event
+package io.ticketaka.api.point.infrastructure.event
 
 import io.ticketaka.api.common.domain.EventBroker
 import io.ticketaka.api.point.domain.PointChargeEvent

@@ -1,8 +1,8 @@
-package io.ticketaka.api.reservation.infrastructure.persistence
+package io.ticketaka.api.point.infrastructure.persistence
 
 import io.ticketaka.api.point.domain.payment.Payment
 import io.ticketaka.api.point.domain.payment.PaymentRepository
-import io.ticketaka.api.reservation.infrastructure.jpa.JpaPaymentRepository
+import io.ticketaka.api.point.infrastructure.jpa.JpaPaymentRepository
 import org.springframework.stereotype.Component
 
 @Component

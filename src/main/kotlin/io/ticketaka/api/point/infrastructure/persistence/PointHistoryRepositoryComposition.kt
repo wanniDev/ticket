@@ -1,8 +1,8 @@
-package io.ticketaka.api.reservation.infrastructure.persistence
+package io.ticketaka.api.point.infrastructure.persistence
 
 import io.ticketaka.api.point.domain.PointHistory
 import io.ticketaka.api.point.domain.PointHistoryRepository
-import io.ticketaka.api.reservation.infrastructure.jpa.JpaPointHistoryRepository
+import io.ticketaka.api.point.infrastructure.jpa.JpaPointHistoryRepository
 import org.springframework.stereotype.Repository
 
 @Repository

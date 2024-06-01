@@ -1,8 +1,8 @@
-package io.ticketaka.api.reservation.infrastructure.persistence
+package io.ticketaka.api.point.infrastructure.persistence
 
 import io.ticketaka.api.point.domain.Point
 import io.ticketaka.api.point.domain.PointRepository
-import io.ticketaka.api.reservation.infrastructure.jpa.JpaPointRepository
+import io.ticketaka.api.point.infrastructure.jpa.JpaPointRepository
 import org.springframework.stereotype.Repository
 import java.math.BigDecimal
 
