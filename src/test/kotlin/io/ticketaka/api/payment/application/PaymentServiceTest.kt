@@ -22,9 +22,8 @@ class PaymentServiceTest {
         // given
         val point = Point.newInstance()
         val user =
-            User("userTsid1", point)
-        user.id = 1
-        val userId = user.getId()
+            User.newInstance(point.id)
+        val userId = user.id
         val pointId = point.id
         val mockPaymentRepository =
             mock<PaymentRepository> {

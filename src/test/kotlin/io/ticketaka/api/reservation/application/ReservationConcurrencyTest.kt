@@ -23,7 +23,7 @@ class ReservationConcurrencyTest
             val len = 10
             val createReservationCommand =
                 CreateReservationCommand(
-                    userTsid = "usr-576023809841191373",
+                    userId = 1L,
                     date = LocalDate.of(2024, 5, 4),
                     seatNumbers = listOf("A1"),
                 )

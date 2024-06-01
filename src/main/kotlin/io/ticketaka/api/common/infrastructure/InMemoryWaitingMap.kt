@@ -7,10 +7,10 @@ import java.util.concurrent.ConcurrentHashMap
 
 @Component
 class InMemoryWaitingMap : TokenWaitingMap {
-    private val tokenCache: MutableMap<String, Token> = ConcurrentHashMap()
+    private val tokenCache: MutableMap<Long, Token> = ConcurrentHashMap()
 
     override fun put(
-        key: String,
+        key: Long,
         token: Token,
     ): Boolean {
         tokenCache[key] = token
@@ -18,11 +18,11 @@ class InMemoryWaitingMap : TokenWaitingMap {
     }
 
     override fun putAll(tokens: List<Token>): Boolean {
-        tokenCache.putAll(tokens.map { it.tsid to it })
+        tokenCache.putAll(tokens.map { it.id to it })
         return true
     }
 
-    override fun get(key: String): Token? {
+    override fun get(key: Long): Token? {
         return tokenCache[key]
     }
 
@@ -34,7 +34,7 @@ class InMemoryWaitingMap : TokenWaitingMap {
         tokenCache.clear()
     }
 
-    override fun remove(key: String): Token? {
+    override fun remove(key: Long): Token? {
         return tokenCache.remove(key)
     }
 

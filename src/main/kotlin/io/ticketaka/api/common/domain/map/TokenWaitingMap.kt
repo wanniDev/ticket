@@ -4,15 +4,15 @@ import io.ticketaka.api.user.domain.Token
 
 interface TokenWaitingMap {
     fun put(
-        key: String,
+        key: Long,
         token: Token,
     ): Boolean
 
     fun putAll(tokens: List<Token>): Boolean
 
-    fun get(key: String): Token?
+    fun get(key: Long): Token?
 
-    fun remove(key: String): Token?
+    fun remove(key: Long): Token?
 
     fun size(): Long
 

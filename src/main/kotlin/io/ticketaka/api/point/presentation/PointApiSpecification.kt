@@ -23,5 +23,5 @@ interface PointApiSpecification {
     )
     @ApiResponse(responseCode = "200", description = "잔액 조회 성공")
     @ApiResponse(responseCode = "404", description = "사용자 조회 실패")
-    fun getBalance(userTsid: String): ResponseEntity<BalanceResponse>
+    fun getBalance(userId: Long): ResponseEntity<BalanceResponse>
 }

@@ -33,7 +33,7 @@ class Reservation(
     }
 
     fun validateUser(user: User) {
-        if (this.userId != user.getId()) {
+        if (this.userId != user.id) {
             throw IllegalStateException("User is not matched")
         }
     }

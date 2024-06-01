@@ -10,26 +10,24 @@ drop table if exists `reservations_seats`;
 drop table if exists `idempotent`;
 
 CREATE TABLE `users` (
-     `id` bigint auto_increment primary key,
-    `tsid` varchar(255) NOT NULL UNIQUE,
+     `id` bigint primary key,
     `point_id`	bigint not null,
-    INDEX user_idx (tsid, point_id)
+    INDEX user_idx (point_id)
 );
 
 CREATE TABLE `points` (
-    `id` bigint auto_increment primary key,
+    `id` bigint primary key,
 	`balance`   decimal(19, 4)	null,
     `create_time`	datetime not null ,
     `update_time`	datetime null
 );
 
 CREATE TABLE `tokens` (
-     `id` bigint auto_increment primary key,
-    `tsid` varchar(255) not null unique,
+     `id` bigint primary key,
 	`issued_time`	datetime null,
 	`status`	enum('ACTIVE', 'EXPIRED') null,
 	`user_id`	bigint not null,
-    INDEX token_idx (tsid, user_id, issued_time)
+    INDEX token_idx (user_id, issued_time)
 );
 
 CREATE TABLE `concerts` (
@@ -49,7 +47,7 @@ CREATE TABLE `seats` (
 );
 
 CREATE TABLE `reservations` (
-    `id` bigint auto_increment primary key,
+    `id` bigint primary key,
     `status`	enum('PENDING', 'CONFIRMED', 'CANCELLED') null,
 	`reservation_time`	datetime null,
 	`expiration_time`	datetime null,
@@ -59,24 +57,22 @@ CREATE TABLE `reservations` (
 );
 
 CREATE TABLE `payments` (
-    `id` bigint auto_increment primary key,
-    `tsid` varchar(255) not null unique,
+    `id` bigint primary key,
 	`amount`	DECIMAL(19, 4)	null,
 	`payment_time`	datetime null,
     `user_id`	bigint not null,
 	`point_id`	bigint not null,
-    INDEX payment_idx (tsid, user_id, point_id)
+    INDEX payment_idx (user_id, point_id)
 );
 
 CREATE TABLE point_histories (
-    `id` bigint auto_increment primary key,
-    `tsid` varchar(255) not null unique,
+    `id` bigint primary key,
     `transaction_type` enum('CHARGE','RECHARGE') null,
     `user_id`	bigint not null,
     `point_id`	bigint not null,
     `amount`	DECIMAL(19, 4)	null,
     `create_time`	datetime not null,
-    INDEX point_history_idx (tsid, user_id, point_id)
+    INDEX point_history_idx (user_id, point_id)
 );
 CREATE TABLE `reservations_seats` (
     `id` bigint auto_increment primary key,

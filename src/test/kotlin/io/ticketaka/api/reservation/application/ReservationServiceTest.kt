@@ -32,11 +32,10 @@ class ReservationServiceTest {
         val point = Point.newInstance(10000.toBigDecimal())
         val date = LocalDate.of(2024, 4, 10)
         val seatNumber = "A24"
-        val user = User.newInstance(point)
-        user.id = 1
+        val user = User.newInstance(point.id)
         val concert = Concert.newInstance(date)
         val seats = setOf(Seat.newInstance(seatNumber, 1000.toBigDecimal(), concert.id))
-        val reservation = Reservation.createPendingReservation(user.getId(), concert.id)
+        val reservation = Reservation.createPendingReservation(user.id, concert.id)
 
         val mockTokenUserQueryService =
             mock<TokenUserQueryService> {
@@ -60,11 +59,12 @@ class ReservationServiceTest {
                 concertSeatService,
                 mockReservationRepository,
                 mock(),
+                mock(),
             )
 
         // when
         reservationService.createReservation(
-            CreateReservationCommand("concertDateTsid", date, seats.map { it.number }.toList()),
+            CreateReservationCommand(user.id, date, seats.map { it.number }.toList()),
         )
 
         // then
@@ -82,8 +82,9 @@ class ReservationServiceTest {
         val seats = setOf(seat)
         val mockReservationRepository = mock<ReservationRepository>()
 
-        val user = User.newInstance(Point.newInstance(10000.toBigDecimal()))
-        user.id = 1
+        val point = Point.newInstance(10000.toBigDecimal())
+        val user = User.newInstance(point.id)
+
         val mockTokenUserQueryService =
             mock<TokenUserQueryService> {
                 on { getUser(any()) } doReturn user
@@ -100,13 +101,14 @@ class ReservationServiceTest {
                 concertSeatService,
                 mockReservationRepository,
                 mock(),
+                mock(),
             )
 
         // when
         val exception =
             assertFailsWith<BadClientRequestException> {
                 reservationService.createReservation(
-                    CreateReservationCommand("concertDateTsid", date, listOf(seatNumber)),
+                    CreateReservationCommand(user.id, date, listOf(seatNumber)),
                 )
             }
 
@@ -139,13 +141,14 @@ class ReservationServiceTest {
                 ConcertSeatService(mock(), mockSeatRepository, mockConcertRepository),
                 mockReservationRepository,
                 mock(),
+                mock(),
             )
 
         // when
         val exception =
             assertFailsWith<NotFoundException> {
                 reservationService.createReservation(
-                    CreateReservationCommand("concertDateTsid", date, listOf(seatNumber)),
+                    CreateReservationCommand(1L, date, listOf(seatNumber)),
                 )
             }
 
@@ -157,10 +160,9 @@ class ReservationServiceTest {
     fun `test reservation confirm`() {
         // given
         val point = Point.newInstance(10000.toBigDecimal())
-        val user = User.newInstance(point)
-        user.id = 1
+        val user = User.newInstance(point.id)
         val concert = Concert.newInstance(LocalDate.now())
-        val reservation = Reservation.createPendingReservation(user.getId(), concert.id)
+        val reservation = Reservation.createPendingReservation(user.id, concert.id)
         val seat = Seat.newInstance("A24", 1000.toBigDecimal(), concert.id)
         seat.reserve()
         reservation.allocate(setOf(seat))
@@ -172,7 +174,7 @@ class ReservationServiceTest {
 
         val mockTokenUserQueryService =
             mock<TokenUserQueryService> {
-                on { getUser(user.tsid) } doReturn user
+                on { getUser(user.id) } doReturn user
             }
 
         val reservationService =
@@ -181,10 +183,11 @@ class ReservationServiceTest {
                 mock(),
                 mockReservationRepository,
                 mock(),
+                mock(),
             )
 
         // when
-        reservationService.confirmReservation(user.tsid, reservation.id)
+        reservationService.confirmReservation(user.id, reservation.id)
 
         // then
     }
@@ -193,8 +196,7 @@ class ReservationServiceTest {
     fun `when user try to confirm reservation with not exist reservation then throw exception`() {
         // given
         val point = Point.newInstance(10000.toBigDecimal())
-        val user = User.newInstance(point)
-        user.id = 1
+        val user = User.newInstance(point.id)
         val notFoundReservationErrorMessage = "예약을 찾을 수 없습니다."
         val mockReservationRepository =
             mock<ReservationRepository> {
@@ -202,7 +204,7 @@ class ReservationServiceTest {
             }
         val mockTokenUserQueryService =
             mock<TokenUserQueryService> {
-                on { getUser(user.tsid) } doReturn user
+                on { getUser(user.id) } doReturn user
             }
 
         val reservationService =
@@ -211,12 +213,13 @@ class ReservationServiceTest {
                 mock(),
                 mockReservationRepository,
                 mock(),
+                mock(),
             )
 
         // when
         val exception =
             assertFailsWith<NotFoundException> {
-                reservationService.confirmReservation(user.tsid, 1L)
+                reservationService.confirmReservation(user.id, 1L)
             }
 
         // then
@@ -227,10 +230,9 @@ class ReservationServiceTest {
     fun `when user try to confirm reservation with not pending status then throw exception`() {
         // given
         val point = Point.newInstance(10000.toBigDecimal())
-        val user = User.newInstance(point)
-        user.id = 1
+        val user = User.newInstance(point.id)
         val concert = Concert.newInstance(LocalDate.now())
-        val reservation = Reservation.createPendingReservation(user.getId(), concert.id)
+        val reservation = Reservation.createPendingReservation(user.id, concert.id)
         val seat = Seat.newInstance("A24", 1000.toBigDecimal(), concert.id)
         seat.reserve()
         reservation.allocate(setOf(seat))
@@ -243,7 +245,7 @@ class ReservationServiceTest {
 
         val mockTokenUserQueryService =
             mock<TokenUserQueryService> {
-                on { getUser(user.tsid) } doReturn user
+                on { getUser(user.id) } doReturn user
             }
 
         val reservationService =
@@ -252,12 +254,13 @@ class ReservationServiceTest {
                 mock(),
                 mockReservationRepository,
                 mock(),
+                mock(),
             )
 
         // when
         val exception =
             assertFailsWith<IllegalStateException> {
-                reservationService.confirmReservation(user.tsid, reservation.id)
+                reservationService.confirmReservation(user.id, reservation.id)
             }
 
         // then

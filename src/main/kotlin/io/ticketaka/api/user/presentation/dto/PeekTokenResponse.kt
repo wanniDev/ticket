@@ -1,4 +1,4 @@
-package io.ticketaka.api.user.presentation
+package io.ticketaka.api.user.presentation.dto
 
 import java.time.LocalDateTime
 

@@ -5,14 +5,14 @@ import io.ticketaka.api.user.domain.Token.Status
 import java.time.LocalDateTime
 
 data class TokenCreatedEvent(
-    var tsid: String,
+    var id: Long,
     val issuedTime: LocalDateTime,
     val status: Status,
     val userId: Long,
     val occurredOn: LocalDateTime = LocalDateTime.now(),
 ) : DomainEvent {
     constructor(token: Token) : this(
-        token.tsid,
+        token.id,
         token.issuedTime,
         token.status,
         token.userId,

@@ -24,9 +24,9 @@ class TokenScheduler(
 
         tokens.sortedBy { it.issuedTime }.take(tokenCapacity.toInt())
         tokens.forEach { token ->
-            logger.debug("scan tokens for activate, {}:{}", token.tsid, token.status)
+            logger.debug("scan tokens for activate, {}:{}", token.id, token.status)
             if (token.isExpired() || token.isDeactivated()) {
-                tokenWaitingMap.remove(token.tsid)
+                tokenWaitingMap.remove(token.id)
             }
         }
     }

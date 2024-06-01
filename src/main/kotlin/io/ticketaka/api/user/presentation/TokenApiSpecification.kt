@@ -2,6 +2,10 @@ package io.ticketaka.api.user.presentation
 
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
+import io.ticketaka.api.user.presentation.dto.CreateTokenRequest
+import io.ticketaka.api.user.presentation.dto.CreateTokenResponse
+import io.ticketaka.api.user.presentation.dto.PeekTokenRequest
+import io.ticketaka.api.user.presentation.dto.PeekTokenResponse
 import org.springframework.http.ResponseEntity
 
 @Tag(name = "Token", description = "토큰 도메인 API")

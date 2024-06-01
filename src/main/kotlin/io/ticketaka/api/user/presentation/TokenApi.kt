@@ -1,6 +1,10 @@
 package io.ticketaka.api.user.presentation
 
 import io.ticketaka.api.user.application.TokenUserService
+import io.ticketaka.api.user.presentation.dto.CreateTokenRequest
+import io.ticketaka.api.user.presentation.dto.CreateTokenResponse
+import io.ticketaka.api.user.presentation.dto.PeekTokenRequest
+import io.ticketaka.api.user.presentation.dto.PeekTokenResponse
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -17,7 +21,7 @@ class TokenApi(
     override fun createToken(
         @RequestBody request: CreateTokenRequest,
     ): ResponseEntity<CreateTokenResponse> {
-        val createdTokenTsid = tokenUserService.createToken(request.userTsid)
+        val createdTokenTsid = tokenUserService.createToken(request.userId)
         return ResponseEntity
             .ok(CreateTokenResponse(createdTokenTsid))
     }
@@ -26,7 +30,7 @@ class TokenApi(
     override fun peekToken(
         @RequestBody peekTokenRequest: PeekTokenRequest,
     ): ResponseEntity<PeekTokenResponse> {
-        val result = tokenUserService.peekToken(peekTokenRequest.tokenTsid)
+        val result = tokenUserService.peekToken(peekTokenRequest.tokenId)
         return ResponseEntity
             .ok(PeekTokenResponse(result, LocalDateTime.now()))
     }

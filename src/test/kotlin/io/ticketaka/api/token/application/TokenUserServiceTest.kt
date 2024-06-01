@@ -25,8 +25,7 @@ class TokenUserServiceTest {
         // given
         val point = Point.newInstance()
         val user =
-            User("userTsid1", point)
-        user.id = 1
+            User.newInstance(point.id)
 
         val mockTokenUserQueryService =
             mock<TokenUserQueryService> {
@@ -35,7 +34,7 @@ class TokenUserServiceTest {
         val tokenUserService = TokenUserService(mock(), mockTokenUserQueryService, mock())
 
         // when
-        val createToken = tokenUserService.createToken("userTsid1")
+        val createToken = tokenUserService.createToken(user.id)
 
         // then
         assertThat(createToken).isNotNull
@@ -53,11 +52,11 @@ class TokenUserServiceTest {
 
         // when
         assertThrows<NotFoundException> {
-            tokenUserService.createToken("userTsid1")
+            tokenUserService.createToken(any())
         }
 
         // then
-        verify(mockTokenUserQueryService).getUser("userTsid1")
+        verify(mockTokenUserQueryService).getUser(any())
     }
 
     @Test
@@ -67,34 +66,13 @@ class TokenUserServiceTest {
         val tokenPosition0 = Token.newInstance(userId)
         val mockTokenWaitingMap =
             mock<TokenWaitingMap> {
-                on { get(tokenPosition0.tsid) } doReturn tokenPosition0
+                on { get(tokenPosition0.id) } doReturn tokenPosition0
             }
         val tokenUserService = TokenUserService(mockTokenWaitingMap, mock(), mock())
 
         // when
-        tokenUserService.peekToken(tokenPosition0.tsid)
+        tokenUserService.peekToken(tokenPosition0.id)
         // then
-        verify(mockTokenWaitingMap).get(tokenPosition0.tsid)
+        verify(mockTokenWaitingMap).get(tokenPosition0.id)
     }
-
-//    @Test
-//    fun `peekToken returns false when the order of the token queue does not match`() {
-//        // given
-//        val userId1 = 1L
-//        val userId2 = 2L
-//        val tokenPosition0 = Token.newInstance(userId1)
-//        val tokenPosition1 = Token.newInstance(userId2)
-//        val tokenWaitingQueue =
-//            mock<TokenWaitingQueue> {
-//                on { peek() } doReturn tokenPosition0
-//            }
-//        val tokenUserService = TokenUserService(tokenWaitingQueue, mock(), mock())
-//
-//        // when
-//        val peekToken = tokenUserService.peekToken(tokenPosition1.tsid)
-//
-//        // then
-//        verify(tokenWaitingQueue).peek()
-//        assertFalse(peekToken)
-//    }
 }

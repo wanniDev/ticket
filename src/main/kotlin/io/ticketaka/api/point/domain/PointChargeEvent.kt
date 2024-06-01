@@ -13,7 +13,7 @@ data class PointChargeEvent(
     val occurredOn: LocalDateTime,
 ) : DomainEvent {
     constructor(user: User, point: Point, balance: BigDecimal, amount: BigDecimal) : this(
-        user.getId(),
+        user.id,
         point.id,
         balance,
         amount,

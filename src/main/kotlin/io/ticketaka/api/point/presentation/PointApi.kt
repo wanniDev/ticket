@@ -1,7 +1,7 @@
 package io.ticketaka.api.point.presentation
 
 import io.ticketaka.api.common.infrastructure.aop.OnMap
-import io.ticketaka.api.point.application.PointBalanceService
+import io.ticketaka.api.point.application.PointService
 import io.ticketaka.api.point.presentation.dto.BalanceResponse
 import io.ticketaka.api.point.presentation.dto.RechargeRequest
 import org.springframework.http.ResponseEntity
@@ -15,22 +15,22 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/api/point")
 class PointApi(
-    private val pointBalanceService: PointBalanceService,
+    private val pointService: PointService,
 ) : PointApiSpecification {
     @OnMap
     @PostMapping("/recharge")
     override fun recharge(
         @RequestBody request: RechargeRequest,
     ): ResponseEntity<Void> {
-        pointBalanceService.recharge(request.toCommand())
+        pointService.recharge(request.toCommand())
         return ResponseEntity.noContent().build()
     }
 
     @GetMapping("/balance")
     override fun getBalance(
-        @RequestParam userTsid: String,
+        @RequestParam userId: Long,
     ): ResponseEntity<BalanceResponse> {
-        val userPoint = pointBalanceService.getBalance(userTsid)
-        return ResponseEntity.ok(BalanceResponse(userPoint.userTsid, userPoint.balance))
+        val userPoint = pointService.getBalance(userId)
+        return ResponseEntity.ok(BalanceResponse(userPoint.userId, userPoint.balance))
     }
 }
