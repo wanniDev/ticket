@@ -1,6 +1,6 @@
-package io.ticketaka.api.reservation.application
+package io.ticketaka.api.point.application
 
-import io.ticketaka.api.reservation.application.dto.PaymentCommand
+import io.ticketaka.api.point.application.dto.PaymentCommand
 import io.ticketaka.api.reservation.domain.payment.Payment
 import io.ticketaka.api.reservation.domain.payment.PaymentRepository
 import org.springframework.context.ApplicationEventPublisher

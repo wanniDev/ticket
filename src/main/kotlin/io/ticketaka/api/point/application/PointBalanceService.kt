@@ -1,7 +1,7 @@
-package io.ticketaka.api.reservation.application
+package io.ticketaka.api.point.application
 
-import io.ticketaka.api.reservation.application.dto.BalanceQueryModel
-import io.ticketaka.api.reservation.application.dto.RechargeCommand
+import io.ticketaka.api.point.application.dto.BalanceQueryModel
+import io.ticketaka.api.point.application.dto.RechargeCommand
 import io.ticketaka.api.reservation.domain.point.PointRechargeEvent
 import io.ticketaka.api.user.application.TokenUserQueryService
 import org.springframework.context.ApplicationEventPublisher

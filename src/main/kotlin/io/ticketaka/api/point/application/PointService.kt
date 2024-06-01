@@ -1,4 +1,4 @@
-package io.ticketaka.api.reservation.application
+package io.ticketaka.api.point.application
 
 import io.ticketaka.api.reservation.domain.point.Point
 import io.ticketaka.api.reservation.domain.point.PointRepository

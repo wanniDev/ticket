@@ -1,4 +1,4 @@
-package io.ticketaka.api.reservation.application
+package io.ticketaka.api.point.application
 
 import io.ticketaka.api.common.infrastructure.IdempotentKeyGenerator
 import io.ticketaka.api.reservation.domain.point.Idempotent

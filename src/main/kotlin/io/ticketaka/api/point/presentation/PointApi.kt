@@ -1,9 +1,9 @@
 package io.ticketaka.api.point.presentation
 
 import io.ticketaka.api.common.infrastructure.aop.OnMap
+import io.ticketaka.api.point.application.PointBalanceService
 import io.ticketaka.api.point.presentation.dto.BalanceResponse
 import io.ticketaka.api.point.presentation.dto.RechargeRequest
-import io.ticketaka.api.reservation.application.PointBalanceService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping

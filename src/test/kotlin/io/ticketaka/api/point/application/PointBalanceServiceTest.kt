@@ -1,9 +1,7 @@
 package io.ticketaka.api.point.application
 
 import io.ticketaka.api.common.exception.BadClientRequestException
-import io.ticketaka.api.reservation.application.PointBalanceService
-import io.ticketaka.api.reservation.application.PointService
-import io.ticketaka.api.reservation.application.dto.RechargeCommand
+import io.ticketaka.api.point.application.dto.RechargeCommand
 import io.ticketaka.api.reservation.domain.point.Point
 import io.ticketaka.api.user.application.TokenUserQueryService
 import io.ticketaka.api.user.domain.User
