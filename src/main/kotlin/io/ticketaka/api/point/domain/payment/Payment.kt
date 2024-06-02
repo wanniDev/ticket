@@ -1,5 +1,6 @@
 package io.ticketaka.api.point.domain.payment
 
+import io.ticketaka.api.common.domain.AbstractAggregateRoot
 import io.ticketaka.api.common.infrastructure.tsid.TsIdKeyGenerator
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
@@ -20,7 +21,7 @@ class Payment(
     val paymentTime: LocalDateTime,
     val userId: Long,
     val pointId: Long,
-) : Persistable<Long> {
+) : AbstractAggregateRoot(), Persistable<Long> {
     @Transient
     private var isNew = true
 
@@ -36,6 +37,10 @@ class Payment(
     @PostLoad
     fun markNotNew() {
         isNew = false
+    }
+
+    init {
+        registerEvent(PaymentApprovalEvent(this, userId, pointId, amount))
     }
 
     companion object {
