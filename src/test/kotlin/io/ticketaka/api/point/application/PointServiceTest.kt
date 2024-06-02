@@ -3,7 +3,7 @@ package io.ticketaka.api.point.application
 import io.ticketaka.api.common.exception.BadClientRequestException
 import io.ticketaka.api.point.application.dto.RechargeCommand
 import io.ticketaka.api.point.domain.Point
-import io.ticketaka.api.point.domain.PointBalanceUpdater
+import io.ticketaka.api.point.domain.PointBalanceCacheUpdater
 import io.ticketaka.api.user.application.TokenUserQueryService
 import io.ticketaka.api.user.domain.User
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -41,14 +41,14 @@ class PointServiceTest {
                 on { getPoint(any()) } doReturn point
             }
 
-        val pointBalanceUpdater =
-            mock<PointBalanceUpdater> {
-                on { recharge(point, rechargeCommand.amount) } doAnswer {
+        val pointBalanceCacheUpdater =
+            mock<PointBalanceCacheUpdater> {
+                on { recharge(point.id, rechargeCommand.amount) } doAnswer {
                     point.recharge(rechargeCommand.amount)
                 }
             }
 
-        val pointService = PointService(tokenUserQueryService, pointQueryService, pointBalanceUpdater, mock())
+        val pointService = PointService(tokenUserQueryService, pointQueryService, pointBalanceCacheUpdater, mock())
 
         // when
         pointService.recharge(rechargeCommand)
@@ -78,14 +78,14 @@ class PointServiceTest {
             mock<PointQueryService> {
                 on { getPoint(any()) } doReturn point
             }
-        val pointBalanceUpdater =
-            mock<PointBalanceUpdater> {
-                on { recharge(point, rechargeCommand.amount) } doAnswer {
+        val pointBalanceCacheUpdater =
+            mock<PointBalanceCacheUpdater> {
+                on { recharge(point.id, rechargeCommand.amount) } doAnswer {
                     point.recharge(rechargeCommand.amount)
                 }
             }
 
-        val pointService = PointService(tokenUserQueryService, pointQueryService, pointBalanceUpdater, mock())
+        val pointService = PointService(tokenUserQueryService, pointQueryService, pointBalanceCacheUpdater, mock())
 
         // when
         val exception =
@@ -110,8 +110,8 @@ class PointServiceTest {
             mock<PointQueryService> {
                 on { getPoint(any()) } doReturn point
             }
-        val pointBalanceUpdater = mock<PointBalanceUpdater>()
-        val pointService = PointService(tokenUserQueryService, pointQueryService, pointBalanceUpdater, mock())
+        val pointBalanceCacheUpdater = mock<PointBalanceCacheUpdater>()
+        val pointService = PointService(tokenUserQueryService, pointQueryService, pointBalanceCacheUpdater, mock())
 
         // when
         val balanceQueryModel = pointService.getBalance(user.id)
