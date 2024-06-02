@@ -8,17 +8,19 @@ import jakarta.persistence.PostLoad
 import jakarta.persistence.PrePersist
 import jakarta.persistence.Table
 import jakarta.persistence.Transient
+import org.hibernate.annotations.DynamicUpdate
 import org.springframework.data.domain.Persistable
 import java.math.BigDecimal
 import java.time.LocalDateTime
 
 @Entity
+@DynamicUpdate
 @Table(name = "points")
 class Point protected constructor(
     @Id
     val id: Long,
     var balance: BigDecimal,
-    val createTime: LocalDateTime,
+    val createTime: LocalDateTime?,
     var updateTime: LocalDateTime,
 ) : Persistable<Long> {
     @Transient
@@ -55,6 +57,19 @@ class Point protected constructor(
     }
 
     companion object {
+        fun newInstance(
+            id: Long,
+            balance: BigDecimal,
+            updateTime: LocalDateTime,
+        ): Point {
+            return Point(
+                id = id,
+                balance = balance,
+                createTime = null,
+                updateTime = updateTime,
+            )
+        }
+
         fun newInstance(balance: BigDecimal = BigDecimal.ZERO): Point {
             val now = LocalDateTime.now()
             return Point(
