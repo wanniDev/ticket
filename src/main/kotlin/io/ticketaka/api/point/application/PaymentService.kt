@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional(readOnly = true)
 class PaymentService(
     private val paymentRepository: PaymentRepository,
-    private val pointQueryService: PointQueryService,
+    private val pointCacheAsideQueryService: PointCacheAsideQueryService,
     private val applicationEventPublisher: ApplicationEventPublisher,
 ) {
     @Transactional

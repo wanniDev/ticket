@@ -55,12 +55,12 @@ class ConcertSeatServiceTest {
         val concert = Concert.newInstance(date)
         val seatNumber = "1"
         val seat = Seat.newInstance(seatNumber, BigDecimal(1), concert.id)
-        val mockConcertQueryService =
-            mock<ConcertQueryService> {
+        val mockConcertCacheAsideQueryService =
+            mock<ConcertCacheAsideQueryService> {
                 on { getConcert(any()) } doReturn concert
                 on { getConcertSeatNumbers(any()) } doReturn setOf(seat)
             }
-        val concertSeatService = ConcertSeatService(mockConcertQueryService, mock(), mock())
+        val concertSeatService = ConcertSeatService(mockConcertCacheAsideQueryService, mock(), mock())
 
         // when
         val result = concertSeatService.getSeatNumbers(date)
@@ -74,12 +74,12 @@ class ConcertSeatServiceTest {
         // given
         val date = LocalDate.of(2024, 4, 1)
         val concert = Concert.newInstance(date)
-        val mockConcertQueryService =
-            mock<ConcertQueryService> {
+        val mockConcertCacheAsideQueryService =
+            mock<ConcertCacheAsideQueryService> {
                 on { getConcert(any()) } doReturn concert
                 on { getConcertSeatNumbers(any()) } doReturn emptySet()
             }
-        val concertSeatService = ConcertSeatService(mockConcertQueryService, mock(), mock())
+        val concertSeatService = ConcertSeatService(mockConcertCacheAsideQueryService, mock(), mock())
 
         // when
         val result = concertSeatService.getSeatNumbers(date)

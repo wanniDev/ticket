@@ -9,15 +9,11 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 @Transactional(readOnly = true)
-class PointQueryService(
+class PointCacheAsideQueryService(
     private val pointRepository: PointRepository,
 ) {
     @Cacheable(value = ["point"], key = "#pointId", sync = true)
     fun getPoint(pointId: Long): Point {
         return pointRepository.findById(pointId) ?: throw NotFoundException("포인트를 찾을 수 없습니다.")
-    }
-
-    fun getPointForUpdate(pointId: Long): Point {
-        return pointRepository.findByIdForUpdate(pointId) ?: throw NotFoundException("포인트를 찾을 수 없습니다.")
     }
 }

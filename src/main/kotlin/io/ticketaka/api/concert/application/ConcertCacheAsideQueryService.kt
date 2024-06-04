@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service
 import java.time.LocalDate
 
 @Service
-class ConcertQueryService(
+class ConcertCacheAsideQueryService(
     private val concertRepository: ConcertRepository,
     private val seatRepository: SeatRepository,
 ) {

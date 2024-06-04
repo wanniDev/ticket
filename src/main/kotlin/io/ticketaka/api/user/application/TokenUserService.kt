@@ -8,11 +8,11 @@ import org.springframework.stereotype.Service
 @Service
 class TokenUserService(
     private val tokenWaitingMap: TokenWaitingMap,
-    private val tokenUserQueryService: TokenUserQueryService,
+    private val tokenUserCacheAsideQueryService: TokenUserCacheAsideQueryService,
     private val applicationEventPublisher: ApplicationEventPublisher,
 ) {
     fun createToken(userId: Long): Long {
-        val user = tokenUserQueryService.getUser(userId)
+        val user = tokenUserCacheAsideQueryService.getUser(userId)
 
         val token = Token.newInstance(user.id)
         token.pollAllEvents().forEach { applicationEventPublisher.publishEvent(it) }

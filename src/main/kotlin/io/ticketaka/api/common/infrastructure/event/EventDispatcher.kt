@@ -12,7 +12,7 @@ class EventDispatcher(
     private val pointRechargeEventConsumer: PointRechargeEventConsumer,
     private val pointChargeEventConsumer: PointChargeEventConsumer,
 ) {
-    fun dispatchAndConsume(event: DomainEvent) {
+    fun dispatch(event: DomainEvent) {
         when (event) {
             is PointRechargeEvent -> {
                 pointRechargeEventConsumer.offer(event)

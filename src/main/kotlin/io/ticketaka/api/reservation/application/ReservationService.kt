@@ -7,7 +7,7 @@ import io.ticketaka.api.reservation.application.dto.CreateReservationCommand
 import io.ticketaka.api.reservation.domain.reservation.Reservation
 import io.ticketaka.api.reservation.domain.reservation.ReservationRepository
 import io.ticketaka.api.reservation.domain.reservation.ReservationSeatAllocator
-import io.ticketaka.api.user.application.TokenUserQueryService
+import io.ticketaka.api.user.application.TokenUserCacheAsideQueryService
 import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 @Transactional(readOnly = true)
 class ReservationService(
-    private val tokenQueryUserService: TokenUserQueryService,
+    private val tokenUserCacheAsideQueryService: TokenUserCacheAsideQueryService,
     private val concertSeatService: ConcertSeatService,
     private val reservationRepository: ReservationRepository,
     private val reservationSeatAllocator: ReservationSeatAllocator,
@@ -24,7 +24,7 @@ class ReservationService(
     @Async
     @Transactional
     fun createReservation(command: CreateReservationCommand) {
-        val user = tokenQueryUserService.getUser(command.userId)
+        val user = tokenUserCacheAsideQueryService.getUser(command.userId)
         val concert = concertSeatService.getAvailableConcert(command.date)
         val seats = concertSeatService.reserveSeat(concert.id, command.seatNumbers)
         val reservation = reservationRepository.save(Reservation.createPendingReservation(user.id, concert.id))
@@ -38,7 +38,7 @@ class ReservationService(
         userId: Long,
         reservationId: Long,
     ) {
-        val user = tokenQueryUserService.getUser(userId)
+        val user = tokenUserCacheAsideQueryService.getUser(userId)
         val reservation =
             reservationRepository.findById(reservationId)
                 ?: throw NotFoundException("예약을 찾을 수 없습니다.")

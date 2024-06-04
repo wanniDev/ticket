@@ -12,13 +12,13 @@ import java.time.LocalDate
 
 @Service
 class ConcertSeatService(
-    private val concertQueryService: ConcertQueryService,
+    private val concertCacheAsideQueryService: ConcertCacheAsideQueryService,
     private val seatRepository: SeatRepository,
     private val concertRepository: ConcertRepository,
 ) {
     fun getSeatNumbers(date: LocalDate): List<SeatResult> {
-        val concert = concertQueryService.getConcert(date)
-        return concertQueryService.getConcertSeatNumbers(concert.id).map { SeatResult(it.number, it.status) }
+        val concert = concertCacheAsideQueryService.getConcert(date)
+        return concertCacheAsideQueryService.getConcertSeatNumbers(concert.id).map { SeatResult(it.number, it.status) }
     }
 
     @Transactional(readOnly = true)

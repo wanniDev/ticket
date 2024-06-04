@@ -7,7 +7,7 @@ import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Service
 
 @Service
-class TokenUserQueryService(
+class TokenUserCacheAsideQueryService(
     private val userRepository: UserRepository,
 ) {
     @Cacheable(value = ["user"], key = "#id")

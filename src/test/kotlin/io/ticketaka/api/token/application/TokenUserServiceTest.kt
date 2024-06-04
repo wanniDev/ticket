@@ -3,7 +3,7 @@ package io.ticketaka.api.token.application
 import io.ticketaka.api.common.domain.map.TokenWaitingMap
 import io.ticketaka.api.common.exception.NotFoundException
 import io.ticketaka.api.point.domain.Point
-import io.ticketaka.api.user.application.TokenUserQueryService
+import io.ticketaka.api.user.application.TokenUserCacheAsideQueryService
 import io.ticketaka.api.user.application.TokenUserService
 import io.ticketaka.api.user.domain.Token
 import io.ticketaka.api.user.domain.User
@@ -27,11 +27,11 @@ class TokenUserServiceTest {
         val user =
             User.newInstance(point.id)
 
-        val mockTokenUserQueryService =
-            mock<TokenUserQueryService> {
+        val mockTokenUserCacheAsideQueryService =
+            mock<TokenUserCacheAsideQueryService> {
                 on { getUser(any()) } doReturn user
             }
-        val tokenUserService = TokenUserService(mock(), mockTokenUserQueryService, mock())
+        val tokenUserService = TokenUserService(mock(), mockTokenUserCacheAsideQueryService, mock())
 
         // when
         val createToken = tokenUserService.createToken(user.id)
@@ -44,11 +44,11 @@ class TokenUserServiceTest {
     fun `when user not found then throw exception`() {
         // given
         val mockTokenWaitingQueue = mock<TokenWaitingMap>()
-        val mockTokenUserQueryService =
-            mock<TokenUserQueryService> {
+        val mockTokenUserCacheAsideQueryService =
+            mock<TokenUserCacheAsideQueryService> {
                 on { getUser(any()) } doThrow NotFoundException("사용자를 찾을 수 없습니다.")
             }
-        val tokenUserService = TokenUserService(mockTokenWaitingQueue, mockTokenUserQueryService, mock())
+        val tokenUserService = TokenUserService(mockTokenWaitingQueue, mockTokenUserCacheAsideQueryService, mock())
 
         // when
         assertThrows<NotFoundException> {
@@ -56,7 +56,7 @@ class TokenUserServiceTest {
         }
 
         // then
-        verify(mockTokenUserQueryService).getUser(any())
+        verify(mockTokenUserCacheAsideQueryService).getUser(any())
     }
 
     @Test

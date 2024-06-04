@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component
 class DBEventBroker(
     private val eventDispatcher: EventDispatcher,
 ) : EventBroker {
-    override fun produceAndConsume(domainEvent: DomainEvent) {
-        eventDispatcher.dispatchAndConsume(domainEvent)
+    override fun produce(domainEvent: DomainEvent) {
+        eventDispatcher.dispatch(domainEvent)
     }
 }
