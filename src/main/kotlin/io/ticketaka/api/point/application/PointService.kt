@@ -37,6 +37,5 @@ class PointService(
     fun updateRecharge(event: PointRechargeEvent) {
         val point = pointRepository.findById(event.pointId) ?: throw NotFoundException("포인트를 찾을 수 없습니다.")
         point.recharge(event.amount)
-        pointRepository.updateBalance(point.id, point.balance)
     }
 }
