@@ -12,6 +12,8 @@ interface SeatRepository {
         numbers: List<String>,
     ): Set<Seat>
 
+    fun findByIdsOrderByNumberForUpdate(ids: List<Long>): Set<Seat>
+
     fun findSeatsByConcertDateAndNumberInOrderByNumber(
         date: LocalDate,
         numbers: List<String>,

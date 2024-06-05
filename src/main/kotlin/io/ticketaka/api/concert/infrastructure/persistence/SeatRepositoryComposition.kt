@@ -26,6 +26,10 @@ class SeatRepositoryComposition(
         return jpaSeatRepository.findSeatsByConcertDateAndNumberIn(date, numbers).toSet()
     }
 
+    override fun findByIdsOrderByNumberForUpdate(ids: List<Long>): Set<Seat> {
+        return jpaSeatRepository.findByIdInOrderByNumber(ids).toSet()
+    }
+
     override fun findSeatsByConcertDateAndNumberInOrderByNumber(
         date: LocalDate,
         numbers: List<String>,

@@ -15,6 +15,9 @@ interface JpaSeatRepository : JpaRepository<Seat, Long> {
     ): List<Seat>
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
+    fun findByIdInOrderByNumber(ids: List<Long>): List<Seat>
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
     fun findSeatsByConcertDateAndNumberInOrderByNumber(
         date: LocalDate,
         seatNumbers: List<String>,
