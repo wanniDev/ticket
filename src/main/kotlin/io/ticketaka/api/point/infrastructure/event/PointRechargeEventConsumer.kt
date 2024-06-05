@@ -4,7 +4,6 @@ import io.ticketaka.api.point.application.PointService
 import io.ticketaka.api.point.domain.PointHistory
 import io.ticketaka.api.point.domain.PointHistoryRepository
 import io.ticketaka.api.point.domain.PointRechargeEvent
-import io.ticketaka.api.point.domain.PointRepository
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.springframework.util.StopWatch
@@ -13,7 +12,6 @@ import kotlin.concurrent.thread
 
 @Component
 class PointRechargeEventConsumer(
-    private val pointRepository: PointRepository,
     private val pointHistoryRepository: PointHistoryRepository,
     private val pointService: PointService,
 ) {
@@ -49,7 +47,7 @@ class PointRechargeEventConsumer(
         thread(
             start = true,
             isDaemon = true,
-            name = "PointRechargeEventConsumer",
+            name = "pointEventConsumer",
         ) {
             while (true) {
                 val stopWatch = StopWatch()
