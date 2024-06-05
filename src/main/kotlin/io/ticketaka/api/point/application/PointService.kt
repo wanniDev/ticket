@@ -3,7 +3,7 @@ package io.ticketaka.api.point.application
 import io.ticketaka.api.common.exception.NotFoundException
 import io.ticketaka.api.point.application.dto.BalanceQueryModel
 import io.ticketaka.api.point.application.dto.RechargeCommand
-import io.ticketaka.api.point.domain.PointBalanceCacheUpdater
+import io.ticketaka.api.point.domain.PointBalanceUpdater
 import io.ticketaka.api.point.domain.PointRechargeEvent
 import io.ticketaka.api.point.domain.PointRepository
 import io.ticketaka.api.user.application.TokenUserCacheAsideQueryService
@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional
 class PointService(
     private val tokenUserCacheAsideQueryService: TokenUserCacheAsideQueryService,
     private val pointCacheAsideQueryService: PointCacheAsideQueryService,
-    private val pointBalanceCacheUpdater: PointBalanceCacheUpdater,
+    private val pointBalanceUpdater: PointBalanceUpdater,
     private val applicationEventPublisher: ApplicationEventPublisher,
     private val pointRepository: PointRepository,
 ) {
@@ -23,7 +23,7 @@ class PointService(
     fun recharge(rechargeCommand: RechargeCommand) {
         val user = tokenUserCacheAsideQueryService.getUser(rechargeCommand.userId)
         val point = pointCacheAsideQueryService.getPoint(user.pointId)
-        pointBalanceCacheUpdater.recharge(point.id, rechargeCommand.amount)
+        pointBalanceUpdater.recharge(point.id, rechargeCommand.amount)
         applicationEventPublisher.publishEvent(PointRechargeEvent(user.id, point.id, rechargeCommand.amount))
     }
 
