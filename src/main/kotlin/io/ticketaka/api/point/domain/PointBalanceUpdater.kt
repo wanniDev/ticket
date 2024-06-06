@@ -2,7 +2,7 @@ package io.ticketaka.api.point.domain
 
 import java.math.BigDecimal
 
-interface PointBalanceCacheUpdater {
+interface PointBalanceUpdater {
     fun recharge(
         pointId: Long,
         amount: BigDecimal,

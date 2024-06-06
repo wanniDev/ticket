@@ -2,11 +2,10 @@ package io.ticketaka.api.reservation.application
 
 import io.ticketaka.api.common.exception.BadClientRequestException
 import io.ticketaka.api.common.exception.NotFoundException
-import io.ticketaka.api.concert.application.ConcertSeatService
+import io.ticketaka.api.concert.application.ConcertCacheAsideQueryService
 import io.ticketaka.api.concert.domain.Concert
-import io.ticketaka.api.concert.domain.ConcertRepository
+import io.ticketaka.api.concert.domain.ConcertSeatUpdater
 import io.ticketaka.api.concert.domain.Seat
-import io.ticketaka.api.concert.domain.SeatRepository
 import io.ticketaka.api.point.domain.Point
 import io.ticketaka.api.reservation.application.dto.CreateReservationCommand
 import io.ticketaka.api.reservation.domain.reservation.Reservation
@@ -42,23 +41,22 @@ class ReservationServiceTest {
                 on { getUser(any()) } doReturn user
             }
 
-        val mockReservationRepository =
-            mock<ReservationRepository> {
-                on { save(any()) } doReturn reservation
+        val mockConcertSeatCacheAsideQueryService =
+            mock<ConcertCacheAsideQueryService> {
+                on { getConcert(date) } doReturn concert
             }
 
-        val concertSeatService =
-            mock<ConcertSeatService> {
-                on { getAvailableConcert(date) } doReturn concert
-                on { reserveSeat(concert.id, seats.map { it.number }.toList()) } doReturn seats
+        val mockConcertUpdater =
+            mock<ConcertSeatUpdater> {
+                on { reserve(concert.id, date, seats.map { it.number }.toList()) } doReturn seats
             }
 
         val reservationService =
             ReservationService(
                 mockTokenUserCacheAsideQueryService,
-                concertSeatService,
-                mockReservationRepository,
+                mockConcertSeatCacheAsideQueryService,
                 mock(),
+                mockConcertUpdater,
                 mock(),
             )
 
@@ -80,7 +78,6 @@ class ReservationServiceTest {
         val seat = Seat.newInstance(seatNumber, 1000.toBigDecimal(), concert.id)
         seat.occupy()
         val seats = setOf(seat)
-        val mockReservationRepository = mock<ReservationRepository>()
 
         val point = Point.newInstance(10000.toBigDecimal())
         val user = User.newInstance(point.id)
@@ -89,18 +86,22 @@ class ReservationServiceTest {
             mock<TokenUserCacheAsideQueryService> {
                 on { getUser(any()) } doReturn user
             }
-        val concertSeatService =
-            mock<ConcertSeatService> {
-                on { getAvailableConcert(date) } doReturn concert
-                on { reserveSeat(concert.id, seats.map { it.number }.toList()) } doThrow BadClientRequestException("이미 예약된 좌석입니다.")
+        val mockConcertSeatCacheAsideQueryService =
+            mock<ConcertCacheAsideQueryService> {
+                on { getConcert(date) } doReturn concert
+            }
+
+        val mockConcertUpdater =
+            mock<ConcertSeatUpdater> {
+                on { reserve(concert.id, date, seats.map { it.number }.toList()) } doThrow BadClientRequestException("이미 예약된 좌석입니다.")
             }
 
         val reservationService =
             ReservationService(
                 mockTokenUserCacheAsideQueryService,
-                concertSeatService,
-                mockReservationRepository,
+                mockConcertSeatCacheAsideQueryService,
                 mock(),
+                mockConcertUpdater,
                 mock(),
             )
 
@@ -126,19 +127,19 @@ class ReservationServiceTest {
         seat.occupy()
 
         val notFoundConcertErrorMessage = "콘서트를 찾을 수 없습니다."
-        val mockConcertRepository =
-            mock<ConcertRepository> {
-                on { findByDate(date) } doThrow NotFoundException(notFoundConcertErrorMessage)
-            }
-        val mockSeatRepository = mock<SeatRepository>()
+
         val mockReservationRepository = mock<ReservationRepository>()
 
         val mockTokenUserCacheAsideQueryService = mock<TokenUserCacheAsideQueryService>()
+        val mockConcertSeatCacheAsideQueryService =
+            mock<ConcertCacheAsideQueryService> {
+                on { getConcert(date) } doThrow NotFoundException(notFoundConcertErrorMessage)
+            }
 
         val reservationService =
             ReservationService(
                 mockTokenUserCacheAsideQueryService,
-                ConcertSeatService(mock(), mockSeatRepository, mockConcertRepository),
+                mockConcertSeatCacheAsideQueryService,
                 mockReservationRepository,
                 mock(),
                 mock(),

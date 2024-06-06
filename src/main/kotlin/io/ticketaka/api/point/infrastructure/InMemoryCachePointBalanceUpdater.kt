@@ -2,15 +2,15 @@ package io.ticketaka.api.point.infrastructure
 
 import io.ticketaka.api.common.exception.NotFoundException
 import io.ticketaka.api.point.domain.Point
-import io.ticketaka.api.point.domain.PointBalanceCacheUpdater
+import io.ticketaka.api.point.domain.PointBalanceUpdater
 import org.springframework.cache.caffeine.CaffeineCacheManager
 import org.springframework.stereotype.Component
 import java.math.BigDecimal
 
 @Component
-class InMemoryPointBalanceCacheUpdater(
+class InMemoryCachePointBalanceUpdater(
     private val caffeineCacheManager: CaffeineCacheManager,
-) : PointBalanceCacheUpdater {
+) : PointBalanceUpdater {
     override fun recharge(
         pointId: Long,
         amount: BigDecimal,

@@ -1,35 +1,30 @@
 package io.ticketaka.api.reservation.application
 
+import io.ticketaka.api.common.domain.EventBroker
 import io.ticketaka.api.common.exception.NotFoundException
-import io.ticketaka.api.concert.application.ConcertSeatService
-import io.ticketaka.api.concert.infrastructure.cache.ConcertSeatCacheRefresher
+import io.ticketaka.api.concert.application.ConcertCacheAsideQueryService
+import io.ticketaka.api.concert.domain.ConcertSeatUpdater
 import io.ticketaka.api.reservation.application.dto.CreateReservationCommand
-import io.ticketaka.api.reservation.domain.reservation.Reservation
+import io.ticketaka.api.reservation.domain.reservation.ReservationCreateEvent
 import io.ticketaka.api.reservation.domain.reservation.ReservationRepository
-import io.ticketaka.api.reservation.domain.reservation.ReservationSeatAllocator
 import io.ticketaka.api.user.application.TokenUserCacheAsideQueryService
 import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-@Transactional(readOnly = true)
 class ReservationService(
     private val tokenUserCacheAsideQueryService: TokenUserCacheAsideQueryService,
-    private val concertSeatService: ConcertSeatService,
+    private val concertCacheAsideQueryService: ConcertCacheAsideQueryService,
     private val reservationRepository: ReservationRepository,
-    private val reservationSeatAllocator: ReservationSeatAllocator,
-    private val concertSeatCacheRefresher: ConcertSeatCacheRefresher,
+    private val concertSeatUpdater: ConcertSeatUpdater,
+    private val eventBroker: EventBroker,
 ) {
-    @Async
-    @Transactional
     fun createReservation(command: CreateReservationCommand) {
         val user = tokenUserCacheAsideQueryService.getUser(command.userId)
-        val concert = concertSeatService.getAvailableConcert(command.date)
-        val seats = concertSeatService.reserveSeat(concert.id, command.seatNumbers)
-        val reservation = reservationRepository.save(Reservation.createPendingReservation(user.id, concert.id))
-        reservationSeatAllocator.allocate(reservation.id, seats.map { it.id })
-        concertSeatCacheRefresher.refresh(concert.id)
+        val concert = concertCacheAsideQueryService.getConcert(command.date)
+        val seats = concertSeatUpdater.reserve(concert.id, command.date, command.seatNumbers)
+        eventBroker.produce(ReservationCreateEvent(user.id, concert.id, seats.map { it.id }))
     }
 
     @Async
