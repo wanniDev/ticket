@@ -23,7 +23,7 @@ class ConcertSeatServiceTest {
             mock<ConcertRepository> {
                 on { findAllDate() } doReturn setOf(LocalDate.of(2024, 4, 1))
             }
-        val concertSeatService = ConcertSeatService(mock(), mock(), mockConcertRepository)
+        val concertSeatService = ConcertSeatService(mock(), mockConcertRepository)
 
         // when
         val result = concertSeatService.getDates()
@@ -39,7 +39,7 @@ class ConcertSeatServiceTest {
             mock<ConcertRepository> {
                 on { findAllDate() } doReturn emptySet()
             }
-        val concertSeatService = ConcertSeatService(mock(), mock(), mockConcertRepository)
+        val concertSeatService = ConcertSeatService(mock(), mockConcertRepository)
 
         // when
         val result = concertSeatService.getDates()
@@ -60,7 +60,7 @@ class ConcertSeatServiceTest {
                 on { getConcert(any()) } doReturn concert
                 on { getConcertSeatNumbers(any()) } doReturn setOf(seat)
             }
-        val concertSeatService = ConcertSeatService(mockConcertCacheAsideQueryService, mock(), mock())
+        val concertSeatService = ConcertSeatService(mockConcertCacheAsideQueryService, mock())
 
         // when
         val result = concertSeatService.getSeatNumbers(date)
@@ -79,7 +79,7 @@ class ConcertSeatServiceTest {
                 on { getConcert(any()) } doReturn concert
                 on { getConcertSeatNumbers(any()) } doReturn emptySet()
             }
-        val concertSeatService = ConcertSeatService(mockConcertCacheAsideQueryService, mock(), mock())
+        val concertSeatService = ConcertSeatService(mockConcertCacheAsideQueryService, mock())
 
         // when
         val result = concertSeatService.getSeatNumbers(date)
