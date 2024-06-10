@@ -1,6 +1,6 @@
 package io.ticketaka.api.point.infrastructure.event
 
-import io.ticketaka.api.point.application.PointService
+import io.ticketaka.api.point.domain.DBPointRecharger
 import io.ticketaka.api.point.domain.PointHistory
 import io.ticketaka.api.point.domain.PointHistoryRepository
 import io.ticketaka.api.point.domain.PointRechargeEvent
@@ -13,7 +13,7 @@ import kotlin.concurrent.thread
 @Component
 class PointRechargeEventConsumer(
     private val pointHistoryRepository: PointHistoryRepository,
-    private val pointService: PointService,
+    private val dbPointRecharger: DBPointRecharger,
 ) {
     private val logger = LoggerFactory.getLogger(javaClass)
     private val eventQueue = LinkedBlockingDeque<PointRechargeEvent>()
@@ -34,7 +34,7 @@ class PointRechargeEventConsumer(
                 )
             pointHistories.add(pointHistory)
 
-            pointService.updateRecharge(event)
+            dbPointRecharger.recharge(event)
         }
         pointHistoryRepository.saveAll(pointHistories)
     }
