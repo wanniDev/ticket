@@ -1,6 +1,6 @@
 package io.ticketaka.api.point.infrastructure.event
 
-import io.ticketaka.api.point.domain.DBPointRecharger
+import io.ticketaka.api.point.domain.DBPointManager
 import io.ticketaka.api.point.domain.PointHistory
 import io.ticketaka.api.point.domain.PointHistoryRepository
 import io.ticketaka.api.point.domain.PointRechargeEvent
@@ -13,34 +13,57 @@ import kotlin.concurrent.thread
 @Component
 class PointRechargeEventConsumer(
     private val pointHistoryRepository: PointHistoryRepository,
-    private val dbPointRecharger: DBPointRecharger,
+    private val dbPointManager: DBPointManager,
+    private val asyncEventLogAppender: AsyncEventLogAppender,
 ) {
     private val logger = LoggerFactory.getLogger(javaClass)
     private val eventQueue = LinkedBlockingDeque<PointRechargeEvent>()
+    private val maxRetries = 3
+    private val warningForRetry = "Retry on failure."
+    private val retryFailed = "Retry failed."
+    private val warningForOffer = "Offer failed."
 
     init {
         startEventConsumer()
     }
 
-    fun consume(events: MutableList<PointRechargeEvent>) {
-        val pointHistories = mutableListOf<PointHistory>()
+    fun consume(events: List<PointRechargeEvent>) {
+        val pointHistories = mutableSetOf<PointHistory>()
         events.forEach { event ->
-            val pointHistory =
-                PointHistory.newInstance(
-                    userId = event.userId,
-                    pointId = event.pointId,
-                    amount = event.amount,
-                    transactionType = PointHistory.TransactionType.RECHARGE,
-                )
-            pointHistories.add(pointHistory)
+            asyncEventLogAppender.appendInfo(event)
 
-            dbPointRecharger.recharge(event)
+            PointHistory.newInstance(
+                userId = event.userId,
+                pointId = event.pointId,
+                amount = event.amount,
+                transactionType = PointHistory.TransactionType.RECHARGE,
+            ).let { pointHistories.add(it) }
+
+            retryOnFailure(event)
         }
-        pointHistoryRepository.saveAll(pointHistories)
+        pointHistoryRepository.saveAll(pointHistories.toList())
+    }
+
+    private fun retryOnFailure(
+        event: PointRechargeEvent,
+        retryCount: Int = 0,
+    ) {
+        try {
+            dbPointManager.recharge(event)
+        } catch (e: Exception) {
+            if (retryCount < maxRetries) {
+                asyncEventLogAppender.appendWarning(event, warningForRetry)
+                retryOnFailure(event, retryCount + 1)
+            } else {
+                asyncEventLogAppender.appendError(event, retryFailed)
+            }
+        }
     }
 
     fun offer(event: PointRechargeEvent) {
-        eventQueue.add(event)
+        if (!eventQueue.offer(event, 1000, java.util.concurrent.TimeUnit.MILLISECONDS)) {
+            asyncEventLogAppender.appendError(event, warningForOffer)
+        }
     }
 
     private fun startEventConsumer() {
@@ -65,7 +88,7 @@ class PointRechargeEventConsumer(
                         quantity--
                         eventQueue.poll()?.let { events.add(it) }
                     }
-                    consume(events)
+                    consume(events.toList())
                     stopWatch.stop()
                     processingTime = stopWatch.totalTimeMillis
                     logger.debug("PointRechargeEventConsumer consume ${events.size} events, cost ${processingTime}ms")
