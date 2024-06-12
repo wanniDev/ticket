@@ -22,11 +22,21 @@ CREATE TABLE `points` (
     `update_time`	datetime null
 );
 
+CREATE TABLE point_histories (
+    `id` bigint primary key,
+    `transaction_type` enum('CHARGE','RECHARGE') null,
+    `user_id`	bigint not null,
+    `point_id`	bigint not null,
+    `amount`	DECIMAL(19, 4)	null,
+    `create_time`	datetime not null,
+    INDEX point_history_idx (user_id, point_id)
+);
+
 CREATE TABLE `tokens` (
-     `id` bigint primary key,
-	`issued_time`	datetime null,
-	`status`	enum('ACTIVE', 'EXPIRED') null,
-	`user_id`	bigint not null,
+    `id` bigint primary key,
+    `issued_time`	datetime null,
+    `status`	enum('ACTIVE', 'EXPIRED') null,
+    `user_id`	bigint not null,
     INDEX token_idx (user_id, issued_time)
 );
 
@@ -63,16 +73,6 @@ CREATE TABLE `payments` (
     `user_id`	bigint not null,
 	`point_id`	bigint not null,
     INDEX payment_idx (user_id, point_id)
-);
-
-CREATE TABLE point_histories (
-    `id` bigint primary key,
-    `transaction_type` enum('CHARGE','RECHARGE') null,
-    `user_id`	bigint not null,
-    `point_id`	bigint not null,
-    `amount`	DECIMAL(19, 4)	null,
-    `create_time`	datetime not null,
-    INDEX point_history_idx (user_id, point_id)
 );
 CREATE TABLE `reservations_seats` (
     `id` bigint auto_increment primary key,
