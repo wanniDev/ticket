@@ -45,7 +45,7 @@ jwt:
   tokenExpirationSec: 1800
   refreshExpirationSec: 604800
   tokenIssuer: tiketatka
-  base64TokenSigningKey: tiketatka-prod
+  base64TokenSigningKey: -hlsZR9K42niHhGXI4qhpeetTZ-MFC121DXl_MzFBq0
 token:
   size: 200
   capacity: 200
