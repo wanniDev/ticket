@@ -2,7 +2,11 @@ package io.ticketaka.api.user.domain
 
 import io.ticketaka.api.common.infrastructure.tsid.TsIdKeyGenerator
 import jakarta.persistence.Column
+import jakarta.persistence.ElementCollection
 import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
+import jakarta.persistence.FetchType
 import jakarta.persistence.Id
 import jakarta.persistence.PostLoad
 import jakarta.persistence.PrePersist
@@ -18,6 +22,8 @@ class User protected constructor(
     @Id
     val id: Long,
     var pointId: Long,
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Enumerated(EnumType.STRING)
     var roles: MutableSet<Role> = hashSetOf(Role.USER),
 ) : Persistable<Long> {
     @Transient
@@ -66,13 +72,14 @@ class User protected constructor(
         other as User
 
         if (id != other.id) return false
+        if (pointId != other.pointId) return false
 
         return true
     }
 
     override fun hashCode(): Int {
         var result = id.hashCode()
-        result = 31 * result + id.hashCode()
+        result = 31 * result + pointId.hashCode()
         return result
     }
 }

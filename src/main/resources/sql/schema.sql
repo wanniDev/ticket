@@ -1,3 +1,4 @@
+drop table if exists `user_roles`;
 drop table if exists `users`;
 drop table if exists `refresh_token_info`;
 drop table if exists `points`;
@@ -16,6 +17,15 @@ CREATE TABLE `users` (
     `created_at` datetime(6) not null,
     `updated_at` datetime(6) not null,
     INDEX user_idx (point_id)
+);
+
+CREATE TABLE `user_roles` (
+    `user_id` bigint not null,
+    `roles` enum('USER') not null,
+    CONSTRAINT fk_user
+        FOREIGN KEY (user_id)
+            REFERENCES users(id)
+            ON DELETE CASCADE
 );
 
 CREATE TABLE refresh_token_info (
