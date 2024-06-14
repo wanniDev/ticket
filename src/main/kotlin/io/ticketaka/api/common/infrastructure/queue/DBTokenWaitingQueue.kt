@@ -1,25 +1,25 @@
 package io.ticketaka.api.common.infrastructure.queue
 
 import io.ticketaka.api.common.domain.queue.TokenWaitingQueue
-import io.ticketaka.api.user.domain.Token
-import io.ticketaka.api.user.domain.TokenRepository
+import io.ticketaka.api.user.domain.token.QueueToken
+import io.ticketaka.api.user.domain.token.TokenRepository
 
 // @Component
 class DBTokenWaitingQueue(
     private val tokenRepository: TokenRepository,
 ) : TokenWaitingQueue {
-    override fun offer(element: Token): Boolean {
+    override fun offer(element: QueueToken): Boolean {
         tokenRepository.save(element)
         return true
     }
 
-    override fun poll(): Token? {
+    override fun poll(): QueueToken? {
         return tokenRepository.findFirstTokenOrderByIssuedTimeAscLimit1()?.also {
             tokenRepository.delete(it)
         }
     }
 
-    override fun peek(): Token? {
+    override fun peek(): QueueToken? {
         return tokenRepository.findFirstTokenOrderByIssuedTimeAscLimit1()
     }
 

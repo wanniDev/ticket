@@ -1,22 +1,22 @@
 package io.ticketaka.api.common.domain.map
 
-import io.ticketaka.api.user.domain.Token
+import io.ticketaka.api.user.domain.token.QueueToken
 
 interface TokenWaitingMap {
     fun put(
         key: Long,
-        token: Token,
+        queueToken: QueueToken,
     ): Boolean
 
-    fun putAll(tokens: List<Token>): Boolean
+    fun putAll(queueTokens: List<QueueToken>): Boolean
 
-    fun get(key: Long): Token?
+    fun get(key: Long): QueueToken?
 
-    fun remove(key: Long): Token?
+    fun remove(key: Long): QueueToken?
 
     fun size(): Long
 
-    fun findAll(): List<Token>
+    fun findAll(): List<QueueToken>
 
     fun clear()
 }

@@ -1,7 +1,7 @@
 package io.ticketaka.api.user.infrastructure.persistence
 
-import io.ticketaka.api.user.domain.Token
-import io.ticketaka.api.user.domain.TokenRepository
+import io.ticketaka.api.user.domain.token.QueueToken
+import io.ticketaka.api.user.domain.token.TokenRepository
 import io.ticketaka.api.user.infrastructure.jpa.JpaTokenRepository
 import org.springframework.stereotype.Component
 
@@ -9,15 +9,15 @@ import org.springframework.stereotype.Component
 class TokenRepositoryComposition(
     private val jpaTokenRepository: JpaTokenRepository,
 ) : TokenRepository {
-    override fun save(token: Token): Token {
-        return jpaTokenRepository.save(token)
+    override fun save(queueToken: QueueToken): QueueToken {
+        return jpaTokenRepository.save(queueToken)
     }
 
-    override fun delete(token: Token) {
-        jpaTokenRepository.delete(token)
+    override fun delete(queueToken: QueueToken) {
+        jpaTokenRepository.delete(queueToken)
     }
 
-    override fun findFirstTokenOrderByIssuedTimeAscLimit1(): Token? {
+    override fun findFirstTokenOrderByIssuedTimeAscLimit1(): QueueToken? {
         return jpaTokenRepository.findFirstTokenOrderByIssuedTimeAscLimit1()
     }
 

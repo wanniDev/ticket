@@ -1,7 +1,7 @@
 package io.ticketaka.api.user.application
 
 import io.ticketaka.api.common.domain.map.TokenWaitingMap
-import io.ticketaka.api.user.domain.Token
+import io.ticketaka.api.user.domain.token.QueueToken
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 
@@ -14,9 +14,9 @@ class TokenUserService(
     fun createToken(userId: Long): Long {
         val user = tokenUserCacheAsideQueryService.getUser(userId)
 
-        val token = Token.newInstance(user.id)
-        token.pollAllEvents().forEach { applicationEventPublisher.publishEvent(it) }
-        return token.id
+        val queueToken = QueueToken.newInstance(user.id)
+        queueToken.pollAllEvents().forEach { applicationEventPublisher.publishEvent(it) }
+        return queueToken.id
     }
 
     fun peekToken(tokenId: Long): Boolean {
@@ -32,6 +32,6 @@ class TokenUserService(
         if (queueSize > 1000) {
             return false
         }
-        return tokenFromMap.status == Token.Status.ACTIVE
+        return tokenFromMap.status == QueueToken.Status.ACTIVE
     }
 }
