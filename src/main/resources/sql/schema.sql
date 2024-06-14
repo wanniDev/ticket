@@ -1,4 +1,5 @@
 drop table if exists `users`;
+drop table if exists `refresh_token_info`;
 drop table if exists `points`;
 drop table if exists `tokens`;
 drop table if exists `concerts`;
@@ -10,16 +11,27 @@ drop table if exists `reservations_seats`;
 drop table if exists `idempotent`;
 
 CREATE TABLE `users` (
-     `id` bigint primary key,
+    `id` bigint primary key,
     `point_id`	bigint not null,
+    `created_at` datetime(6) not null,
+    `updated_at` datetime(6) not null,
     INDEX user_idx (point_id)
 );
+
+CREATE TABLE refresh_token_info (
+    `id` bigint primary key,
+    `refresh_token_jti` varchar(255) not null unique,
+    `expired` boolean not null default false,
+    `created_at` datetime(6) not null,
+    `updated_at` datetime(6) not null
+);
+
 
 CREATE TABLE `points` (
     `id` bigint primary key,
 	`balance`   decimal(19, 4)	null,
-    `create_time`	datetime not null ,
-    `update_time`	datetime null
+    `created_at` datetime(6) not null,
+    `updated_at` datetime(6) not null
 );
 
 CREATE TABLE point_histories (
@@ -28,21 +40,16 @@ CREATE TABLE point_histories (
     `user_id`	bigint not null,
     `point_id`	bigint not null,
     `amount`	DECIMAL(19, 4)	null,
-    `create_time`	datetime not null,
+    `created_at` datetime(6) not null,
+    `updated_at` datetime(6) not null,
     INDEX point_history_idx (user_id, point_id)
-);
-
-CREATE TABLE `tokens` (
-    `id` bigint primary key,
-    `issued_time`	datetime null,
-    `status`	enum('ACTIVE', 'EXPIRED') null,
-    `user_id`	bigint not null,
-    INDEX token_idx (user_id, issued_time)
 );
 
 CREATE TABLE `concerts` (
     `id` bigint primary key,
 	`date`	date not null,
+    `created_at` datetime(6) not null,
+    `updated_at` datetime(6) not null,
     INDEX concert_idx (date)
 );
 
@@ -53,6 +60,8 @@ CREATE TABLE `seats` (
 	`status`	enum('AVAILABLE', 'RESERVED', 'OCCUPIED') null ,
 	`concert_id`    bigint not null,
     `concert_date`  date not null,
+    `created_at` datetime(6) not null,
+    `updated_at` datetime(6) not null,
     INDEX seat_idx (concert_id)
 );
 
@@ -63,6 +72,8 @@ CREATE TABLE `reservations` (
 	`expiration_time`	datetime null,
 	`user_id`	bigint not null,
     `concert_id`	bigint not null,
+    `created_at` datetime(6) not null,
+    `updated_at` datetime(6) not null,
     INDEX reservation_idx (user_id, concert_id)
 );
 
@@ -72,14 +83,20 @@ CREATE TABLE `payments` (
 	`payment_time`	datetime null,
     `user_id`	bigint not null,
 	`point_id`	bigint not null,
+    `created_at` datetime(6) not null,
+    `updated_at` datetime(6) not null,
     INDEX payment_idx (user_id, point_id)
 );
 CREATE TABLE `reservations_seats` (
     `id` bigint auto_increment primary key,
     `reservation_id`	bigint not null,
-    `seat_id`	bigint not null
+    `seat_id`	bigint not null,
+    `created_at` datetime(6) not null,
+    `updated_at` datetime(6) not null
 );
 CREATE TABLE `idempotent` (
     `id` bigint auto_increment primary key,
-    `key` varchar(255) not null unique
+    `key` varchar(255) not null unique,
+    `created_at` datetime(6) not null,
+    `updated_at` datetime(6) not null
 );

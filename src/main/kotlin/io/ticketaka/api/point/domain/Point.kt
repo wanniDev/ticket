@@ -20,8 +20,8 @@ class Point protected constructor(
     @Id
     val id: Long,
     var balance: BigDecimal,
-    val createTime: LocalDateTime?,
-    var updateTime: LocalDateTime,
+    val createdAt: LocalDateTime?,
+    var updatedAt: LocalDateTime,
 ) : Persistable<Long> {
     @Transient
     private var isNew = true
@@ -43,7 +43,7 @@ class Point protected constructor(
     fun recharge(amount: BigDecimal) {
         if (amount < BigDecimal.ZERO) throw BadClientRequestException("충전 금액은 0보다 커야 합니다.")
         this.balance = this.balance.plus(amount)
-        this.updateTime = LocalDateTime.now()
+        this.updatedAt = LocalDateTime.now()
     }
 
     fun charge(price: BigDecimal) {
@@ -65,8 +65,8 @@ class Point protected constructor(
             return Point(
                 id = id,
                 balance = balance,
-                createTime = null,
-                updateTime = updateTime,
+                createdAt = null,
+                updatedAt = updateTime,
             )
         }
 
@@ -75,8 +75,8 @@ class Point protected constructor(
             return Point(
                 id = TsIdKeyGenerator.nextLong(),
                 balance = balance,
-                createTime = now,
-                updateTime = now,
+                createdAt = now,
+                updatedAt = now,
             )
         }
 
@@ -84,8 +84,8 @@ class Point protected constructor(
             return Point(
                 id = id,
                 balance = BigDecimal.ZERO,
-                createTime = LocalDateTime.now(),
-                updateTime = LocalDateTime.now(),
+                createdAt = LocalDateTime.now(),
+                updatedAt = LocalDateTime.now(),
             )
         }
     }

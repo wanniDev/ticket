@@ -1,7 +1,7 @@
 package io.ticketaka.api.common.infrastructure.aop
 
 import io.ticketaka.api.common.domain.map.TokenWaitingMap
-import io.ticketaka.api.user.domain.Token
+import io.ticketaka.api.user.domain.token.QueueToken
 import org.aspectj.lang.ProceedingJoinPoint
 import org.aspectj.lang.annotation.Around
 import org.aspectj.lang.annotation.Aspect
@@ -14,7 +14,7 @@ import java.time.LocalDateTime
 
 @Aspect
 @Component
-class RequestMapAspect(
+class RequestQueueTokenAspect(
     private val tokenWaitingMap: TokenWaitingMap,
 ) {
     private val logger = LoggerFactory.getLogger(this::class.java)
@@ -50,16 +50,16 @@ class RequestMapAspect(
         }
     }
 
-    private fun validateTokenActive(firstToken: Token) {
-        if (firstToken.status != Token.Status.ACTIVE) {
+    private fun validateTokenActive(firstQueueToken: QueueToken) {
+        if (firstQueueToken.status != QueueToken.Status.ACTIVE) {
             val errorMessage = "토큰이 활성화되지 않았습니다."
             logger.debug(errorMessage)
             throw IllegalArgumentException(errorMessage)
         }
     }
 
-    private fun validateTokenExpiration(firstToken: Token) {
-        val expiredTime = firstToken.issuedTime.plusMinutes(30)
+    private fun validateTokenExpiration(firstQueueToken: QueueToken) {
+        val expiredTime = firstQueueToken.issuedTime.plusMinutes(30)
         val now = LocalDateTime.now()
         if (expiredTime.isBefore(now)) {
             val errorMessage = "토큰이 만료되었습니다."
@@ -69,10 +69,10 @@ class RequestMapAspect(
     }
 
     private fun validateTokenIdentifier(
-        firstToken: Token,
+        firstQueueToken: QueueToken,
         authorizationHeader: Long,
     ) {
-        if (firstToken.id != authorizationHeader) {
+        if (firstQueueToken.id != authorizationHeader) {
             val errorMessage = "현재 대기 중인 토큰과 요청한 토큰이 일치하지 않습니다."
             logger.debug(errorMessage)
             throw IllegalArgumentException(errorMessage)

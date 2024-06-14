@@ -1,6 +1,6 @@
 package io.ticketaka.api.user.presentation
 
-import io.ticketaka.api.user.application.TokenUserService
+import io.ticketaka.api.user.application.QueueTokenUserService
 import io.ticketaka.api.user.presentation.dto.CreateTokenRequest
 import io.ticketaka.api.user.presentation.dto.CreateTokenResponse
 import io.ticketaka.api.user.presentation.dto.PeekTokenRequest
@@ -14,14 +14,14 @@ import java.time.LocalDateTime
 
 @RestController
 @RequestMapping("/api/token")
-class TokenApi(
-    private val tokenUserService: TokenUserService,
-) : TokenApiSpecification {
+class QueueTokenApi(
+    private val queueTokenUserService: QueueTokenUserService,
+) : QueueTokenApiSpecification {
     @PostMapping
     override fun createToken(
         @RequestBody request: CreateTokenRequest,
     ): ResponseEntity<CreateTokenResponse> {
-        val createdTokenTsid = tokenUserService.createToken(request.userId)
+        val createdTokenTsid = queueTokenUserService.createToken(request.userId)
         return ResponseEntity
             .ok(CreateTokenResponse(createdTokenTsid))
     }
@@ -30,7 +30,7 @@ class TokenApi(
     override fun peekToken(
         @RequestBody peekTokenRequest: PeekTokenRequest,
     ): ResponseEntity<PeekTokenResponse> {
-        val result = tokenUserService.peekToken(peekTokenRequest.tokenId)
+        val result = queueTokenUserService.peekToken(peekTokenRequest.tokenId)
         return ResponseEntity
             .ok(PeekTokenResponse(result, LocalDateTime.now()))
     }

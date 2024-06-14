@@ -68,6 +68,9 @@ dependencies {
     // swagger
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2")
 
+    // security
+    implementation("org.springframework.boot:spring-boot-starter-security")
+
     // testcontainers
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("org.springframework.boot:spring-boot-testcontainers")
@@ -94,6 +97,7 @@ dependencies {
     implementation("org.springframework.retry:spring-retry:2.0.5")
 
     // test
+    testImplementation("org.springframework.security:spring-security-test")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
     testImplementation("org.mockito.kotlin:mockito-kotlin:5.2.1")

@@ -9,7 +9,7 @@ import io.ticketaka.api.user.presentation.dto.PeekTokenResponse
 import org.springframework.http.ResponseEntity
 
 @Tag(name = "Token", description = "토큰 도메인 API")
-interface TokenApiSpecification {
+interface QueueTokenApiSpecification {
     @Operation(
         summary = "토큰 대기열 조회 API",
         description = "토큰이 현재 사용자의 차례인지 확인하는 코드입니다.",

@@ -1,8 +1,8 @@
 package io.ticketaka.api.common.domain.queue
 
 import io.ticketaka.api.point.domain.Point
-import io.ticketaka.api.user.domain.Token
 import io.ticketaka.api.user.domain.User
+import io.ticketaka.api.user.domain.token.QueueToken
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -12,7 +12,7 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 
 @ExtendWith(MockitoExtension::class)
-class TokenWaitingQueueTest {
+class QueueTokenWaitingQueueTest {
     @Test
     fun `test offer`() {
         // given
@@ -22,10 +22,10 @@ class TokenWaitingQueueTest {
             mock<TokenWaitingQueue> {
                 on { offer(any()) } doReturn true
             }
-        val token = Token.newInstance(user.id)
+        val queueToken = QueueToken.newInstance(user.id)
 
         // when
-        val result = mockTokenWaitingQueue.offer(token)
+        val result = mockTokenWaitingQueue.offer(queueToken)
 
         // then
         assertTrue(result)
@@ -36,13 +36,13 @@ class TokenWaitingQueueTest {
         // given
         val point = Point.newInstance()
         val user = User.newInstance(point.id)
-        val mockTokenWaitingQueue =
+        val mockQueueTokenWaitingQueue =
             mock<TokenWaitingQueue> {
-                on { poll() } doReturn Token.newInstance(user.id)
+                on { poll() } doReturn QueueToken.newInstance(user.id)
             }
 
         // when
-        val result = mockTokenWaitingQueue.poll()
+        val result = mockQueueTokenWaitingQueue.poll()
 
         // then
         assertTrue(result != null)

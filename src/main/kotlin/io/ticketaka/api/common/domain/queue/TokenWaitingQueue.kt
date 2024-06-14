@@ -1,13 +1,13 @@
 package io.ticketaka.api.common.domain.queue
 
-import io.ticketaka.api.user.domain.Token
+import io.ticketaka.api.user.domain.token.QueueToken
 
 interface TokenWaitingQueue {
-    fun offer(element: Token): Boolean
+    fun offer(element: QueueToken): Boolean
 
-    fun poll(): Token?
+    fun poll(): QueueToken?
 
-    fun peek(): Token?
+    fun peek(): QueueToken?
 
     fun size(): Long
 }

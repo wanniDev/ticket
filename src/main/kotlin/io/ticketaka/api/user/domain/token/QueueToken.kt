@@ -1,21 +1,17 @@
-package io.ticketaka.api.user.domain
+package io.ticketaka.api.user.domain.token
 
 import io.ticketaka.api.common.domain.AbstractAggregateRoot
 import io.ticketaka.api.common.infrastructure.tsid.TsIdKeyGenerator
-import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
 import jakarta.persistence.Id
 import jakarta.persistence.PostLoad
 import jakarta.persistence.PrePersist
-import jakarta.persistence.Table
 import jakarta.persistence.Transient
 import org.springframework.data.domain.Persistable
 import java.time.LocalDateTime
 
-@Entity
-@Table(name = "tokens")
-class Token protected constructor(
+class QueueToken protected constructor(
     @Id
     val id: Long,
     val issuedTime: LocalDateTime,
@@ -80,8 +76,8 @@ class Token protected constructor(
     }
 
     companion object {
-        fun newInstance(userId: Long): Token {
-            return Token(
+        fun newInstance(userId: Long): QueueToken {
+            return QueueToken(
                 id = TsIdKeyGenerator.nextLong(),
                 issuedTime = LocalDateTime.now(),
                 status = Status.ACTIVE,
@@ -94,8 +90,8 @@ class Token protected constructor(
             issuedTime: LocalDateTime,
             status: Status,
             userId: Long,
-        ): Token {
-            return Token(id, issuedTime, status, userId)
+        ): QueueToken {
+            return QueueToken(id, issuedTime, status, userId)
         }
     }
 }

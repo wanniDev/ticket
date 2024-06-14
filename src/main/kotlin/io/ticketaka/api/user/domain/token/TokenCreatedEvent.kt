@@ -1,7 +1,7 @@
-package io.ticketaka.api.user.domain
+package io.ticketaka.api.user.domain.token
 
 import io.ticketaka.api.common.domain.DomainEvent
-import io.ticketaka.api.user.domain.Token.Status
+import io.ticketaka.api.user.domain.token.QueueToken.Status
 import java.time.LocalDateTime
 
 data class TokenCreatedEvent(
@@ -11,11 +11,11 @@ data class TokenCreatedEvent(
     val userId: Long,
     val occurredOn: LocalDateTime = LocalDateTime.now(),
 ) : DomainEvent {
-    constructor(token: Token) : this(
-        token.id,
-        token.issuedTime,
-        token.status,
-        token.userId,
+    constructor(queueToken: QueueToken) : this(
+        queueToken.id,
+        queueToken.issuedTime,
+        queueToken.status,
+        queueToken.userId,
     )
 
     override fun occurredOn(): LocalDateTime {
