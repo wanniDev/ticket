@@ -8,7 +8,9 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
+import org.springframework.security.web.AuthenticationEntryPoint
 import org.springframework.security.web.SecurityFilterChain
+import org.springframework.security.web.access.AccessDeniedHandler
 import org.springframework.security.web.access.ExceptionTranslationFilter
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 
@@ -16,6 +18,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity(debug = true)
 @EnableMethodSecurity
 class SecurityConfig(
+    private val accessDeniedHandler: AccessDeniedHandler,
+    private val authenticationEntryPoint: AuthenticationEntryPoint,
     private val jwtExceptionFilter: JwtExceptionFilter,
     private val jwtAuthenticationFilter: JwtAuthenticationFilter,
 ) {
@@ -47,5 +51,12 @@ Security filter chain: [
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
             .addFilterBefore(jwtExceptionFilter, ExceptionTranslationFilter::class.java)
         return http.build()
+    }
+
+    @Bean
+    fun exceptionTranslationFilter(): ExceptionTranslationFilter {
+        val filter = ExceptionTranslationFilter(authenticationEntryPoint)
+        filter.setAccessDeniedHandler(accessDeniedHandler)
+        return filter
     }
 }
