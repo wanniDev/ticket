@@ -1,5 +1,6 @@
 package io.ticketaka.api.user.domain.token
 
+import io.ticketaka.api.user.domain.exception.AlreadyTokenExpiredException
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
@@ -14,7 +15,7 @@ class RefreshTokenInfo protected constructor(
     @Id
     val id: Long,
     var refreshTokenJti: String? = null,
-    var expired: Boolean? = false,
+    var expired: Boolean = false,
 ) {
     @Column(nullable = false, updatable = false)
     var createdAt: LocalDateTime? = null
@@ -34,5 +35,12 @@ class RefreshTokenInfo protected constructor(
     @PreUpdate
     fun onPreUpdate() {
         updatedAt = LocalDateTime.now()
+    }
+
+    fun expire() {
+        if (this.expired) {
+            throw AlreadyTokenExpiredException()
+        }
+        this.expired = true
     }
 }

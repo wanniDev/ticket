@@ -1,5 +1,5 @@
 package io.ticketaka.api.user.domain.token
 
 interface TokenParser {
-    fun parse(token: String): QueueToken
+    fun parse(token: String): RawToken
 }
