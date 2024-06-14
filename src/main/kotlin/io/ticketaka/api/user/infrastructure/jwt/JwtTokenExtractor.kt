@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component
 class JwtTokenExtractor : TokenExtractor {
     private val headerPrefix = "Bearer "
 
-    override fun extract(payload: String): String {
-        return if (payload.isEmpty()) {
+    override fun extract(payload: String?): String {
+        return if (payload.isNullOrEmpty()) {
             ""
         } else {
             payload.substring(headerPrefix.length)

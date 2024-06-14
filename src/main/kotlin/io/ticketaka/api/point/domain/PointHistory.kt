@@ -19,7 +19,7 @@ import java.time.LocalDateTime
 @Table(name = "point_histories")
 class PointHistory(
     @Id
-    val id: Long = 0,
+    val id: Long,
     @Enumerated(EnumType.STRING)
     val transactionType: TransactionType,
     val userId: Long,
@@ -31,7 +31,7 @@ class PointHistory(
         private set
 
     @Column(nullable = false)
-    var updatedAt: LocalDateTime? = null
+    var updatedAt: LocalDateTime? = LocalDateTime.now()
         private set
 
     @PreUpdate
