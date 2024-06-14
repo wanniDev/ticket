@@ -18,6 +18,7 @@ class User protected constructor(
     @Id
     val id: Long,
     var pointId: Long,
+    var roles: MutableSet<Role> = hashSetOf(Role.USER),
 ) : Persistable<Long> {
     @Transient
     private var isNew = true
