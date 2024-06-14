@@ -32,14 +32,6 @@ CREATE TABLE point_histories (
     INDEX point_history_idx (user_id, point_id)
 );
 
-CREATE TABLE `tokens` (
-    `id` bigint primary key,
-    `issued_time`	datetime null,
-    `status`	enum('ACTIVE', 'EXPIRED') null,
-    `user_id`	bigint not null,
-    INDEX token_idx (user_id, issued_time)
-);
-
 CREATE TABLE `concerts` (
     `id` bigint primary key,
 	`date`	date not null,

@@ -4,7 +4,7 @@ import io.ticketaka.api.common.exception.BadClientRequestException
 import io.ticketaka.api.point.application.dto.RechargeCommand
 import io.ticketaka.api.point.domain.CachePointRecharger
 import io.ticketaka.api.point.domain.Point
-import io.ticketaka.api.user.application.TokenUserCacheAsideQueryService
+import io.ticketaka.api.user.application.QueueTokenUserCacheAsideQueryService
 import io.ticketaka.api.user.domain.User
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -31,8 +31,8 @@ class PointServiceTest {
                 20000.toBigDecimal(),
             )
 
-        val tokenUserCacheAsideQueryService =
-            mock<TokenUserCacheAsideQueryService> {
+        val queueTokenUserCacheAsideQueryService =
+            mock<QueueTokenUserCacheAsideQueryService> {
                 on { getUser(any()) } doReturn user
             }
 
@@ -49,7 +49,7 @@ class PointServiceTest {
             }
 
         val pointService =
-            PointService(tokenUserCacheAsideQueryService, pointCacheAsideQueryService, cachePointRecharger, mock())
+            PointService(queueTokenUserCacheAsideQueryService, pointCacheAsideQueryService, cachePointRecharger, mock())
 
         // when
         pointService.recharge(rechargeCommand)
@@ -70,8 +70,8 @@ class PointServiceTest {
                 (-20000).toBigDecimal(),
             )
 
-        val tokenUserCacheAsideQueryService =
-            mock<TokenUserCacheAsideQueryService> {
+        val queueTokenUserCacheAsideQueryService =
+            mock<QueueTokenUserCacheAsideQueryService> {
                 on { getUser(any()) } doReturn user
             }
 
@@ -87,7 +87,7 @@ class PointServiceTest {
             }
 
         val pointService =
-            PointService(tokenUserCacheAsideQueryService, pointCacheAsideQueryService, cachePointRecharger, mock())
+            PointService(queueTokenUserCacheAsideQueryService, pointCacheAsideQueryService, cachePointRecharger, mock())
 
         // when
         val exception =
@@ -104,8 +104,8 @@ class PointServiceTest {
         // given
         val point = Point.newInstance()
         val user = User.newInstance(point.id)
-        val tokenUserCacheAsideQueryService =
-            mock<TokenUserCacheAsideQueryService> {
+        val queueTokenUserCacheAsideQueryService =
+            mock<QueueTokenUserCacheAsideQueryService> {
                 on { getUser(any()) } doReturn user
             }
         val pointCacheAsideQueryService =
@@ -114,7 +114,7 @@ class PointServiceTest {
             }
         val cachePointRecharger = mock<CachePointRecharger>()
         val pointService =
-            PointService(tokenUserCacheAsideQueryService, pointCacheAsideQueryService, cachePointRecharger, mock())
+            PointService(queueTokenUserCacheAsideQueryService, pointCacheAsideQueryService, cachePointRecharger, mock())
 
         // when
         val balanceQueryModel = pointService.getBalance(user.id)
