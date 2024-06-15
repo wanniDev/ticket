@@ -48,4 +48,4 @@ out/
 ### log ###
 logs/
 
-!**/src/main/docker/.env
+/src/main/docker/.env
