@@ -47,3 +47,5 @@ out/
 
 ### log ###
 logs/
+
+!**/src/main/docker/.env
