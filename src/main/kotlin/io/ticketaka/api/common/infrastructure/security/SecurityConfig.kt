@@ -4,6 +4,7 @@ import io.ticketaka.api.user.infrastructure.jwt.JwtAuthenticationFilter
 import io.ticketaka.api.user.infrastructure.jwt.JwtExceptionFilter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.security.config.Customizer
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
@@ -48,6 +49,8 @@ Security filter chain: [
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .authorizeHttpRequests { it.anyRequest().permitAll() } // TODO oauth 구현이후 endpoint별 권한 설정 필요
             .formLogin { it.disable() }
+            .oauth2Login(Customizer.withDefaults())
+            .logout { it.logoutSuccessUrl("/") }
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
             .addFilterBefore(jwtExceptionFilter, ExceptionTranslationFilter::class.java)
         return http.build()
