@@ -1,6 +1,7 @@
 package io.ticketaka.api.user.domain
 
 import io.ticketaka.api.common.infrastructure.tsid.TsIdKeyGenerator
+import io.ticketaka.api.point.domain.Point
 import jakarta.persistence.Column
 import jakarta.persistence.ElementCollection
 import jakarta.persistence.Entity
@@ -22,6 +23,7 @@ class User protected constructor(
     @Id
     val id: Long,
     var pointId: Long,
+    val email: String,
     @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
     var roles: MutableSet<Role> = hashSetOf(Role.USER),
@@ -60,7 +62,16 @@ class User protected constructor(
         fun newInstance(pointId: Long): User {
             return User(
                 id = TsIdKeyGenerator.nextLong(),
+                email = "",
                 pointId = pointId,
+            )
+        }
+
+        fun newInstance(email: String): User {
+            return User(
+                id = TsIdKeyGenerator.nextLong(),
+                email = email,
+                pointId = Point.newInstance().getId(),
             )
         }
     }
