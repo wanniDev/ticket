@@ -10,12 +10,12 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
-import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper
 import org.springframework.security.web.AuthenticationEntryPoint
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.access.AccessDeniedHandler
 import org.springframework.security.web.access.ExceptionTranslationFilter
+import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 
 @Configuration
@@ -57,16 +57,22 @@ Security filter chain: [
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         http
             .csrf { it.disable() }
-            .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
+//            .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .authorizeHttpRequests { it.anyRequest().permitAll() } // TODO oauth 구현이후 endpoint별 권한 설정 필요
-            .formLogin { it.disable() }
-            .oauth2Login { oauth2LoginCustomizer ->
+            .formLogin {
+                it
+                    .loginPage("/login")
+                    .loginProcessingUrl("/loginProc")
+                    .defaultSuccessUrl("/")
+                    .permitAll()
+            }.oauth2Login { oauth2LoginCustomizer ->
                 oauth2LoginCustomizer.userInfoEndpoint { userInfoEndpointConfig ->
                     userInfoEndpointConfig
                         .userService(customOAuth2UserService)
-                        .oidcUserService(null)
+//                        .oidcUserService(null)
                 }
-            }.logout { it.logoutSuccessUrl("/") }
+            }.exceptionHandling { it.authenticationEntryPoint(LoginUrlAuthenticationEntryPoint("/login")) }
+            .logout { it.logoutSuccessUrl("/") }
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
             .addFilterBefore(jwtExceptionFilter, ExceptionTranslationFilter::class.java)
         return http.build()
