@@ -8,11 +8,15 @@ object ProviderUserAttributeGenerator {
         oAuth2User: OAuth2User,
         subAttributesKey: String = "",
         otherAttributesKey: String = "",
-    ): Attributes {
-        return Attributes(
+    ): Attributes =
+        Attributes(
             mainAttributes = oAuth2User.attributes,
             subAttributes = oAuth2User.attributes[subAttributesKey] as Map<String, Any>,
-            otherAttributes = oAuth2User.attributes[otherAttributesKey] as Map<String, Any>,
+            otherAttributes =
+                if (otherAttributesKey.isNotBlank()) {
+                    oAuth2User.attributes[otherAttributesKey] as Map<String, Any>
+                } else {
+                    emptyMap()
+                },
         )
-    }
 }

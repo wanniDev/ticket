@@ -31,13 +31,9 @@ class User protected constructor(
     @Transient
     private var isNew = true
 
-    override fun isNew(): Boolean {
-        return isNew
-    }
+    override fun isNew(): Boolean = isNew
 
-    override fun getId(): Long {
-        return id
-    }
+    override fun getId(): Long = id
 
     @PrePersist
     @PostLoad
@@ -50,7 +46,7 @@ class User protected constructor(
         private set
 
     @Column(nullable = false)
-    var updatedAt: LocalDateTime? = null
+    var updatedAt: LocalDateTime? = LocalDateTime.now()
         private set
 
     @PreUpdate
@@ -59,21 +55,19 @@ class User protected constructor(
     }
 
     companion object {
-        fun newInstance(pointId: Long): User {
-            return User(
+        fun newInstance(pointId: Long): User =
+            User(
                 id = TsIdKeyGenerator.nextLong(),
                 email = "",
                 pointId = pointId,
             )
-        }
 
-        fun newInstance(email: String): User {
-            return User(
+        fun newInstance(email: String): User =
+            User(
                 id = TsIdKeyGenerator.nextLong(),
                 email = email,
                 pointId = Point.newInstance().getId(),
             )
-        }
     }
 
     override fun equals(other: Any?): Boolean {

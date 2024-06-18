@@ -11,7 +11,7 @@ class OAuth2NaverProviderUserConverter : ProviderUserConverter<ProviderUserReque
         }
 
         return NaverUser(
-            ProviderUserAttributeGenerator.generate(providerUserRequest.oAuth2User),
+            ProviderUserAttributeGenerator.generate(providerUserRequest.oAuth2User, "response"),
             providerUserRequest.oAuth2User,
             providerUserRequest.clientRegistration,
         )
