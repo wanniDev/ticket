@@ -13,6 +13,8 @@ spring:
       ddl-auto: validate
     database: mysql
     database-platform: org.hibernate.dialect.MySQLDialect
+  mvc:
+    static-path-pattern: /static/**
   sql:
     init:
       mode: always

@@ -8,6 +8,7 @@ import org.springframework.security.config.Customizer
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.web.AuthenticationEntryPoint
 import org.springframework.security.web.SecurityFilterChain
@@ -24,6 +25,12 @@ class SecurityConfig(
     private val jwtExceptionFilter: JwtExceptionFilter,
     private val jwtAuthenticationFilter: JwtAuthenticationFilter,
 ) {
+    @Bean
+    fun webSecurityCustomizer(): WebSecurityCustomizer =
+        WebSecurityCustomizer { web ->
+            web.ignoring().requestMatchers("/static/js/**", "/static/images/**", "/static/css/**", "/static/scss/**")
+        }
+
     /*
      *
 Security filter chain: [
