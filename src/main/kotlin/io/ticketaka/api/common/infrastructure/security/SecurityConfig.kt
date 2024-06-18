@@ -1,14 +1,17 @@
 package io.ticketaka.api.common.infrastructure.security
 
+import io.ticketaka.api.user.application.CustomOAuth2UserService
+import io.ticketaka.api.user.application.CustomOidcUserService
+import io.ticketaka.api.user.infrastructure.CustomAuthorityMapper
 import io.ticketaka.api.user.infrastructure.jwt.JwtAuthenticationFilter
 import io.ticketaka.api.user.infrastructure.jwt.JwtExceptionFilter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.security.config.Customizer
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
+import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper
 import org.springframework.security.web.AuthenticationEntryPoint
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.access.AccessDeniedHandler
@@ -21,6 +24,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 class SecurityConfig(
     private val accessDeniedHandler: AccessDeniedHandler,
     private val authenticationEntryPoint: AuthenticationEntryPoint,
+    private val customOAuth2UserService: CustomOAuth2UserService,
+    private val customOidcUserService: CustomOidcUserService,
     private val jwtExceptionFilter: JwtExceptionFilter,
     private val jwtAuthenticationFilter: JwtAuthenticationFilter,
 ) {
@@ -55,8 +60,13 @@ Security filter chain: [
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .authorizeHttpRequests { it.anyRequest().permitAll() } // TODO oauth 구현이후 endpoint별 권한 설정 필요
             .formLogin { it.disable() }
-            .oauth2Login(Customizer.withDefaults())
-            .logout { it.logoutSuccessUrl("/") }
+            .oauth2Login { oauth2LoginCustomizer ->
+                oauth2LoginCustomizer.userInfoEndpoint { userInfoEndpointConfig ->
+                    userInfoEndpointConfig
+                        .userService(customOAuth2UserService)
+                        .oidcUserService(null)
+                }
+            }.logout { it.logoutSuccessUrl("/") }
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
             .addFilterBefore(jwtExceptionFilter, ExceptionTranslationFilter::class.java)
         return http.build()
@@ -68,4 +78,7 @@ Security filter chain: [
         filter.setAccessDeniedHandler(accessDeniedHandler)
         return filter
     }
+
+    @Bean
+    fun customAuthorityMapper(): GrantedAuthoritiesMapper = CustomAuthorityMapper()
 }
