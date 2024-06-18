@@ -6,11 +6,11 @@ insert into `points` (`id`, `balance`, `created_at`, `updated_at`) values (4, 90
 insert into `points` (`id`, `balance`, `created_at`, `updated_at`) values (5, 3000, '2024-01-05 00:00:00', '2024-01-05 00:00:00');
 
 
-insert into `users` (`id`, `point_id`, `created_at`, `updated_at`) values (1, 1, '2024-01-05 00:00:00', '2024-01-05 00:00:00');
-insert into `users` (`id`, `point_id`, `created_at`, `updated_at`) values (2, 2, '2024-01-05 00:00:00', '2024-01-05 00:00:00');
-insert into `users` (`id`, `point_id`, `created_at`, `updated_at`) values (3, 3, '2024-01-05 00:00:00', '2024-01-05 00:00:00');
-insert into `users` (`id`, `point_id`, `created_at`, `updated_at`) values (4, 4, '2024-01-05 00:00:00', '2024-01-05 00:00:00');
-insert into `users` (`id`, `point_id`, `created_at`, `updated_at`) values (5, 5, '2024-01-05 00:00:00', '2024-01-05 00:00:00');
+insert into `users` (`id`, `point_id`, `email`, `created_at`, `updated_at`) values (1, 1, 'user1@gmail.com', '2024-01-05 00:00:00', '2024-01-05 00:00:00');
+insert into `users` (`id`, `point_id`, `email`, `created_at`, `updated_at`) values (2, 2, 'user2@gmail.com', '2024-01-05 00:00:00', '2024-01-05 00:00:00');
+insert into `users` (`id`, `point_id`, `email`, `created_at`, `updated_at`) values (3, 3, 'user3@naver.com', '2024-01-05 00:00:00', '2024-01-05 00:00:00');
+insert into `users` (`id`, `point_id`, `email`, `created_at`, `updated_at`) values (4, 4, 'user4@gmail.com', '2024-01-05 00:00:00', '2024-01-05 00:00:00');
+insert into `users` (`id`, `point_id`, `email`, `created_at`, `updated_at`) values (5, 5, 'user5@naver.com', '2024-01-05 00:00:00', '2024-01-05 00:00:00');
 
 
 insert into `concerts` (`id`, `date`, `created_at`, `updated_at`) values (1, '2024-05-05', '2024-01-05 00:00:00', '2024-01-05 00:00:00');

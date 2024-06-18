@@ -14,9 +14,10 @@ drop table if exists `idempotent`;
 CREATE TABLE `users` (
     `id` bigint primary key,
     `point_id`	bigint not null,
+    `email` varchar(255) not null unique,
     `created_at` datetime(6) not null,
     `updated_at` datetime(6) not null,
-    INDEX user_idx (point_id)
+    INDEX user_idx (point_id, email)
 );
 
 CREATE TABLE `user_roles` (
