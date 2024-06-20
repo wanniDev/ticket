@@ -12,6 +12,7 @@ class DelegatingProviderUserConverter : ProviderUserConverter<ProviderUserReques
         listOf(
             OAuth2GoogleProviderUserConverter(),
             OAuth2NaverProviderUserConverter(),
+            OAuth2KakaoProviderUserConverter(),
         ).forEach { converters.add(it) }
     }
 
