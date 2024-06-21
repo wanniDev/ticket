@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="static/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="static/css/style.css">
+    <title>로그인 페이지</title>
+</head>
+<body>
+    <div class="content">
+        <div class="row align-items-center">
+            <div class="social-login text-center">
+                <a th:href="@{/oauth2/authorization/google}" class="google btn btn-block">
+                    <span>Sign in with Google</span>
+                </a>
+                <a th:href="@{/oauth2/authorization/naver}" class="naver btn btn-block">
+                    <span>Sign in with Naver</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
