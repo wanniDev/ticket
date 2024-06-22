@@ -11,7 +11,7 @@ import java.util.concurrent.LinkedBlockingDeque
 import kotlin.concurrent.thread
 
 @Component
-class ReservationCreateEventConsumer(
+class ReservationCreateEventQueue(
     private val reservationRepository: ReservationRepository,
     private val reservationSeatAllocator: ReservationSeatAllocator,
     private val seatStatusManger: DBSeatStatusManger,

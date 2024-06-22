@@ -1,30 +1,30 @@
 package io.ticketaka.api.common.infrastructure.event
 
 import io.ticketaka.api.common.domain.DomainEvent
-import io.ticketaka.api.concert.infrastructure.event.ReservationCreateEventConsumer
+import io.ticketaka.api.concert.infrastructure.event.ReservationCreateEventQueue
 import io.ticketaka.api.point.domain.PointChargeEvent
 import io.ticketaka.api.point.domain.PointRechargeEvent
-import io.ticketaka.api.point.infrastructure.event.PointChargeEventConsumer
-import io.ticketaka.api.point.infrastructure.event.PointRechargeEventConsumer
+import io.ticketaka.api.point.infrastructure.event.PointChargeEventQueue
+import io.ticketaka.api.point.infrastructure.event.PointRechargeEventQueue
 import io.ticketaka.api.reservation.domain.reservation.ReservationCreateEvent
 import org.springframework.stereotype.Component
 
 @Component
 class EventDispatcher(
-    private val pointRechargeEventConsumer: PointRechargeEventConsumer,
-    private val pointChargeEventConsumer: PointChargeEventConsumer,
-    private val reservationCreateEventConsumer: ReservationCreateEventConsumer,
+    private val pointRechargeEventQueue: PointRechargeEventQueue,
+    private val pointChargeEventQueue: PointChargeEventQueue,
+    private val reservationCreateEventQueue: ReservationCreateEventQueue,
 ) {
     fun dispatch(event: DomainEvent) {
         when (event) {
             is PointRechargeEvent -> {
-                pointRechargeEventConsumer.offer(event)
+                pointRechargeEventQueue.offer(event)
             }
             is PointChargeEvent -> {
-                pointChargeEventConsumer.offer(event)
+                pointChargeEventQueue.offer(event)
             }
             is ReservationCreateEvent -> {
-                reservationCreateEventConsumer.offer(event)
+                reservationCreateEventQueue.offer(event)
             }
         }
     }
