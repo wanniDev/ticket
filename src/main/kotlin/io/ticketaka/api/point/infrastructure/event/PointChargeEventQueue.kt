@@ -1,5 +1,6 @@
 package io.ticketaka.api.point.infrastructure.event
 
+import io.ticketaka.api.common.infrastructure.event.EventConsumer
 import io.ticketaka.api.point.domain.DBPointManager
 import io.ticketaka.api.point.domain.PointChargeEvent
 import io.ticketaka.api.point.domain.PointHistory
@@ -10,6 +11,7 @@ import kotlin.concurrent.thread
 
 @Component
 class PointChargeEventQueue(
+    private val eventConsumer: EventConsumer,
     private val pointHistoryRepository: PointHistoryRepository,
     private val dbPointManger: DBPointManager,
     private val asyncEventLogAppender: AsyncEventLogAppender,
@@ -21,7 +23,7 @@ class PointChargeEventQueue(
     private val warningForOffer = "Offer failed."
 
     init {
-        startEventConsumer()
+        startEventQueue()
     }
 
     fun consume(events: MutableList<PointChargeEvent>) {
@@ -64,7 +66,7 @@ class PointChargeEventQueue(
         }
     }
 
-    private fun startEventConsumer() {
+    private fun startEventQueue() {
         thread(
             start = true,
             isDaemon = true,
@@ -78,7 +80,7 @@ class PointChargeEventQueue(
                         quantity--
                         eventQueue.poll()?.let { events.add(it) }
                     }
-                    consume(events)
+                    eventConsumer.consume(events)
                     Thread.sleep(1000)
                 } else {
                     Thread.sleep(5000)
