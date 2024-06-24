@@ -2,12 +2,13 @@ package io.ticketaka.api.reservation.application
 
 import io.ticketaka.api.point.infrastructure.event.AsyncEventLogAppender
 import io.ticketaka.api.reservation.domain.reservation.ReservationCreateEvent
+import io.ticketaka.api.reservation.domain.reservation.ReservationCreator
 import org.springframework.stereotype.Service
 
 @Service
 class ReservationEventService(
     private val asyncEventLogAppender: AsyncEventLogAppender,
-    private val reservationService: ReservationService,
+    private val reservationCreator: ReservationCreator,
 ) {
     private val warningForRetry = "Retry on failure."
     private val retryFailed = "Retry failed."
@@ -21,7 +22,7 @@ class ReservationEventService(
         retryCount: Int = 3,
     ) {
         try {
-            reservationService.reserveFromEvent(event)
+            reservationCreator.fromEvent(event)
         } catch (e: Exception) {
             if (retryCount > 0) {
                 asyncEventLogAppender.appendWarning(event, warningForRetry)

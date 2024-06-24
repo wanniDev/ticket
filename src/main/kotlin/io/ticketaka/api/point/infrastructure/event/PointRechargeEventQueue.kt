@@ -1,9 +1,6 @@
 package io.ticketaka.api.point.infrastructure.event
 
 import io.ticketaka.api.common.infrastructure.event.EventConsumer
-import io.ticketaka.api.point.domain.DBPointManager
-import io.ticketaka.api.point.domain.PointHistory
-import io.ticketaka.api.point.domain.PointHistoryRepository
 import io.ticketaka.api.point.domain.PointRechargeEvent
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
