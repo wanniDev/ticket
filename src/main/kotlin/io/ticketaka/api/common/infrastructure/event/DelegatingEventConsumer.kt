@@ -11,6 +11,7 @@ class DelegatingEventConsumer(
 
     init {
         listOf(
+            PointChargeEventConsumer(pointEventService),
             PointRechargeEventConsumer(pointEventService),
         ).forEach { consumers.add(it) }
     }

@@ -52,19 +52,28 @@ class PointEventService(
         event: PointRechargeEvent,
         retryCount: Int = 3,
     ) {
-        dbPointManager.recharge(event)
-    }
-
-    fun retryOnFailure(
-        event: PointRechargeEvent,
-        retryCount: Int = 3,
-    ) {
         try {
             dbPointManager.recharge(event)
         } catch (e: Exception) {
             if (retryCount > 0) {
                 asyncEventLogAppender.appendWarning(event, warningForRetry)
-                retryOnFailure(event, retryCount + 1)
+                retryableRechargePoint(event, retryCount - 1)
+            } else {
+                asyncEventLogAppender.appendError(event, retryFailed)
+            }
+        }
+    }
+
+    fun retryableChargePoint(
+        event: PointChargeEvent,
+        retryCount: Int = 3,
+    ) {
+        try {
+            dbPointManager.charge(event)
+        } catch (e: Exception) {
+            if (retryCount > 0) {
+                asyncEventLogAppender.appendWarning(event, warningForRetry)
+                retryableChargePoint(event, retryCount - 1)
             } else {
                 asyncEventLogAppender.appendError(event, retryFailed)
             }
