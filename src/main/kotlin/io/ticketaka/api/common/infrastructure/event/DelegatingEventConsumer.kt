@@ -1,6 +1,11 @@
 package io.ticketaka.api.common.infrastructure.event
 
 import io.ticketaka.api.common.domain.DomainEvent
+import io.ticketaka.api.point.application.PointEventService
+import io.ticketaka.api.point.infrastructure.event.PointChargeEventConsumer
+import io.ticketaka.api.point.infrastructure.event.PointRechargeEventConsumer
+import io.ticketaka.api.reservation.application.ReservationEventService
+import io.ticketaka.api.reservation.infrastructure.event.ReservationCreateEventConsumer
 import org.springframework.stereotype.Component
 
 @Component

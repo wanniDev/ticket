@@ -1,7 +1,6 @@
-package io.ticketaka.api.common.infrastructure.event
+package io.ticketaka.api.reservation.application
 
 import io.ticketaka.api.point.infrastructure.event.AsyncEventLogAppender
-import io.ticketaka.api.reservation.application.ReservationService
 import io.ticketaka.api.reservation.domain.reservation.ReservationCreateEvent
 import org.springframework.stereotype.Service
 

@@ -1,4 +1,4 @@
-package io.ticketaka.api.common.infrastructure.event
+package io.ticketaka.api.point.application
 
 import io.ticketaka.api.common.domain.DomainEvent
 import io.ticketaka.api.point.domain.DBPointManager

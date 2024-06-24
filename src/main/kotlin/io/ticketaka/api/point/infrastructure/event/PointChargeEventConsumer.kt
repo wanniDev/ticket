@@ -1,6 +1,8 @@
-package io.ticketaka.api.common.infrastructure.event
+package io.ticketaka.api.point.infrastructure.event
 
 import io.ticketaka.api.common.domain.DomainEvent
+import io.ticketaka.api.common.infrastructure.event.EventConsumer
+import io.ticketaka.api.point.application.PointEventService
 import io.ticketaka.api.point.domain.PointChargeEvent
 import io.ticketaka.api.point.domain.PointHistory
 
