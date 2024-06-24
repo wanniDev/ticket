@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component
 @Component
 class DelegatingEventConsumer(
     private val pointEventService: PointEventService,
+    private val reservationEventService: ReservationEventService,
 ) : EventConsumer {
     private val consumers = mutableListOf<EventConsumer>()
 
@@ -13,6 +14,7 @@ class DelegatingEventConsumer(
         listOf(
             PointChargeEventConsumer(pointEventService),
             PointRechargeEventConsumer(pointEventService),
+            ReservationCreateEventConsumer(reservationEventService),
         ).forEach { consumers.add(it) }
     }
 
