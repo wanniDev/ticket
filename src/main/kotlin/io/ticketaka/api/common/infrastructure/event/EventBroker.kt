@@ -10,7 +10,7 @@ import io.ticketaka.api.reservation.infrastructure.event.ReservationCreateEventQ
 import org.springframework.stereotype.Component
 
 @Component
-class EventDispatcher(
+class EventBroker(
     private val pointRechargeEventQueue: PointRechargeEventQueue,
     private val pointChargeEventQueue: PointChargeEventQueue,
     private val reservationCreateEventQueue: ReservationCreateEventQueue,
