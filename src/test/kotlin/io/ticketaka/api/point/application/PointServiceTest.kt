@@ -2,7 +2,6 @@ package io.ticketaka.api.point.application
 
 import io.ticketaka.api.common.exception.BadClientRequestException
 import io.ticketaka.api.point.application.dto.RechargeCommand
-import io.ticketaka.api.point.domain.CachePointRecharger
 import io.ticketaka.api.point.domain.Point
 import io.ticketaka.api.user.application.QueueTokenUserCacheAsideQueryService
 import io.ticketaka.api.user.domain.User
@@ -41,15 +40,15 @@ class PointServiceTest {
                 on { getPoint(any()) } doReturn point
             }
 
-        val cachePointRecharger =
-            mock<CachePointRecharger> {
+        val cacheWriteBehindPointService =
+            mock<CacheWriteBehindPointService> {
                 on { recharge(point.id, rechargeCommand.amount) } doAnswer {
                     point.recharge(rechargeCommand.amount)
                 }
             }
 
         val pointService =
-            PointService(queueTokenUserCacheAsideQueryService, pointCacheAsideQueryService, cachePointRecharger, mock())
+            PointService(queueTokenUserCacheAsideQueryService, pointCacheAsideQueryService, cacheWriteBehindPointService, mock())
 
         // when
         pointService.recharge(rechargeCommand)
@@ -79,15 +78,15 @@ class PointServiceTest {
             mock<PointCacheAsideQueryService> {
                 on { getPoint(any()) } doReturn point
             }
-        val cachePointRecharger =
-            mock<CachePointRecharger> {
+        val cacheWriteBehindPointService =
+            mock<CacheWriteBehindPointService> {
                 on { recharge(point.id, rechargeCommand.amount) } doAnswer {
                     point.recharge(rechargeCommand.amount)
                 }
             }
 
         val pointService =
-            PointService(queueTokenUserCacheAsideQueryService, pointCacheAsideQueryService, cachePointRecharger, mock())
+            PointService(queueTokenUserCacheAsideQueryService, pointCacheAsideQueryService, cacheWriteBehindPointService, mock())
 
         // when
         val exception =
@@ -112,9 +111,9 @@ class PointServiceTest {
             mock<PointCacheAsideQueryService> {
                 on { getPoint(any()) } doReturn point
             }
-        val cachePointRecharger = mock<CachePointRecharger>()
+        val cacheWriteBehindPointService = mock<CacheWriteBehindPointService>()
         val pointService =
-            PointService(queueTokenUserCacheAsideQueryService, pointCacheAsideQueryService, cachePointRecharger, mock())
+            PointService(queueTokenUserCacheAsideQueryService, pointCacheAsideQueryService, cacheWriteBehindPointService, mock())
 
         // when
         val balanceQueryModel = pointService.getBalance(user.id)

@@ -23,13 +23,14 @@ class Payment(
     val paymentTime: LocalDateTime,
     val userId: Long,
     val pointId: Long,
-) : AbstractAggregateRoot(), Persistable<Long> {
+) : AbstractAggregateRoot(),
+    Persistable<Long> {
     @Column(nullable = false, updatable = false)
     var createdAt: LocalDateTime? = LocalDateTime.now()
         private set
 
     @Column(nullable = false)
-    var updatedAt: LocalDateTime? = null
+    var updatedAt: LocalDateTime? = LocalDateTime.now()
         private set
 
     @PreUpdate
@@ -40,13 +41,9 @@ class Payment(
     @Transient
     private var isNew = true
 
-    override fun isNew(): Boolean {
-        return isNew
-    }
+    override fun isNew(): Boolean = isNew
 
-    override fun getId(): Long {
-        return id
-    }
+    override fun getId(): Long = id
 
     @PrePersist
     @PostLoad
@@ -63,14 +60,13 @@ class Payment(
             amount: BigDecimal,
             userId: Long,
             pointId: Long,
-        ): Payment {
-            return Payment(
+        ): Payment =
+            Payment(
                 id = TsIdKeyGenerator.nextLong(),
                 amount = amount,
                 userId = userId,
                 paymentTime = LocalDateTime.now(),
                 pointId = pointId,
             )
-        }
     }
 }

@@ -1,6 +1,5 @@
 package io.ticketaka.api.reservation.application
 
-import io.ticketaka.api.common.domain.EventBroker
 import io.ticketaka.api.common.exception.NotFoundException
 import io.ticketaka.api.concert.application.ConcertCacheAsideQueryService
 import io.ticketaka.api.concert.domain.ConcertSeatUpdater
@@ -8,6 +7,7 @@ import io.ticketaka.api.reservation.application.dto.CreateReservationCommand
 import io.ticketaka.api.reservation.domain.reservation.ReservationCreateEvent
 import io.ticketaka.api.reservation.domain.reservation.ReservationRepository
 import io.ticketaka.api.user.application.QueueTokenUserCacheAsideQueryService
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -18,13 +18,13 @@ class ReservationService(
     private val concertCacheAsideQueryService: ConcertCacheAsideQueryService,
     private val reservationRepository: ReservationRepository,
     private val concertSeatUpdater: ConcertSeatUpdater,
-    private val eventBroker: EventBroker,
+    private val applicationEventPublisher: ApplicationEventPublisher,
 ) {
     fun createReservation(command: CreateReservationCommand) {
         val user = queueTokenUserCacheAsideQueryService.getUser(command.userId)
         val concert = concertCacheAsideQueryService.getConcert(command.date)
         val seats = concertSeatUpdater.reserve(concert.id, command.date, command.seatNumbers)
-        eventBroker.produce(ReservationCreateEvent(user.id, concert.id, seats.map { it.id }))
+        applicationEventPublisher.publishEvent(ReservationCreateEvent(user.id, concert.id, seats.map { it.id }))
     }
 
     @Async

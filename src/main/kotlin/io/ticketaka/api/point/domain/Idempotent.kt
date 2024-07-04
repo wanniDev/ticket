@@ -26,7 +26,7 @@ class Idempotent(
         private set
 
     @Column(nullable = false)
-    var updatedAt: LocalDateTime? = null
+    var updatedAt: LocalDateTime? = LocalDateTime.now()
         private set
 
     @PreUpdate
@@ -37,13 +37,9 @@ class Idempotent(
     @Transient
     private var isNew = true
 
-    override fun isNew(): Boolean {
-        return isNew
-    }
+    override fun isNew(): Boolean = isNew
 
-    override fun getId(): Long {
-        return id
-    }
+    override fun getId(): Long = id
 
     @PrePersist
     @PostLoad
@@ -57,8 +53,7 @@ class Idempotent(
             tokenId: Long,
             amount: BigDecimal,
             transactionType: PointHistory.TransactionType,
-        ): Idempotent {
-            return Idempotent(TsIdKeyGenerator.nextLong(), IdempotentKeyGenerator.generate(userId, tokenId, amount, transactionType.name))
-        }
+        ): Idempotent =
+            Idempotent(TsIdKeyGenerator.nextLong(), IdempotentKeyGenerator.generate(userId, tokenId, amount, transactionType.name))
     }
 }

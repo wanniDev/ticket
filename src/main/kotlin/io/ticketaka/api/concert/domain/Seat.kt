@@ -34,7 +34,7 @@ class Seat(
         private set
 
     @Column(nullable = false)
-    var updatedAt: LocalDateTime? = null
+    var updatedAt: LocalDateTime? = LocalDateTime.now()
         private set
 
     @PreUpdate
@@ -45,13 +45,9 @@ class Seat(
     @Transient
     private var isNew = true
 
-    override fun isNew(): Boolean {
-        return isNew
-    }
+    override fun isNew(): Boolean = isNew
 
-    override fun getId(): Long {
-        return id
-    }
+    override fun getId(): Long = id
 
     @PrePersist
     @PostLoad
@@ -59,9 +55,7 @@ class Seat(
         isNew = false
     }
 
-    fun isAvailable(): Boolean {
-        return this.status == Status.AVAILABLE
-    }
+    fun isAvailable(): Boolean = this.status == Status.AVAILABLE
 
     fun available() {
         this.status = Status.AVAILABLE
@@ -96,8 +90,8 @@ class Seat(
             number: String,
             price: BigDecimal,
             concertId: Long,
-        ): Seat {
-            return Seat(
+        ): Seat =
+            Seat(
                 id = TsIdKeyGenerator.nextLong(),
                 number = number,
                 status = Status.AVAILABLE,
@@ -105,6 +99,5 @@ class Seat(
                 concertId = concertId,
                 concertDate = LocalDate.now(),
             )
-        }
     }
 }
