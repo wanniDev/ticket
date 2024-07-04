@@ -1,8 +1,8 @@
-package io.ticketaka.api.point.domain
+package io.ticketaka.api.point.application
 
 import java.math.BigDecimal
 
-interface CachePointRecharger {
+interface CacheWriteBehindPointService {
     fun recharge(
         pointId: Long,
         amount: BigDecimal,

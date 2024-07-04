@@ -3,7 +3,6 @@ package io.ticketaka.api.point.application
 import io.ticketaka.api.common.domain.EventBroker
 import io.ticketaka.api.point.application.dto.BalanceQueryModel
 import io.ticketaka.api.point.application.dto.RechargeCommand
-import io.ticketaka.api.point.domain.CachePointRecharger
 import io.ticketaka.api.point.domain.PointRechargeEvent
 import io.ticketaka.api.user.application.QueueTokenUserCacheAsideQueryService
 import org.springframework.stereotype.Service
@@ -12,13 +11,13 @@ import org.springframework.stereotype.Service
 class PointService(
     private val queueTokenUserCacheAsideQueryService: QueueTokenUserCacheAsideQueryService,
     private val pointCacheAsideQueryService: PointCacheAsideQueryService,
-    private val cachePointRecharger: CachePointRecharger,
+    private val cacheWriteBehindPointService: CacheWriteBehindPointService,
     private val eventBroker: EventBroker,
 ) {
     fun recharge(rechargeCommand: RechargeCommand) {
         val user = queueTokenUserCacheAsideQueryService.getUser(rechargeCommand.userId)
         val point = pointCacheAsideQueryService.getPoint(user.pointId)
-        cachePointRecharger.recharge(point.id, rechargeCommand.amount)
+        cacheWriteBehindPointService.recharge(point.id, rechargeCommand.amount)
         eventBroker.produce(PointRechargeEvent(user.id, point.id, rechargeCommand.amount))
     }
 
