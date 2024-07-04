@@ -22,7 +22,7 @@ class RefreshTokenInfo protected constructor(
         private set
 
     @Column(nullable = false)
-    var updatedAt: LocalDateTime? = null
+    var updatedAt: LocalDateTime? = LocalDateTime.now()
         private set
 
     @PrePersist

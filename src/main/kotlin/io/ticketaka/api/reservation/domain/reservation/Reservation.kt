@@ -32,8 +32,8 @@ class Reservation(
     var createdAt: LocalDateTime? = LocalDateTime.now()
         private set
 
-    @Column(nullable = false)
-    var updatedAt: LocalDateTime? = null
+    @Column
+    var updatedAt: LocalDateTime? = LocalDateTime.now()
         private set
 
     @PreUpdate
@@ -44,13 +44,9 @@ class Reservation(
     @Transient
     private var isNew = true
 
-    override fun isNew(): Boolean {
-        return isNew
-    }
+    override fun isNew(): Boolean = isNew
 
-    override fun getId(): Long {
-        return id
-    }
+    override fun getId(): Long = id
 
     @PrePersist
     @PostLoad
@@ -90,15 +86,14 @@ class Reservation(
         fun createPendingReservation(
             userId: Long,
             concertId: Long,
-        ): Reservation {
-            return Reservation(
-                TsIdKeyGenerator.nextLong(),
-                Status.PENDING,
-                LocalDateTime.now(),
-                LocalDateTime.now().plusMinutes(5L),
-                userId,
-                concertId,
+        ): Reservation =
+            Reservation(
+                id = TsIdKeyGenerator.nextLong(),
+                status = Status.PENDING,
+                reservationTime = LocalDateTime.now(),
+                expirationTime = LocalDateTime.now().plusMinutes(5L),
+                userId = userId,
+                concertId = concertId,
             )
-        }
     }
 }

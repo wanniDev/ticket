@@ -25,7 +25,7 @@ class Concert(
         private set
 
     @Column(nullable = false)
-    var updatedAt: LocalDateTime? = null
+    var updatedAt: LocalDateTime? = LocalDateTime.now()
         private set
 
     @PreUpdate
@@ -36,13 +36,9 @@ class Concert(
     @Transient
     private var isNew = true
 
-    override fun isNew(): Boolean {
-        return isNew
-    }
+    override fun isNew(): Boolean = isNew
 
-    override fun getId(): Long {
-        return id
-    }
+    override fun getId(): Long = id
 
     @PrePersist
     @PostLoad
@@ -51,11 +47,10 @@ class Concert(
     }
 
     companion object {
-        fun newInstance(date: LocalDate): Concert {
-            return Concert(
+        fun newInstance(date: LocalDate): Concert =
+            Concert(
                 id = TsIdKeyGenerator.nextLong(),
                 date = date,
             )
-        }
     }
 }
