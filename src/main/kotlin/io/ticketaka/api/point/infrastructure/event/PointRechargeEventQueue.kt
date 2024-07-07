@@ -33,10 +33,11 @@ class PointRechargeEventQueue(
             isDaemon = true,
             name = "pointEventConsumer",
         ) {
+            var processingTime = 1000L
+
             while (true) {
                 val stopWatch = StopWatch()
                 stopWatch.start()
-                var processingTime = 1000L
                 val currentThread = Thread.currentThread()
                 while (currentThread.state.name == Thread.State.WAITING.name) {
                     logger.info(currentThread.state.name)

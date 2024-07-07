@@ -1,21 +1,23 @@
 package io.ticketaka.api.user.application
 
 import io.ticketaka.api.common.domain.map.TokenWaitingMap
+import io.ticketaka.api.common.exception.TooManyRequestException
 import io.ticketaka.api.user.domain.token.QueueToken
-import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 
 @Service
 class QueueTokenUserService(
     private val tokenWaitingMap: TokenWaitingMap,
     private val queueTokenUserCacheAsideQueryService: QueueTokenUserCacheAsideQueryService,
-    private val applicationEventPublisher: ApplicationEventPublisher,
 ) {
     fun createToken(userId: Long): Long {
         val user = queueTokenUserCacheAsideQueryService.getUser(userId)
 
         val queueToken = QueueToken.newInstance(user.id)
-        queueToken.pollAllEvents().forEach { applicationEventPublisher.publishEvent(it) }
+        if (tokenWaitingMap.size() >= 500) {
+            throw TooManyRequestException("토큰 용량이 초과되었습니다.")
+        }
+        tokenWaitingMap.put(queueToken.id, queueToken)
         return queueToken.id
     }
 
