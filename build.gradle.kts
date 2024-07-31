@@ -101,6 +101,12 @@ dependencies {
     // retry
     implementation("org.springframework.retry:spring-retry:2.0.5")
 
+    // redis
+    implementation("org.springframework.boot:spring-boot-starter-data-redis")
+
+    // lettuce
+    implementation("io.lettuce:lettuce-core:6.3.2.RELEASE")
+
     // test
     testImplementation("org.springframework.security:spring-security-test")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
